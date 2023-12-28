@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const SwipeActionObserver = ({
   onTap,
@@ -13,36 +13,43 @@ export const SwipeActionObserver = ({
   onSwipedUp?: () => void;
   onSwipedDown?: () => void;
 }) => {
-  const [touchStartX, setTouchStartX] = useState(0);
-  const [touchStartY, setTouchStartY] = useState(0);
+  const touchStart = useRef<{
+    x: number | null;
+    y: number | null;
+  }>({ x: null, y: null });
 
   const handleTouchStart = (event: TouchEvent) => {
-    setTouchStartX(event.touches[0].clientX);
-    setTouchStartY(event.touches[0].clientY);
+    touchStart.current = {
+      x: event.touches[0].clientX,
+      y: event.touches[0].clientY,
+    };
   };
 
   const handleTouchEnd = (event: TouchEvent) => {
-    const touchEndX = event.changedTouches[0].clientX;
-    const touchEndY = event.changedTouches[0].clientY;
-    const touchDeltaX = touchEndX - touchStartX;
-    const touchDeltaY = touchEndY - touchStartY;
-    const touchDeltaXAbs = Math.abs(touchDeltaX);
-    const touchDeltaYAbs = Math.abs(touchDeltaY);
-    if (touchDeltaXAbs < 10 && touchDeltaYAbs < 10) {
+    if (touchStart.current.x === null || touchStart.current.y === null) return;
+    const currentX = event.changedTouches[0].clientX;
+    const currentY = event.changedTouches[0].clientY;
+
+    const deltaX = currentX - touchStart.current.x;
+    const deltaY = currentY - touchStart.current.y;
+
+    if (Math.abs(deltaX) < 10 && Math.abs(deltaY) < 10) {
       onTap?.();
-    } else if (touchDeltaYAbs > touchDeltaXAbs) {
-      if (touchDeltaY > 0) {
+    } else if (Math.abs(deltaY) > Math.abs(deltaX)) {
+      if (deltaY > 0) {
         onSwipedDown?.();
       } else {
         onSwipedUp?.();
       }
     } else {
-      if (touchDeltaX > 0) {
+      if (deltaX > 0) {
         onSwipedRight?.();
       } else {
         onSwipedLeft?.();
       }
     }
+
+    touchStart.current = { x: null, y: null };
   };
 
   useEffect(() => {

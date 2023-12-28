@@ -23,34 +23,9 @@ export const CreditsList = ({
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  // const { height } = useResize(containerRef);
   const [speed, setSpeed] = useState(1);
   const movingRef = useRef<number>(0);
   const requestAnimationFrameRef = useRef<number>(0);
-
-  const motion = () => {
-    const scroll = scrollRef.current;
-    const container = containerRef.current;
-    if (scroll && container) {
-      const loop = () => {
-        const height = container.clientHeight;
-        // 末端から500px手前までスクロールしたら追加
-        if (movingRef.current < -height + 500) {
-          addWork();
-          requestAnimationFrameRef.current = requestAnimationFrame(loop);
-          return;
-        }
-        // もし末端までスクロールしたら終了
-        if (movingRef.current < -height) {
-          return;
-        }
-        scroll.style.transform = `translateY(${movingRef.current}px)`;
-        movingRef.current -= speed;
-        requestAnimationFrameRef.current = requestAnimationFrame(loop);
-      };
-      requestAnimationFrameRef.current = requestAnimationFrame(loop);
-    }
-  };
 
   useEffect(() => {
     const scroll = scrollRef.current;
@@ -81,15 +56,11 @@ export const CreditsList = ({
   }, [speed, titles]);
 
   const handleSpeedUp = useCallback(() => {
-    setSpeed((prev) => prev + 0.2);
+    setSpeed((prev) => prev + 0.3);
   }, []);
 
   const handleSpeedDown = useCallback(() => {
-    setSpeed((prev) => Math.max(0.1, prev - 0.2));
-  }, []);
-
-  const handleAddWork = useCallback(() => {
-    addWork();
+    setSpeed((prev) => Math.max(0.1, prev - 0.3));
   }, []);
 
   return (
