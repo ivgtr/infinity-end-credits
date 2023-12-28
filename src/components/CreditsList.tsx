@@ -1,14 +1,18 @@
 import { useCredits } from "@/hooks/useCredits";
 import { useResize } from "@/hooks/useResize";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CreditsTitle } from "./CreaditsTitle";
 import { CreditsRole } from "./CreditsRole";
 import { CreditsItem } from "./CreditsItem";
+import { SwipeActionObserver } from "./SwipeActionObserver";
+import { MouseActionObserver } from "./MouseActionObserver";
 
 export const CreditsList = ({
+  titles,
   credits,
   addWork,
 }: {
+  titles: string[];
   credits: {
     [key: string]: {
       role: string;
@@ -19,43 +23,89 @@ export const CreditsList = ({
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { height } = useResize(containerRef);
-
-  const titles = useMemo(() => {
-    return Object.keys(credits);
-  }, [credits]);
+  // const { height } = useResize(containerRef);
+  const [speed, setSpeed] = useState(1);
+  const movingRef = useRef<number>(0);
+  const requestAnimationFrameRef = useRef<number>(0);
 
   const motion = () => {
     const scroll = scrollRef.current;
-    if (scroll) {
-      let moving = 0;
+    const container = containerRef.current;
+    if (scroll && container) {
       const loop = () => {
-        // もし末端までスクロールしたら終了
-        if (moving < -height) {
+        const height = container.clientHeight;
+        // 末端から500px手前までスクロールしたら追加
+        if (movingRef.current < -height + 500) {
+          addWork();
+          requestAnimationFrameRef.current = requestAnimationFrame(loop);
           return;
         }
-        scroll.style.transform = `translateY(${moving}px)`;
-        moving -= 1;
-        requestAnimationFrame(loop);
+        // もし末端までスクロールしたら終了
+        if (movingRef.current < -height) {
+          return;
+        }
+        scroll.style.transform = `translateY(${movingRef.current}px)`;
+        movingRef.current -= speed;
+        requestAnimationFrameRef.current = requestAnimationFrame(loop);
       };
-      requestAnimationFrame(loop);
+      requestAnimationFrameRef.current = requestAnimationFrame(loop);
     }
   };
 
   useEffect(() => {
-    motion();
-  }, [height]);
+    const scroll = scrollRef.current;
+    const container = containerRef.current;
+    if (scroll && container) {
+      const loop = () => {
+        const height = container.clientHeight;
+        // 末端から1000px手前までスクロールしたら追加
+        if (movingRef.current < -height + 1000) {
+          addWork();
+          requestAnimationFrameRef.current = requestAnimationFrame(loop);
+          return;
+        }
+        // もし末端までスクロールしたら終了
+        if (movingRef.current < -height) {
+          return;
+        }
+        scroll.style.transform = `translateY(${movingRef.current}px)`;
+        movingRef.current -= speed;
+        requestAnimationFrameRef.current = requestAnimationFrame(loop);
+      };
+      requestAnimationFrameRef.current = requestAnimationFrame(loop);
+
+      return () => {
+        cancelAnimationFrame(requestAnimationFrameRef.current);
+      };
+    }
+  }, [speed, titles]);
+
+  const handleSpeedUp = useCallback(() => {
+    setSpeed((prev) => prev + 0.1);
+  }, []);
+
+  const handleSpeedDown = useCallback(() => {
+    setSpeed((prev) => Math.max(0.1, prev - 0.1));
+  }, []);
+
+  const handleAddWork = useCallback(() => {
+    addWork();
+  }, []);
 
   return (
-    <div ref={scrollRef} className="flex flex-col items-center justify-center">
-      <div ref={containerRef}>
-        {titles.map((title, index) => (
-          <CreditsItem key={index} title={title} credits={credits} />
-        ))}
+    <>
+      <div ref={scrollRef} className="flex flex-col items-center justify-center">
+        <div ref={containerRef} className="flex flex-col items-center justify-center">
+          {titles.map((title, index) => (
+            <CreditsItem key={index} title={title} credits={credits} />
+          ))}
+        </div>
+        <div className="flex flex-col items-center justify-center w-full min-h-screen">
+          <h2 className="text-6xl font-bold">Thank you for watching!</h2>
+        </div>
       </div>
-      <div className="flex flex-col items-center justify-center w-full min-h-screen">
-        <h2 className="text-6xl font-bold">Thank you for watching!</h2>
-      </div>
-    </div>
+      <SwipeActionObserver onSwipedUp={handleSpeedUp} onSwipedDown={handleSpeedDown} onTap={handleAddWork} />
+      <MouseActionObserver onWheelUp={handleSpeedUp} onWheelDown={handleSpeedDown} onClick={handleAddWork} />
+    </>
   );
 };

@@ -14,17 +14,37 @@ export const CreditsItem = ({
   };
 }) => {
   return (
-    <div className="flex flex-col items-center justify-center mt-32">
+    <div className="flex flex-col items-center justify-center">
       <CreditsTitle>{title}</CreditsTitle>
       <div className="flex flex-col items-center justify-center mt-24 gap-8">
         {credits[title].map((credit, index) => (
           <div key={index} className="flex flex-col items-center justify-center">
             <CreditsRole>{credit.role}</CreditsRole>
-            <div className="grid grid-cols-2 gap-4 mt-8">
-              {credit.names.map((name, index) => (
-                <p key={index}>{name}</p>
-              ))}
-            </div>
+            {credit.names.length > 20 ? (
+              <div className="grid grid-cols-3 gap-x-6 text-center">
+                {credit.names.map((name, index) => (
+                  <p className="text-base" key={index}>
+                    {name}
+                  </p>
+                ))}
+              </div>
+            ) : credit.names.length > 5 ? (
+              <div className="grid grid-cols-2 gap-x-6 text-center">
+                {credit.names.map((name, index) => (
+                  <p className="text-base" key={index}>
+                    {name}
+                  </p>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-x-6 text-center">
+                {credit.names.map((name, index) => (
+                  <p className="text-base" key={index}>
+                    {name}
+                  </p>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>

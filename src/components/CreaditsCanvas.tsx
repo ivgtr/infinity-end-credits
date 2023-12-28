@@ -15,7 +15,7 @@ export const CreditsCanvas = () => {
 
   return (
     <div className="min-h-screen w-full overflow-hidden">
-      {titles.length && <CreditsList credits={credits} addWork={addWork} />}
+      {titles.length > 0 && <CreditsList titles={titles} credits={credits} addWork={addWork} />}
     </div>
   );
 };
