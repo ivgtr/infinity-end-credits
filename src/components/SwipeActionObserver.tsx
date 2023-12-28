@@ -30,17 +30,17 @@ export const SwipeActionObserver = ({
     const touchDeltaYAbs = Math.abs(touchDeltaY);
     if (touchDeltaXAbs < 10 && touchDeltaYAbs < 10) {
       onTap?.();
-    } else if (touchDeltaXAbs > touchDeltaYAbs) {
-      if (touchDeltaX > 0) {
-        onSwipedRight?.();
-      } else {
-        onSwipedLeft?.();
-      }
-    } else {
+    } else if (touchDeltaYAbs > touchDeltaXAbs) {
       if (touchDeltaY > 0) {
         onSwipedDown?.();
       } else {
         onSwipedUp?.();
+      }
+    } else {
+      if (touchDeltaX > 0) {
+        onSwipedRight?.();
+      } else {
+        onSwipedLeft?.();
       }
     }
   };
@@ -54,5 +54,5 @@ export const SwipeActionObserver = ({
     };
   }, [onTap, onSwipedLeft, onSwipedRight, onSwipedUp, onSwipedDown]);
 
-  return <div className="fixed inset-0 z-50" />;
+  return <div className="fixed inset-0 z-50 min-h-full w-full" />;
 };

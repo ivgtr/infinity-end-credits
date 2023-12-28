@@ -81,11 +81,11 @@ export const CreditsList = ({
   }, [speed, titles]);
 
   const handleSpeedUp = useCallback(() => {
-    setSpeed((prev) => prev + 0.1);
+    setSpeed((prev) => prev + 0.2);
   }, []);
 
   const handleSpeedDown = useCallback(() => {
-    setSpeed((prev) => Math.max(0.1, prev - 0.1));
+    setSpeed((prev) => Math.max(0.1, prev - 0.2));
   }, []);
 
   const handleAddWork = useCallback(() => {
