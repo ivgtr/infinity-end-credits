@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from "react";
-import { CreditsList } from "./CreditsList";
 import { useCredits } from "@/hooks/useCredits";
+import { ManualCreditsList } from "./ManualCreaditsList";
 
-export const CreditsCanvas = () => {
+export const ManualCreditsCanvas = () => {
   const { titles, credits, addRandomWork } = useCredits();
 
   const addWork = useCallback(() => {
@@ -14,8 +14,8 @@ export const CreditsCanvas = () => {
   }, []);
 
   return (
-    <div className="min-h-screen h-full w-full overflow-hidden">
-      {titles.length > 0 && <CreditsList titles={titles} credits={credits} addWork={addWork} />}
+    <div className="min-h-screen h-full w-full">
+      {titles.length > 0 && <ManualCreditsList titles={titles} credits={credits} addWork={addWork} />}
     </div>
   );
 };

@@ -1,8 +1,4 @@
-import { useCredits } from "@/hooks/useCredits";
-import { useResize } from "@/hooks/useResize";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { CreditsTitle } from "./CreaditsTitle";
-import { CreditsRole } from "./CreditsRole";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { CreditsItem } from "./CreditsItem";
 import { SwipeActionObserver } from "./SwipeActionObserver";
 import { MouseActionObserver } from "./MouseActionObserver";
@@ -71,7 +67,7 @@ export const CreditsList = ({
             <CreditsItem key={index} title={title} credits={credits} />
           ))}
         </div>
-        <div className="flex flex-col items-center justify-center w-full min-h-screen">
+        <div className="flex flex-col items-center justify-center w-full min-h-screen h-full">
           <h2 className="text-6xl font-bold">Thank you for watching!</h2>
         </div>
       </div>
