@@ -104,8 +104,8 @@ export const CreditsList = ({
           <h2 className="text-6xl font-bold">Thank you for watching!</h2>
         </div>
       </div>
-      <SwipeActionObserver onSwipedUp={handleSpeedUp} onSwipedDown={handleSpeedDown} onTap={handleAddWork} />
-      <MouseActionObserver onWheelUp={handleSpeedUp} onWheelDown={handleSpeedDown} onClick={handleAddWork} />
+      <SwipeActionObserver onSwipedUp={handleSpeedUp} onSwipedDown={handleSpeedDown} />
+      <MouseActionObserver onWheelUp={handleSpeedUp} onWheelDown={handleSpeedDown} />
     </>
   );
 };

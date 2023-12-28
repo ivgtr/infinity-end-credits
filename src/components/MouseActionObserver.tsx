@@ -5,18 +5,18 @@ export const MouseActionObserver = ({
   onWheelUp,
   onWheelDown,
 }: {
-  onClick: () => void;
-  onWheelUp: () => void;
-  onWheelDown: () => void;
+  onClick?: () => void;
+  onWheelUp?: () => void;
+  onWheelDown?: () => void;
 }) => {
   const handleMouseClick = () => {
-    onClick();
+    onClick?.();
   };
   const handleMouseWheel = (event: WheelEvent) => {
     if (event.deltaY < 0) {
-      onWheelUp();
+      onWheelUp?.();
     } else if (event.deltaY > 0) {
-      onWheelDown();
+      onWheelDown?.();
     }
   };
   useEffect(() => {
