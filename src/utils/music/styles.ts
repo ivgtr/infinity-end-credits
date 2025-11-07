@@ -111,6 +111,50 @@ export const GRAND_STYLE: MusicStyle = {
         { root: NOTES.G3, type: "sus4", duration: 5 },
       ],
     },
+    // vi-IV-I-V (Let It Be progression / Pachelbel変形)
+    {
+      name: "Let It Be",
+      tempo: 62,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.F3, type: "major", duration: 4 },
+        { root: NOTES.C4, type: "major", duration: 4 },
+        { root: NOTES.G3, type: "major", duration: 4 },
+      ],
+    },
+    // I-III-IV-iv (クリシェ進行 / 映画的)
+    {
+      name: "Cliche Progression",
+      tempo: 56,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 4 },
+        { root: NOTES.E3, type: "major", duration: 4 },
+        { root: NOTES.F3, type: "major", duration: 4 },
+        { root: NOTES.F3, type: "minor", duration: 4 },
+      ],
+    },
+    // IV-V-iii-vi (逆循環 / Axis progression)
+    {
+      name: "Axis Progression",
+      tempo: 64,
+      chords: [
+        { root: NOTES.F3, type: "major", duration: 3 },
+        { root: NOTES.G3, type: "major", duration: 3 },
+        { root: NOTES.E3, type: "minor", duration: 3 },
+        { root: NOTES.A3, type: "minor", duration: 3 },
+      ],
+    },
+    // I-bVII-bVI-bVII (Royal Road変化形)
+    {
+      name: "Royal Road Variant",
+      tempo: 60,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 4 },
+        { root: NOTES.A3 + 10, type: "major", duration: 4 }, // Bb
+        { root: NOTES.G3 + 8, type: "major", duration: 4 }, // Ab
+        { root: NOTES.A3 + 10, type: "major", duration: 4 }, // Bb
+      ],
+    },
   ],
   melodyPatterns: [
     {
@@ -184,6 +228,33 @@ export const MONOTONOUS_STYLE: MusicStyle = {
         { root: NOTES.G3, type: "sus2", duration: 12 },
       ],
     },
+    // I-bVII (Mixolydian)
+    {
+      name: "Mixolydian Minimal",
+      tempo: 44,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 10 },
+        { root: NOTES.A3 + 10, type: "major", duration: 10 }, // Bb
+      ],
+    },
+    // vi-V (2コードマイナー)
+    {
+      name: "Two Chord Minor",
+      tempo: 43,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 12 },
+        { root: NOTES.E3, type: "major", duration: 12 },
+      ],
+    },
+    // IV-I (サブドミナントドローン)
+    {
+      name: "Subdominant Drone",
+      tempo: 41,
+      chords: [
+        { root: NOTES.F3, type: "sus2", duration: 14 },
+        { root: NOTES.C4, type: "sus2", duration: 14 },
+      ],
+    },
   ],
   melodyPatterns: [
     {
@@ -252,6 +323,50 @@ export const BRIGHT_STYLE: MusicStyle = {
         { root: NOTES.C4, type: "major", duration: 2 },
         { root: NOTES.D4, type: "major", duration: 2 },
         { root: NOTES.G3, type: "major", duration: 2 },
+      ],
+    },
+    // I-IV-I-V (ブルース風)
+    {
+      name: "Blues Style",
+      tempo: 74,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 4 },
+        { root: NOTES.F3, type: "major", duration: 2 },
+        { root: NOTES.C4, type: "major", duration: 2 },
+        { root: NOTES.G3, type: "major", duration: 4 },
+      ],
+    },
+    // I-iii-IV-V (順次進行)
+    {
+      name: "Sequential Ascent",
+      tempo: 70,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 3 },
+        { root: NOTES.E3, type: "minor", duration: 3 },
+        { root: NOTES.F3, type: "major", duration: 3 },
+        { root: NOTES.G3, type: "major", duration: 3 },
+      ],
+    },
+    // I-V-IV-IV (ポップパンク進行)
+    {
+      name: "Pop Punk",
+      tempo: 76,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 2 },
+        { root: NOTES.G3, type: "major", duration: 2 },
+        { root: NOTES.F3, type: "major", duration: 2 },
+        { root: NOTES.F3, type: "major", duration: 2 },
+      ],
+    },
+    // vi-IV-I-V (悲しい→明るい転調)
+    {
+      name: "Minor to Major",
+      tempo: 69,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 3 },
+        { root: NOTES.F3, type: "major", duration: 3 },
+        { root: NOTES.C4, type: "major", duration: 3 },
+        { root: NOTES.G3, type: "major", duration: 3 },
       ],
     },
   ],
@@ -334,6 +449,50 @@ export const DARK_STYLE: MusicStyle = {
         { root: NOTES.D3, type: "major", duration: 4 },
       ],
     },
+    // i-bVI-bVII-i (Aeolian循環)
+    {
+      name: "Aeolian Circle",
+      tempo: 51,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.F3, type: "major", duration: 4 },
+        { root: NOTES.G3, type: "major", duration: 4 },
+        { root: NOTES.A3, type: "minor", duration: 4 },
+      ],
+    },
+    // i-iv-v-i (マイナー基本循環)
+    {
+      name: "Minor Circle",
+      tempo: 49,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 5 },
+        { root: NOTES.D3, type: "minor", duration: 5 },
+        { root: NOTES.E3, type: "minor", duration: 5 },
+        { root: NOTES.A3, type: "minor", duration: 5 },
+      ],
+    },
+    // i-V-i-VII (ゴシック進行)
+    {
+      name: "Gothic",
+      tempo: 47,
+      chords: [
+        { root: NOTES.E3, type: "minor", duration: 6 },
+        { root: NOTES.B3, type: "major", duration: 6 },
+        { root: NOTES.E3, type: "minor", duration: 6 },
+        { root: NOTES.D3, type: "major", duration: 6 },
+      ],
+    },
+    // vi-iii-IV-I (Sad Progression)
+    {
+      name: "Melancholic",
+      tempo: 53,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.E3, type: "minor", duration: 4 },
+        { root: NOTES.F3, type: "major", duration: 4 },
+        { root: NOTES.C4, type: "major", duration: 4 },
+      ],
+    },
   ],
   melodyPatterns: [
     {
@@ -399,6 +558,59 @@ export const AMBIENT_STYLE: MusicStyle = {
         { root: NOTES.E3, type: "sus4", duration: 12 },
         { root: NOTES.D3, type: "sus2", duration: 12 },
         { root: NOTES.A3, type: "sus2", duration: 12 },
+      ],
+    },
+    // Lydian mode for ethereal quality
+    {
+      name: "Lydian Dream",
+      tempo: 42,
+      chords: [
+        { root: NOTES.C4, type: "maj7", duration: 11 },
+        { root: NOTES.D4, type: "major", duration: 11 },
+        { root: NOTES.E4, type: "minor", duration: 11 },
+        { root: NOTES.C4, type: "maj7", duration: 11 },
+      ],
+    },
+    // Major 7th progression for dreamy atmosphere
+    {
+      name: "Seventh Heaven",
+      tempo: 36,
+      chords: [
+        { root: NOTES.F3, type: "maj7", duration: 13 },
+        { root: NOTES.C4, type: "maj7", duration: 13 },
+        { root: NOTES.G3, type: "maj7", duration: 13 },
+      ],
+    },
+    // Minimal chord movement
+    {
+      name: "Breath of Air",
+      tempo: 35,
+      chords: [
+        { root: NOTES.E3, type: "sus2", duration: 15 },
+        { root: NOTES.A3, type: "sus2", duration: 15 },
+        { root: NOTES.E3, type: "sus2", duration: 15 },
+      ],
+    },
+    // Whole tone inspired movement
+    {
+      name: "Ethereal Drift",
+      tempo: 39,
+      chords: [
+        { root: NOTES.C4, type: "maj7", duration: 12 },
+        { root: NOTES.D4, type: "maj7", duration: 12 },
+        { root: NOTES.B3, type: "maj7", duration: 12 },
+        { root: NOTES.C4, type: "sus2", duration: 12 },
+      ],
+    },
+    // Cosmic suspension
+    {
+      name: "Cosmic Suspension",
+      tempo: 41,
+      chords: [
+        { root: NOTES.G3, type: "sus4", duration: 10 },
+        { root: NOTES.D4, type: "maj7", duration: 10 },
+        { root: NOTES.A3, type: "sus2", duration: 10 },
+        { root: NOTES.E3, type: "maj7", duration: 10 },
       ],
     },
   ],
