@@ -37,8 +37,8 @@ export const ManualCreditsList = ({
     >
       <div className="flex flex-col items-center justify-center">
         <div ref={containerRef} className="flex flex-col items-center justify-center">
-          {titles.map((title, index) => (
-            <CreditsItem key={index} title={title} credits={credits} />
+          {titles.map((title) => (
+            <CreditsItem key={title} title={title} credits={credits} />
           ))}
         </div>
         <div className="flex flex-col items-center justify-center w-full min-h-screen">

@@ -23,6 +23,12 @@ export const CreditsList = ({
   const movingRef = useRef<number>(0);
   const requestAnimationFrameRef = useRef<number>(0);
   const prevTitlesLengthRef = useRef<number>(0);
+  const addWorkRef = useRef(addWork);
+
+  // addWorkの参照を常に最新に保つ
+  useEffect(() => {
+    addWorkRef.current = addWork;
+  }, [addWork]);
 
   // メモリリーク防止: titlesが減った場合（古いアイテムが削除された場合）にスクロール位置を調整
   useEffect(() => {
@@ -46,7 +52,7 @@ export const CreditsList = ({
         const height = container.clientHeight;
         // 末端から1000px手前までスクロールしたら追加
         if (movingRef.current < -height + 1000) {
-          addWork();
+          addWorkRef.current();
           requestAnimationFrameRef.current = requestAnimationFrame(loop);
           return;
         }
@@ -64,7 +70,7 @@ export const CreditsList = ({
         cancelAnimationFrame(requestAnimationFrameRef.current);
       };
     }
-  }, [speed, titles]);
+  }, [speed]);
 
   const handleSpeedUp = useCallback(() => {
     setSpeed((prev) => prev + 0.3);
@@ -76,10 +82,10 @@ export const CreditsList = ({
 
   return (
     <>
-      <div ref={scrollRef} className="flex flex-col items-center justify-center">
+      <div ref={scrollRef} className="flex flex-col items-center justify-center" style={{ willChange: 'transform' }}>
         <div ref={containerRef} className="flex flex-col items-center justify-center">
-          {titles.map((title, index) => (
-            <CreditsItem key={index} title={title} credits={credits} />
+          {titles.map((title) => (
+            <CreditsItem key={title} title={title} credits={credits} />
           ))}
         </div>
         <div className="flex flex-col items-center justify-center w-full min-h-screen h-full">
