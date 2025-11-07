@@ -118,6 +118,24 @@ export function useBackgroundMusic() {
         }
       }
 
+      // ベースラインを再生（存在する場合）
+      if (section.bass) {
+        let bassTime = sectionStartTime;
+        section.progression.chords.forEach((chord) => {
+          engine.playBassline(chord, section.bass!, soundParams, bassTime);
+          bassTime += chord.duration;
+        });
+      }
+
+      // アルペジオを再生（存在する場合）
+      if (section.arpeggio) {
+        let arpeggioTime = sectionStartTime;
+        section.progression.chords.forEach((chord) => {
+          engine.playArpeggio(chord, section.arpeggio!, soundParams, arpeggioTime);
+          arpeggioTime += chord.duration;
+        });
+      }
+
       // 次のセクションへ
       nextScheduleTimeRef.current += section.duration;
       currentSectionIndexRef.current++;

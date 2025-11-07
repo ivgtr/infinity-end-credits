@@ -1,27 +1,86 @@
-import type { MusicStyle } from "@/types/music";
+import type { MusicStyle, ArpeggioPattern, BassPattern } from "@/types/music";
 import { NOTES } from "./patterns";
 
 /**
- * 5つの音楽スタイル定義
+ * 共通ベースパターン
  */
+export const BASS_PATTERNS: BassPattern[] = [
+  {
+    name: "Root-Fifth",
+    pattern: [0, 7], // ルート、5度
+    durations: [2, 2],
+    rhythm: [0, 2],
+  },
+  {
+    name: "Walking Bass",
+    pattern: [0, 2, 4, 5], // ルート、2度、3度、4度
+    durations: [1, 1, 1, 1],
+    rhythm: [0, 1, 2, 3],
+  },
+  {
+    name: "Octave Jump",
+    pattern: [0, 12, 0, 7], // ルート、オクターブ上、ルート、5度
+    durations: [1, 1, 1, 1],
+    rhythm: [0, 1, 2, 3],
+  },
+  {
+    name: "Minimal",
+    pattern: [0], // ルートのみ
+    durations: [4],
+    rhythm: [0],
+  },
+];
 
-// 1. 壮大（Grand）: ゆったりとしたテンポ、長い音符、スケール感
+/**
+ * 共通アルペジオパターン
+ */
+export const ARPEGGIO_PATTERNS: ArpeggioPattern[] = [
+  {
+    name: "Up",
+    pattern: [0, 1, 2, 1], // コードの音を上昇
+    noteDuration: 0.5,
+    speed: 1,
+  },
+  {
+    name: "Down",
+    pattern: [2, 1, 0, 1], // コードの音を下降
+    noteDuration: 0.5,
+    speed: 1,
+  },
+  {
+    name: "Up-Down",
+    pattern: [0, 1, 2, 1, 0, 1, 2, 1], // 上昇下降
+    noteDuration: 0.25,
+    speed: 1.5,
+  },
+  {
+    name: "Random",
+    pattern: [0, 2, 1, 0, 2, 0, 1, 2], // ランダムパターン
+    noteDuration: 0.3,
+    speed: 1.2,
+  },
+];
+
+/**
+ * 1. 壮大（Grand）: 映画のようなエピック感
+ */
 export const GRAND_STYLE: MusicStyle = {
   type: "grand",
   name: "壮大",
-  description: "ゆったりとしたテンポと長い音符でスケール感を演出",
+  description: "映画のような壮大でエピックな雰囲気",
   soundParams: {
-    padVolume: 0.08,
-    padAttack: 0.8,
-    padRelease: 1.2,
-    leadVolume: 0.4,
-    leadAttack: 0.1,
-    leadRelease: 0.3,
+    padVolume: 0.09,
+    padAttack: 1.0,
+    padRelease: 1.5,
+    leadVolume: 0.45,
+    leadAttack: 0.15,
+    leadRelease: 0.4,
     oscillatorType: "sine",
   },
   progressions: [
+    // I-V-vi-IV (王道進行 / カノン進行バリエーション)
     {
-      name: "Grand Epic",
+      name: "Canon Progression",
       tempo: 65,
       chords: [
         { root: NOTES.C4, type: "major", duration: 4 },
@@ -30,232 +89,333 @@ export const GRAND_STYLE: MusicStyle = {
         { root: NOTES.F3, type: "major", duration: 4 },
       ],
     },
+    // I-vi-IV-V (50s progression)
     {
-      name: "Grand Emotional",
+      name: "50s Progression",
       tempo: 60,
       chords: [
-        { root: NOTES.C4, type: "maj7", duration: 6 },
-        { root: NOTES.F3, type: "maj7", duration: 6 },
-        { root: NOTES.A3, type: "min7", duration: 6 },
-        { root: NOTES.G3, type: "sus4", duration: 6 },
+        { root: NOTES.C4, type: "major", duration: 4 },
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.F3, type: "major", duration: 4 },
+        { root: NOTES.G3, type: "major", duration: 4 },
+      ],
+    },
+    // I-IV-vi-V (sensitive feminine chord progression)
+    {
+      name: "Sensitive Progression",
+      tempo: 58,
+      chords: [
+        { root: NOTES.C4, type: "maj7", duration: 5 },
+        { root: NOTES.F3, type: "maj7", duration: 5 },
+        { root: NOTES.A3, type: "min7", duration: 5 },
+        { root: NOTES.G3, type: "sus4", duration: 5 },
       ],
     },
   ],
   melodyPatterns: [
     {
-      name: "Grand Ascending",
+      name: "Epic Rise",
       notes: [
-        { pitch: NOTES.C5, duration: 2, startTime: 0, velocity: 0.3 },
-        { pitch: NOTES.D5, duration: 2, startTime: 2, velocity: 0.3 },
-        { pitch: NOTES.E5, duration: 2, startTime: 4, velocity: 0.3 },
-        { pitch: NOTES.G5, duration: 2, startTime: 6, velocity: 0.3 },
-        { pitch: NOTES.E5, duration: 4, startTime: 8, velocity: 0.25 },
+        { pitch: NOTES.C5, duration: 3, startTime: 0, velocity: 0.3 },
+        { pitch: NOTES.E5, duration: 3, startTime: 3, velocity: 0.32 },
+        { pitch: NOTES.G5, duration: 3, startTime: 6, velocity: 0.35 },
+        { pitch: NOTES.C5 + 12, duration: 3, startTime: 9, velocity: 0.38 },
       ],
-      repeat: 2,
+      repeat: 1,
+    },
+    {
+      name: "Heroic Theme",
+      notes: [
+        { pitch: NOTES.G5, duration: 2, startTime: 0, velocity: 0.35 },
+        { pitch: NOTES.E5, duration: 2, startTime: 2, velocity: 0.33 },
+        { pitch: NOTES.C5, duration: 2, startTime: 4, velocity: 0.3 },
+        { pitch: NOTES.E5, duration: 2, startTime: 6, velocity: 0.32 },
+        { pitch: NOTES.G5, duration: 4, startTime: 8, velocity: 0.35 },
+      ],
+      repeat: 1,
     },
   ],
-  durationRange: [40, 60],
+  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Octave Jump"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Up-Down"].includes(p.name)),
+  durationRange: [35, 55],
 };
 
-// 2. 退屈（Monotonous）: 非常に単調で反復的、ミニマル
+/**
+ * 2. 退屈（Monotonous）: ミニマリスト的な反復
+ */
 export const MONOTONOUS_STYLE: MusicStyle = {
   type: "monotonous",
   name: "退屈",
-  description: "単調で反復的な極限のミニマリズム",
+  description: "極限のミニマリズムと反復",
   soundParams: {
     padVolume: 0.06,
-    padAttack: 1.0,
-    padRelease: 1.5,
+    padAttack: 1.5,
+    padRelease: 2.0,
     leadVolume: 0.25,
-    leadAttack: 0.2,
-    leadRelease: 0.5,
+    leadAttack: 0.3,
+    leadRelease: 0.6,
     oscillatorType: "sine",
   },
   progressions: [
+    // I-IV (最もシンプル)
     {
-      name: "Monotonous Simple",
-      tempo: 50,
+      name: "Minimal Two",
+      tempo: 45,
       chords: [
         { root: NOTES.C4, type: "major", duration: 8 },
         { root: NOTES.F3, type: "major", duration: 8 },
       ],
     },
+    // vi-IV (アンビエント的)
     {
-      name: "Monotonous Minimal",
-      tempo: 48,
+      name: "Ambient Two",
+      tempo: 42,
       chords: [
-        { root: NOTES.A3, type: "minor", duration: 8 },
-        { root: NOTES.C4, type: "major", duration: 8 },
+        { root: NOTES.A3, type: "minor", duration: 10 },
+        { root: NOTES.F3, type: "major", duration: 10 },
+      ],
+    },
+    // I-V (ドローン的)
+    {
+      name: "Drone",
+      tempo: 40,
+      chords: [
+        { root: NOTES.C4, type: "sus2", duration: 12 },
+        { root: NOTES.G3, type: "sus2", duration: 12 },
       ],
     },
   ],
   melodyPatterns: [
     {
-      name: "Monotonous Repetitive",
+      name: "Single Note",
       notes: [
-        { pitch: NOTES.E5, duration: 4, startTime: 0, velocity: 0.2 },
-        { pitch: NOTES.E5, duration: 4, startTime: 4, velocity: 0.2 },
-        { pitch: NOTES.C5, duration: 4, startTime: 8, velocity: 0.2 },
-        { pitch: NOTES.C5, duration: 4, startTime: 12, velocity: 0.2 },
+        { pitch: NOTES.E5, duration: 8, startTime: 0, velocity: 0.2 },
+        { pitch: NOTES.C5, duration: 8, startTime: 8, velocity: 0.2 },
       ],
-      repeat: 2,
+      repeat: 1,
     },
   ],
-  durationRange: [45, 70],
+  bassPatterns: BASS_PATTERNS.filter(p => p.name === "Minimal"),
+  arpeggioPatterns: [],
+  durationRange: [50, 80],
 };
 
-// 3. 明るい（Bright）: 少し明るめ、メジャーコード中心
+/**
+ * 3. 明るい（Bright）: ポップで前向き
+ */
 export const BRIGHT_STYLE: MusicStyle = {
   type: "bright",
   name: "明るい",
-  description: "やや明るめで穏やかな雰囲気",
+  description: "ポップで前向きな雰囲気",
   soundParams: {
-    padVolume: 0.09,
-    padAttack: 0.5,
-    padRelease: 0.8,
-    leadVolume: 0.45,
+    padVolume: 0.08,
+    padAttack: 0.3,
+    padRelease: 0.6,
+    leadVolume: 0.5,
     leadAttack: 0.05,
     leadRelease: 0.2,
     oscillatorType: "triangle",
   },
   progressions: [
+    // I-IV-V (ポップスの基本)
     {
-      name: "Bright Happy",
-      tempo: 70,
+      name: "Pop Basic",
+      tempo: 75,
       chords: [
         { root: NOTES.C4, type: "major", duration: 3 },
-        { root: NOTES.G3, type: "major", duration: 3 },
         { root: NOTES.F3, type: "major", duration: 3 },
+        { root: NOTES.G3, type: "major", duration: 3 },
         { root: NOTES.C4, type: "major", duration: 3 },
       ],
     },
+    // I-vi-ii-V (Circle progression)
     {
-      name: "Bright Gentle",
+      name: "Circle of Fifths",
+      tempo: 72,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 2 },
+        { root: NOTES.A3, type: "minor", duration: 2 },
+        { root: NOTES.D4, type: "minor", duration: 2 },
+        { root: NOTES.G3, type: "major", duration: 2 },
+      ],
+    },
+    // I-V-vi-iii-IV-I-II-V (JPop進行)
+    {
+      name: "JPop Progression",
       tempo: 68,
       chords: [
-        { root: NOTES.F3, type: "maj7", duration: 4 },
-        { root: NOTES.C4, type: "maj7", duration: 4 },
-        { root: NOTES.G3, type: "maj7", duration: 4 },
-        { root: NOTES.C4, type: "maj7", duration: 4 },
+        { root: NOTES.C4, type: "major", duration: 2 },
+        { root: NOTES.G3, type: "major", duration: 2 },
+        { root: NOTES.A3, type: "minor", duration: 2 },
+        { root: NOTES.E3, type: "minor", duration: 2 },
+        { root: NOTES.F3, type: "major", duration: 2 },
+        { root: NOTES.C4, type: "major", duration: 2 },
+        { root: NOTES.D4, type: "major", duration: 2 },
+        { root: NOTES.G3, type: "major", duration: 2 },
       ],
     },
   ],
   melodyPatterns: [
     {
-      name: "Bright Cheerful",
+      name: "Cheerful Bounce",
       notes: [
-        { pitch: NOTES.G5, duration: 1.5, startTime: 0, velocity: 0.35 },
-        { pitch: NOTES.E5, duration: 1.5, startTime: 1.5, velocity: 0.35 },
-        { pitch: NOTES.C5, duration: 2, startTime: 3, velocity: 0.3 },
-        { pitch: NOTES.E5, duration: 1.5, startTime: 5, velocity: 0.35 },
-        { pitch: NOTES.G5, duration: 1.5, startTime: 6.5, velocity: 0.35 },
+        { pitch: NOTES.G5, duration: 1, startTime: 0, velocity: 0.4 },
+        { pitch: NOTES.E5, duration: 1, startTime: 1, velocity: 0.38 },
+        { pitch: NOTES.C5, duration: 1.5, startTime: 2, velocity: 0.35 },
+        { pitch: NOTES.E5, duration: 1, startTime: 3.5, velocity: 0.38 },
+        { pitch: NOTES.G5, duration: 2.5, startTime: 4.5, velocity: 0.4 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Happy Skip",
+      notes: [
+        { pitch: NOTES.C5, duration: 0.8, startTime: 0, velocity: 0.38 },
+        { pitch: NOTES.E5, duration: 0.8, startTime: 0.8, velocity: 0.4 },
+        { pitch: NOTES.G5, duration: 0.8, startTime: 1.6, velocity: 0.42 },
+        { pitch: NOTES.E5, duration: 0.8, startTime: 2.4, velocity: 0.4 },
+        { pitch: NOTES.C5, duration: 1.6, startTime: 3.2, velocity: 0.38 },
       ],
       repeat: 2,
     },
   ],
-  durationRange: [35, 50],
+  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Walking Bass"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS,
+  durationRange: [30, 45],
 };
 
-// 4. ダーク（Dark）: 暗めで重い雰囲気、マイナーコード中心
+/**
+ * 4. ダーク（Dark）: 重厚で神秘的
+ */
 export const DARK_STYLE: MusicStyle = {
   type: "dark",
   name: "ダーク",
-  description: "重厚で暗い雰囲気",
+  description: "重厚で神秘的な暗い雰囲気",
   soundParams: {
     padVolume: 0.1,
-    padAttack: 1.2,
-    padRelease: 1.8,
-    leadVolume: 0.35,
-    leadAttack: 0.15,
-    leadRelease: 0.6,
+    padAttack: 1.5,
+    padRelease: 2.0,
+    leadVolume: 0.38,
+    leadAttack: 0.2,
+    leadRelease: 0.8,
     oscillatorType: "sawtooth",
   },
   progressions: [
+    // i-VI-III-VII (Natural minor progression)
     {
-      name: "Dark Mysterious",
-      tempo: 55,
-      chords: [
-        { root: NOTES.A3, type: "minor", duration: 5 },
-        { root: NOTES.F3, type: "minor", duration: 5 },
-        { root: NOTES.C4, type: "minor", duration: 5 },
-        { root: NOTES.G3, type: "minor", duration: 5 },
-      ],
-    },
-    {
-      name: "Dark Heavy",
+      name: "Dark Minor",
       tempo: 52,
       chords: [
-        { root: NOTES.D3, type: "min7", duration: 6 },
-        { root: NOTES.A3, type: "min7", duration: 6 },
-        { root: NOTES.E3, type: "min7", duration: 6 },
-        { root: NOTES.D3, type: "min7", duration: 6 },
+        { root: NOTES.A3, type: "minor", duration: 5 },
+        { root: NOTES.F3, type: "major", duration: 5 },
+        { root: NOTES.C4, type: "major", duration: 5 },
+        { root: NOTES.G3, type: "major", duration: 5 },
+      ],
+    },
+    // i-iv-VII-III (Dorian)
+    {
+      name: "Dorian Mystery",
+      tempo: 48,
+      chords: [
+        { root: NOTES.D3, type: "minor", duration: 6 },
+        { root: NOTES.G3, type: "minor", duration: 6 },
+        { root: NOTES.C4, type: "major", duration: 6 },
+        { root: NOTES.F3, type: "major", duration: 6 },
+      ],
+    },
+    // i-bVII-bVI-bVII (Phrygian)
+    {
+      name: "Phrygian Dark",
+      tempo: 50,
+      chords: [
+        { root: NOTES.E3, type: "minor", duration: 4 },
+        { root: NOTES.D3, type: "major", duration: 4 },
+        { root: NOTES.C4, type: "major", duration: 4 },
+        { root: NOTES.D3, type: "major", duration: 4 },
       ],
     },
   ],
   melodyPatterns: [
     {
-      name: "Dark Descending",
+      name: "Mysterious Descent",
       notes: [
-        { pitch: NOTES.A4, duration: 3, startTime: 0, velocity: 0.3 },
-        { pitch: NOTES.G4, duration: 3, startTime: 3, velocity: 0.28 },
-        { pitch: NOTES.F4, duration: 3, startTime: 6, velocity: 0.26 },
-        { pitch: NOTES.E4, duration: 3, startTime: 9, velocity: 0.24 },
+        { pitch: NOTES.A4, duration: 4, startTime: 0, velocity: 0.32 },
+        { pitch: NOTES.G4, duration: 4, startTime: 4, velocity: 0.3 },
+        { pitch: NOTES.F4, duration: 4, startTime: 8, velocity: 0.28 },
+        { pitch: NOTES.E4, duration: 4, startTime: 12, velocity: 0.26 },
       ],
-      repeat: 2,
-    },
-  ],
-  durationRange: [45, 65],
-};
-
-// 5. アンビエント（Ambient）: 非常にゆっくり、長い持続音
-export const AMBIENT_STYLE: MusicStyle = {
-  type: "ambient",
-  name: "アンビエント",
-  description: "浮遊感のある静かな音空間",
-  soundParams: {
-    padVolume: 0.07,
-    padAttack: 1.5,
-    padRelease: 2.0,
-    leadVolume: 0.3,
-    leadAttack: 0.3,
-    leadRelease: 0.8,
-    oscillatorType: "sine",
-  },
-  progressions: [
-    {
-      name: "Ambient Float",
-      tempo: 45,
-      chords: [
-        { root: NOTES.C4, type: "sus2", duration: 8 },
-        { root: NOTES.G3, type: "sus2", duration: 8 },
-        { root: NOTES.F3, type: "sus2", duration: 8 },
-        { root: NOTES.C4, type: "sus2", duration: 8 },
-      ],
+      repeat: 1,
     },
     {
-      name: "Ambient Space",
-      tempo: 42,
-      chords: [
-        { root: NOTES.A3, type: "sus4", duration: 10 },
-        { root: NOTES.E3, type: "sus4", duration: 10 },
-        { root: NOTES.D3, type: "sus2", duration: 10 },
-        { root: NOTES.A3, type: "sus2", duration: 10 },
-      ],
-    },
-  ],
-  melodyPatterns: [
-    {
-      name: "Ambient Sparse",
+      name: "Haunting Echo",
       notes: [
-        { pitch: NOTES.G5, duration: 6, startTime: 0, velocity: 0.25 },
-        { pitch: NOTES.E5, duration: 6, startTime: 6, velocity: 0.25 },
-        { pitch: NOTES.D5, duration: 6, startTime: 12, velocity: 0.23 },
-        { pitch: NOTES.C5, duration: 6, startTime: 18, velocity: 0.2 },
+        { pitch: NOTES.E5, duration: 3, startTime: 0, velocity: 0.3 },
+        { pitch: NOTES.D5, duration: 2, startTime: 3, velocity: 0.28 },
+        { pitch: NOTES.C5, duration: 2, startTime: 5, velocity: 0.26 },
+        { pitch: NOTES.A4, duration: 5, startTime: 7, velocity: 0.24 },
       ],
       repeat: 1,
     },
   ],
-  durationRange: [50, 80],
+  bassPatterns: BASS_PATTERNS.filter(p => ["Minimal", "Root-Fifth"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Down", "Random"].includes(p.name)),
+  durationRange: [40, 60],
+};
+
+/**
+ * 5. アンビエント（Ambient）: 浮遊感のある空間
+ */
+export const AMBIENT_STYLE: MusicStyle = {
+  type: "ambient",
+  name: "アンビエント",
+  description: "浮遊感のある広がる音空間",
+  soundParams: {
+    padVolume: 0.07,
+    padAttack: 2.0,
+    padRelease: 2.5,
+    leadVolume: 0.32,
+    leadAttack: 0.5,
+    leadRelease: 1.0,
+    oscillatorType: "sine",
+  },
+  progressions: [
+    // Suspended chords
+    {
+      name: "Floating Suspended",
+      tempo: 40,
+      chords: [
+        { root: NOTES.C4, type: "sus2", duration: 10 },
+        { root: NOTES.G3, type: "sus2", duration: 10 },
+        { root: NOTES.F3, type: "sus2", duration: 10 },
+        { root: NOTES.C4, type: "sus2", duration: 10 },
+      ],
+    },
+    // Modal interchange
+    {
+      name: "Modal Space",
+      tempo: 38,
+      chords: [
+        { root: NOTES.A3, type: "sus4", duration: 12 },
+        { root: NOTES.E3, type: "sus4", duration: 12 },
+        { root: NOTES.D3, type: "sus2", duration: 12 },
+        { root: NOTES.A3, type: "sus2", duration: 12 },
+      ],
+    },
+  ],
+  melodyPatterns: [
+    {
+      name: "Sparse Stars",
+      notes: [
+        { pitch: NOTES.G5, duration: 8, startTime: 0, velocity: 0.25 },
+        { pitch: NOTES.E5, duration: 8, startTime: 8, velocity: 0.25 },
+        { pitch: NOTES.D5, duration: 8, startTime: 16, velocity: 0.23 },
+      ],
+      repeat: 1,
+    },
+  ],
+  bassPatterns: BASS_PATTERNS.filter(p => p.name === "Minimal"),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => p.name === "Up"),
+  durationRange: [55, 90],
 };
 
 /**

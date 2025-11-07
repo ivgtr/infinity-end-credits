@@ -1,4 +1,4 @@
-import type { Chord, Note, SoundParameters } from "@/types/music";
+import type { Chord, Note, SoundParameters, BassPattern, ArpeggioPattern } from "@/types/music";
 import { getChordNotes } from "./patterns";
 
 /**
@@ -269,5 +269,181 @@ export class MusicEngine {
    */
   public getCurrentTime(): number {
     return this.audioContext?.currentTime ?? 0;
+  }
+
+  /**
+   * ベースラインを再生
+   */
+  public playBassline(
+    chord: Chord,
+    bassPattern: BassPattern,
+    soundParams: SoundParameters,
+    startTime?: number
+  ): void {
+    if (!this.audioContext || !this.masterGain || !this.isPlaying) {
+      return;
+    }
+
+    const now = this.audioContext.currentTime;
+    const start = startTime ?? now;
+    const rootNote = chord.root - 12; // ベースは1オクターブ下
+
+    bassPattern.rhythm.forEach((rhythmTime, index) => {
+      const noteOffset = bassPattern.pattern[index] ?? 0;
+      const pitch = rootNote + noteOffset;
+      const duration = bassPattern.durations[index] ?? 1;
+      const noteStart = start + rhythmTime;
+
+      this.playBassNote(pitch, noteStart, duration, soundParams);
+    });
+  }
+
+  /**
+   * ベース音を再生
+   */
+  private playBassNote(
+    midiNote: number,
+    startTime: number,
+    duration: number,
+    soundParams: SoundParameters
+  ): void {
+    if (!this.audioContext || !this.masterGain) {
+      return;
+    }
+
+    const freq = midiToFrequency(midiNote);
+
+    // オシレーター: サイン波（ベースには柔らかい音）
+    const osc = this.audioContext.createOscillator();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+
+    // ゲインノード
+    const gainNode = this.audioContext.createGain();
+    gainNode.gain.value = 0;
+
+    // 接続
+    osc.connect(gainNode);
+    gainNode.connect(this.masterGain);
+
+    // エンベロープ: ベースらしい短いアタックと適度なリリース
+    const attackTime = 0.05;
+    const releaseTime = 0.2;
+    const sustainLevel = 0.12; // ベースは控えめに
+
+    gainNode.gain.setValueAtTime(0, startTime);
+    gainNode.gain.linearRampToValueAtTime(sustainLevel, startTime + attackTime);
+    gainNode.gain.setValueAtTime(
+      sustainLevel,
+      startTime + Math.max(duration - releaseTime, attackTime)
+    );
+    gainNode.gain.linearRampToValueAtTime(0, startTime + duration);
+
+    // 再生
+    osc.start(startTime);
+    osc.stop(startTime + duration);
+
+    // トラッキング
+    this.activeOscillators.add(osc);
+
+    // クリーンアップ
+    osc.onended = () => {
+      osc.disconnect();
+      gainNode.disconnect();
+      this.activeOscillators.delete(osc);
+    };
+  }
+
+  /**
+   * アルペジオを再生
+   */
+  public playArpeggio(
+    chord: Chord,
+    arpeggioPattern: ArpeggioPattern,
+    soundParams: SoundParameters,
+    startTime?: number
+  ): void {
+    if (!this.audioContext || !this.masterGain || !this.isPlaying) {
+      return;
+    }
+
+    const now = this.audioContext.currentTime;
+    const start = startTime ?? now;
+    const chordNotes = getChordNotes(chord);
+
+    let currentTime = start;
+    const noteCount = arpeggioPattern.pattern.length;
+    const patternDuration = chord.duration;
+    const totalNotes = Math.floor(patternDuration / arpeggioPattern.noteDuration);
+
+    for (let i = 0; i < totalNotes; i++) {
+      const patternIndex = arpeggioPattern.pattern[i % noteCount];
+      if (patternIndex !== undefined && patternIndex < chordNotes.length) {
+        const pitch = chordNotes[patternIndex]! + 12; // アルペジオは1オクターブ上
+        this.playArpeggioNote(
+          pitch,
+          currentTime,
+          arpeggioPattern.noteDuration,
+          soundParams
+        );
+      }
+      currentTime += arpeggioPattern.noteDuration / arpeggioPattern.speed;
+    }
+  }
+
+  /**
+   * アルペジオ音を再生
+   */
+  private playArpeggioNote(
+    midiNote: number,
+    startTime: number,
+    duration: number,
+    soundParams: SoundParameters
+  ): void {
+    if (!this.audioContext || !this.masterGain) {
+      return;
+    }
+
+    const freq = midiToFrequency(midiNote);
+
+    // オシレーター: トライアングル波（クリアで明るい音）
+    const osc = this.audioContext.createOscillator();
+    osc.type = "triangle";
+    osc.frequency.value = freq;
+
+    // ゲインノード
+    const gainNode = this.audioContext.createGain();
+    gainNode.gain.value = 0;
+
+    // 接続
+    osc.connect(gainNode);
+    gainNode.connect(this.masterGain);
+
+    // エンベロープ: 短いアタックとリリース
+    const attackTime = 0.02;
+    const releaseTime = 0.1;
+    const sustainLevel = 0.08; // アルペジオは繊細に
+
+    gainNode.gain.setValueAtTime(0, startTime);
+    gainNode.gain.linearRampToValueAtTime(sustainLevel, startTime + attackTime);
+    gainNode.gain.setValueAtTime(
+      sustainLevel,
+      startTime + Math.max(duration - releaseTime, attackTime)
+    );
+    gainNode.gain.linearRampToValueAtTime(0, startTime + duration);
+
+    // 再生
+    osc.start(startTime);
+    osc.stop(startTime + duration);
+
+    // トラッキング
+    this.activeOscillators.add(osc);
+
+    // クリーンアップ
+    osc.onended = () => {
+      osc.disconnect();
+      gainNode.disconnect();
+      this.activeOscillators.delete(osc);
+    };
   }
 }

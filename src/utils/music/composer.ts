@@ -4,6 +4,7 @@ import { getRandomStyle } from "./styles";
 /**
  * 音楽作曲アルゴリズム
  * スタイルを切り替えながら、無限に音楽を生成
+ * 革新的な生成アルゴリズムでダイナミクスと多様性を提供
  */
 export class MusicComposer {
   private currentStyle: MusicStyle;
@@ -11,11 +12,18 @@ export class MusicComposer {
   private currentStyleDuration: number = 0;
   private progressionHistory: string[] = [];
   private maxHistorySize = 3;
+  private sectionCount = 0;
+  private lastHadMelody = false;
+  private lastHadBass = false;
+  private lastHadArpeggio = false;
 
   constructor() {
     // 初期スタイルをランダムに選択
     this.currentStyle = getRandomStyle();
     this.currentStyleDuration = this.getRandomDuration();
+    console.log(
+      `🎵 初期スタイル: ${this.currentStyle.name} (${this.currentStyleDuration}秒間)`
+    );
   }
 
   /**
@@ -62,17 +70,52 @@ export class MusicComposer {
       0
     );
 
-    // メロディーパターンを選択（スタイルに応じて確率調整）
+    // レイヤーの選択（革新的アルゴリズム）
+    const layers = this.selectLayers();
+
+    // メロディーパターンを選択
     let melody = undefined;
-    const melodyProbability = this.getMelodyProbability();
     if (
-      Math.random() < melodyProbability &&
+      layers.includeMelody &&
       this.currentStyle.melodyPatterns.length > 0
     ) {
       melody =
         this.currentStyle.melodyPatterns[
           Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
         ]!;
+      this.lastHadMelody = true;
+    } else {
+      this.lastHadMelody = false;
+    }
+
+    // ベースラインパターンを選択
+    let bass = undefined;
+    if (
+      layers.includeBass &&
+      this.currentStyle.bassPatterns.length > 0
+    ) {
+      bass =
+        this.currentStyle.bassPatterns[
+          Math.floor(Math.random() * this.currentStyle.bassPatterns.length)
+        ]!;
+      this.lastHadBass = true;
+    } else {
+      this.lastHadBass = false;
+    }
+
+    // アルペジオパターンを選択
+    let arpeggio = undefined;
+    if (
+      layers.includeArpeggio &&
+      this.currentStyle.arpeggioPatterns.length > 0
+    ) {
+      arpeggio =
+        this.currentStyle.arpeggioPatterns[
+          Math.floor(Math.random() * this.currentStyle.arpeggioPatterns.length)
+        ]!;
+      this.lastHadArpeggio = true;
+    } else {
+      this.lastHadArpeggio = false;
     }
 
     // 履歴に追加
@@ -83,12 +126,64 @@ export class MusicComposer {
 
     // 経過時間を更新
     this.currentStyleElapsedTime += chordDuration;
+    this.sectionCount++;
 
     return {
       progression,
       melody,
+      bass,
+      arpeggio,
       duration: chordDuration,
       style: this.currentStyle,
+    };
+  }
+
+  /**
+   * レイヤー選択アルゴリズム
+   * ダイナミクスと多様性を提供するために、レイヤーを戦略的に選択
+   */
+  private selectLayers(): {
+    includeMelody: boolean;
+    includeBass: boolean;
+    includeArpeggio: boolean;
+  } {
+    // セクション番号に基づいたパターン
+    const sectionMod = this.sectionCount % 8;
+
+    // スタイルごとのベース確率
+    let melodyProb = this.getMelodyProbability();
+    let bassProb = this.getBassProbability();
+    let arpeggioProb = this.getArpeggioProbability();
+
+    // ダイナミクスパターン: 徐々にレイヤーを追加/削除
+    if (sectionMod === 0 || sectionMod === 4) {
+      // ビルドアップ: 最小限から開始
+      melodyProb *= 0.3;
+      bassProb *= 0.5;
+      arpeggioProb *= 0.3;
+    } else if (sectionMod === 2 || sectionMod === 6) {
+      // クライマックス: すべてのレイヤー
+      melodyProb *= 1.5;
+      bassProb *= 1.3;
+      arpeggioProb *= 1.2;
+    }
+
+    // 前のセクションとの連続性を考慮
+    // 同じレイヤーが続きすぎないように
+    if (this.lastHadMelody && this.lastHadBass && this.lastHadArpeggio) {
+      // すべてあった場合、少し減らす
+      melodyProb *= 0.7;
+      arpeggioProb *= 0.6;
+    } else if (!this.lastHadMelody && !this.lastHadBass && !this.lastHadArpeggio) {
+      // 何もなかった場合、増やす
+      melodyProb *= 1.5;
+      bassProb *= 1.5;
+    }
+
+    return {
+      includeMelody: Math.random() < melodyProb,
+      includeBass: Math.random() < bassProb,
+      includeArpeggio: Math.random() < arpeggioProb,
     };
   }
 
@@ -112,6 +207,7 @@ export class MusicComposer {
     this.currentStyleElapsedTime = 0;
     this.currentStyleDuration = this.getRandomDuration();
     this.progressionHistory = []; // 履歴をクリア
+    this.sectionCount = 0; // セクションカウントをリセット
 
     console.log(
       `🎵 スタイル切り替え: ${this.currentStyle.name} (${this.currentStyleDuration}秒間)`
@@ -132,17 +228,57 @@ export class MusicComposer {
   private getMelodyProbability(): number {
     switch (this.currentStyle.type) {
       case "grand":
-        return 0.8; // 壮大: メロディー多め
+        return 0.85; // 壮大: メロディー多め
       case "monotonous":
-        return 0.4; // 退屈: メロディー少なめ
+        return 0.35; // 退屈: メロディー少なめ
       case "bright":
-        return 0.85; // 明るい: メロディー多め
+        return 0.9; // 明るい: メロディー多め
       case "dark":
-        return 0.6; // ダーク: 適度
+        return 0.65; // ダーク: 適度
       case "ambient":
-        return 0.5; // アンビエント: 適度
+        return 0.45; // アンビエント: 適度
       default:
         return 0.7;
+    }
+  }
+
+  /**
+   * ベースの出現確率を取得
+   */
+  private getBassProbability(): number {
+    switch (this.currentStyle.type) {
+      case "grand":
+        return 0.75; // 壮大: ベース多め
+      case "monotonous":
+        return 0.4; // 退屈: ベース少なめ
+      case "bright":
+        return 0.85; // 明るい: ベース多め
+      case "dark":
+        return 0.8; // ダーク: ベース多め
+      case "ambient":
+        return 0.3; // アンビエント: ベース少なめ
+      default:
+        return 0.65;
+    }
+  }
+
+  /**
+   * アルペジオの出現確率を取得
+   */
+  private getArpeggioProbability(): number {
+    switch (this.currentStyle.type) {
+      case "grand":
+        return 0.6; // 壮大: 適度
+      case "monotonous":
+        return 0.2; // 退屈: アルペジオほぼなし
+      case "bright":
+        return 0.8; // 明るい: アルペジオ多め
+      case "dark":
+        return 0.5; // ダーク: 適度
+      case "ambient":
+        return 0.6; // アンビエント: 適度
+      default:
+        return 0.5;
     }
   }
 
@@ -154,5 +290,9 @@ export class MusicComposer {
     this.currentStyleElapsedTime = 0;
     this.currentStyleDuration = this.getRandomDuration();
     this.progressionHistory = [];
+    this.sectionCount = 0;
+    this.lastHadMelody = false;
+    this.lastHadBass = false;
+    this.lastHadArpeggio = false;
   }
 }

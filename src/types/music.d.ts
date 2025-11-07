@@ -49,6 +49,34 @@ export interface MelodyPattern {
 }
 
 /**
+ * ベースラインパターン
+ */
+export interface BassPattern {
+  /** パターン名 */
+  name: string;
+  /** 音符の配列（ルート音からの相対位置） */
+  pattern: number[];
+  /** 各音の持続時間 */
+  durations: number[];
+  /** リズムパターン */
+  rhythm: number[];
+}
+
+/**
+ * アルペジオパターン
+ */
+export interface ArpeggioPattern {
+  /** パターン名 */
+  name: string;
+  /** コード内の音のインデックスパターン */
+  pattern: number[];
+  /** 各音の持続時間 */
+  noteDuration: number;
+  /** パターンの速度係数 */
+  speed: number;
+}
+
+/**
  * 音楽セクション
  */
 export interface MusicSection {
@@ -56,6 +84,10 @@ export interface MusicSection {
   progression: ChordProgression;
   /** メロディーパターン（オプション） */
   melody?: MelodyPattern;
+  /** ベースラインパターン（オプション） */
+  bass?: BassPattern;
+  /** アルペジオパターン（オプション） */
+  arpeggio?: ArpeggioPattern;
   /** 持続時間（秒） */
   duration: number;
   /** スタイル */
@@ -103,6 +135,10 @@ export interface MusicStyle {
   progressions: ChordProgression[];
   /** メロディーパターン */
   melodyPatterns: MelodyPattern[];
+  /** ベースラインパターン */
+  bassPatterns: BassPattern[];
+  /** アルペジオパターン */
+  arpeggioPatterns: ArpeggioPattern[];
   /** スタイルの持続時間範囲（秒） */
   durationRange: [number, number];
 }
