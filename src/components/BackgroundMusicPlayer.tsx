@@ -17,6 +17,7 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
   const { isPlaying, play, toggle, setVolume } = useBackgroundMusic();
   const [volume, setVolumeState] = useState(DEFAULT_VOLUME);
   const [showUI, setShowUI] = useState(true);
+  const [previousVolume, setPreviousVolume] = useState(DEFAULT_VOLUME);
 
   // 初期化時にローカルストレージから音量を読み込む
   useEffect(() => {
@@ -25,8 +26,13 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
       const vol = parseFloat(savedVolume);
       setVolumeState(vol);
       setVolume(vol);
+      // ミュート以外の音量を記憶
+      if (vol > 0) {
+        setPreviousVolume(vol);
+      }
     } else {
       setVolume(DEFAULT_VOLUME);
+      setPreviousVolume(DEFAULT_VOLUME);
     }
   }, [setVolume]);
 
@@ -40,6 +46,10 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
         const savedVolume = localStorage.getItem(VOLUME_STORAGE_KEY);
         const vol = savedVolume ? parseFloat(savedVolume) : DEFAULT_VOLUME;
         setVolume(vol);
+        // ミュート以外の音量を記憶
+        if (vol > 0) {
+          setPreviousVolume(vol);
+        }
       };
 
       startPlayback();
@@ -52,18 +62,26 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
     setVolumeState(newVolume);
     setVolume(newVolume);
     localStorage.setItem(VOLUME_STORAGE_KEY, newVolume.toString());
+
+    // ミュート以外の音量を記憶
+    if (newVolume > 0) {
+      setPreviousVolume(newVolume);
+    }
   };
 
   // ミュート/ミュート解除
   const handleMuteToggle = () => {
     if (volume > 0) {
+      // ミュート: 現在の音量を保存してから0に設定
+      setPreviousVolume(volume);
       setVolumeState(0);
       setVolume(0);
       localStorage.setItem(VOLUME_STORAGE_KEY, "0");
     } else {
-      setVolumeState(DEFAULT_VOLUME);
-      setVolume(DEFAULT_VOLUME);
-      localStorage.setItem(VOLUME_STORAGE_KEY, DEFAULT_VOLUME.toString());
+      // ミュート解除: 以前の音量に戻す
+      setVolumeState(previousVolume);
+      setVolume(previousVolume);
+      localStorage.setItem(VOLUME_STORAGE_KEY, previousVolume.toString());
     }
   };
 
