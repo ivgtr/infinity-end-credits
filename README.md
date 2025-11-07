@@ -1,40 +1,140 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 無限エンドロール (Infinity End Credits)
 
-## Getting Started
+エヴァンゲリオン風の無限にスクロールするエンドクレジットを生成するWebアプリケーションです。
 
-First, run the development server:
+## 特徴
+
+- **無限スクロール**: 終わりのないエンドクレジットを自動生成
+- **2つの表示モード**:
+  - 自動スクロールモード (`/`) - アニメーションで自動的にスクロール
+  - 手動スクロールモード (`/manual`) - ブラウザのネイティブスクロールを使用
+- **インタラクティブな速度調整**: マウスホイールやタッチスワイプで速度を変更可能
+- **本格的な制作スタッフ表記**: エヴァンゲリオンのエンドロールを参考にした役職テンプレート
+- **日本語の架空の名前を自動生成**: faker-jsを使用した自然な日本語名
+
+## 技術スタック
+
+- **Next.js 14** (Pages Router)
+- **TypeScript 5**
+- **React 18**
+- **Tailwind CSS 3**
+- **@faker-js/faker** - 日本語名の生成
+
+## セットアップ
+
+### 必要要件
+
+- Node.js 18.17以上
+
+### インストール
+
+```bash
+# リポジトリをクローン
+git clone https://github.com/ivgtr/infinity-end-credits.git
+cd infinity-end-credits
+
+# 依存関係をインストール
+npm install
+```
+
+### 開発サーバーの起動
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ブラウザで [http://localhost:3000](http://localhost:3000) を開いて確認できます。
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### 本番ビルド
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```bash
+# ビルド
+npm run build
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+# 本番サーバー起動
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## 使い方
 
-## Learn More
+### 自動スクロールモード (`/`)
 
-To learn more about Next.js, take a look at the following resources:
+- エンドクレジットが自動的に上にスクロールします
+- **マウスホイール**: 上に回すと速度アップ、下に回すと速度ダウン
+- **タッチスワイプ**: 上にスワイプで速度アップ、下にスワイプで速度ダウン
+- **クリック/タップ**: スクロール位置をリセット
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 手動スクロールモード (`/manual`)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- ブラウザのネイティブスクロールを使用
+- 下にスクロールすると自動的に新しいコンテンツが読み込まれます
 
-## Deploy on Vercel
+## プロジェクト構造
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+├── pages/           # Next.js Pages Router
+│   ├── index.tsx   # 自動スクロールモード
+│   └── manual.tsx  # 手動スクロールモード
+├── components/      # Reactコンポーネント
+│   ├── CreaditsCanvas.tsx          # 自動モードのメインコンテナ
+│   ├── ManualCreaditsCanvas.tsx    # 手動モードのメインコンテナ
+│   ├── CreditsList.tsx             # 自動モードのリスト
+│   ├── ManualCreaditsList.tsx      # 手動モードのリスト
+│   ├── CreditsItem.tsx             # クレジット項目
+│   ├── MouseActionObserver.tsx     # マウス操作の監視
+│   └── SwipeActionObserver.tsx     # タッチ操作の監視
+├── hooks/           # カスタムフック
+│   ├── useCredits.ts  # クレジットの状態管理
+│   └── useResize.ts   # ウィンドウリサイズ処理
+├── utils/           # ユーティリティ関数
+│   ├── generate.ts  # 架空の名前・IDの生成
+│   ├── role.ts      # 役職テンプレート
+│   └── object.ts    # オブジェクト操作ヘルパー
+└── types/           # TypeScript型定義
+    ├── credits.d.ts
+    ├── role.d.ts
+    └── staff.d.ts
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## 開発
+
+### コマンド
+
+```bash
+# 開発サーバー起動
+npm run dev
+
+# 本番ビルド
+npm run build
+
+# 本番サーバー起動
+npm start
+
+# リンター実行
+npm run lint
+```
+
+### アーキテクチャ
+
+#### 無限スクロールの実装
+
+両モードとも以下の仕組みで無限スクロールを実現しています:
+
+1. スクロール位置を監視（`requestAnimationFrame`または`onScroll`）
+2. コンテンツの底から1000px以内に達したら`addRandomWork()`をトリガー
+3. 新しいクレジットをDOMに動的追加
+
+#### アニメーションシステム（自動スクロールモード）
+
+- `requestAnimationFrame`ループを使用
+- パフォーマンスのため`transform: translateY()`でアニメーション
+- マウス/タッチ操作で速度を動的調整
+
+## ライセンス
+
+MIT
+
+## 作者
+
+[@ivgtr](https://github.com/ivgtr)
