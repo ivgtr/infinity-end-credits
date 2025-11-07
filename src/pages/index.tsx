@@ -1,4 +1,5 @@
 import { CreditsCanvas } from "@/components/CreaditsCanvas";
+import { BackgroundMusicPlayer } from "@/components/BackgroundMusicPlayer";
 import Head from "next/head";
 
 export default function Home() {
@@ -9,6 +10,7 @@ export default function Home() {
       </Head>
 
       <CreditsCanvas />
+      <BackgroundMusicPlayer />
     </>
   );
 }
