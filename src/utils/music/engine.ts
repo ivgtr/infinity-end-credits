@@ -1,4 +1,4 @@
-import type { Chord, Note, SoundParameters, BassPattern, ArpeggioPattern } from "@/types/music";
+import type { Chord, Note, SoundParameters, BassPattern, ArpeggioPattern, DrumPattern } from "@/types/music";
 import { getChordNotes } from "./patterns";
 
 /**
@@ -445,5 +445,198 @@ export class MusicEngine {
       gainNode.disconnect();
       this.activeOscillators.delete(osc);
     };
+  }
+
+  /**
+   * ドラムパターンを再生
+   */
+  public playDrums(
+    drumPattern: DrumPattern,
+    sectionDuration: number,
+    startTime?: number
+  ): void {
+    if (!this.audioContext || !this.masterGain || !this.isPlaying) {
+      return;
+    }
+
+    const now = this.audioContext.currentTime;
+    const start = startTime ?? now;
+
+    // パターンを繰り返して再生
+    const repeatCount = Math.ceil(sectionDuration / drumPattern.duration);
+
+    for (let i = 0; i < repeatCount; i++) {
+      const patternStartTime = start + (i * drumPattern.duration);
+
+      // キックドラムを再生
+      drumPattern.kick.forEach((time) => {
+        this.playKick(patternStartTime + time);
+      });
+
+      // スネアドラムを再生
+      drumPattern.snare.forEach((time) => {
+        this.playSnare(patternStartTime + time);
+      });
+
+      // ハイハットを再生
+      drumPattern.hihat.forEach((time) => {
+        this.playHihat(patternStartTime + time);
+      });
+    }
+  }
+
+  /**
+   * キックドラム音を再生
+   */
+  private playKick(startTime: number): void {
+    if (!this.audioContext || !this.masterGain) {
+      return;
+    }
+
+    const duration = 0.5;
+
+    // 低周波オシレーター（ピッチエンベロープ付き）
+    const osc = this.audioContext.createOscillator();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(150, startTime);
+    osc.frequency.exponentialRampToValueAtTime(50, startTime + 0.05);
+
+    // ゲインノード
+    const gainNode = this.audioContext.createGain();
+    gainNode.gain.setValueAtTime(0.4, startTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+
+    // 接続
+    osc.connect(gainNode);
+    gainNode.connect(this.masterGain);
+
+    // 再生
+    osc.start(startTime);
+    osc.stop(startTime + duration);
+
+    // トラッキング
+    this.activeOscillators.add(osc);
+
+    // クリーンアップ
+    osc.onended = () => {
+      osc.disconnect();
+      gainNode.disconnect();
+      this.activeOscillators.delete(osc);
+    };
+  }
+
+  /**
+   * スネアドラム音を再生
+   */
+  private playSnare(startTime: number): void {
+    if (!this.audioContext || !this.masterGain) {
+      return;
+    }
+
+    const duration = 0.2;
+
+    // ノイズ生成（ホワイトノイズ）
+    const bufferSize = this.audioContext.sampleRate * duration;
+    const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
+    const data = buffer.getChannelData(0);
+
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+
+    const noise = this.audioContext.createBufferSource();
+    noise.buffer = buffer;
+
+    // ノイズ用ハイパスフィルター
+    const noiseFilter = this.audioContext.createBiquadFilter();
+    noiseFilter.type = "highpass";
+    noiseFilter.frequency.value = 1000;
+
+    // トーン成分（200Hz）
+    const tone = this.audioContext.createOscillator();
+    tone.type = "triangle";
+    tone.frequency.value = 200;
+
+    // ゲインノード
+    const gainNode = this.audioContext.createGain();
+    gainNode.gain.setValueAtTime(0.3, startTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+
+    // 接続
+    noise.connect(noiseFilter);
+    noiseFilter.connect(gainNode);
+    tone.connect(gainNode);
+    gainNode.connect(this.masterGain);
+
+    // 再生
+    noise.start(startTime);
+    tone.start(startTime);
+    noise.stop(startTime + duration);
+    tone.stop(startTime + duration);
+
+    // トラッキング
+    this.activeOscillators.add(tone);
+
+    // クリーンアップ
+    tone.onended = () => {
+      noise.disconnect();
+      noiseFilter.disconnect();
+      tone.disconnect();
+      gainNode.disconnect();
+      this.activeOscillators.delete(tone);
+    };
+  }
+
+  /**
+   * ハイハット音を再生
+   */
+  private playHihat(startTime: number): void {
+    if (!this.audioContext || !this.masterGain) {
+      return;
+    }
+
+    const duration = 0.1;
+
+    // ノイズ生成（ホワイトノイズ）
+    const bufferSize = this.audioContext.sampleRate * duration;
+    const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
+    const data = buffer.getChannelData(0);
+
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+
+    const noise = this.audioContext.createBufferSource();
+    noise.buffer = buffer;
+
+    // ノイズ用ハイパスフィルター（より高い周波数）
+    const noiseFilter = this.audioContext.createBiquadFilter();
+    noiseFilter.type = "highpass";
+    noiseFilter.frequency.value = 7000;
+
+    // ゲインノード
+    const gainNode = this.audioContext.createGain();
+    gainNode.gain.setValueAtTime(0.15, startTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+
+    // 接続
+    noise.connect(noiseFilter);
+    noiseFilter.connect(gainNode);
+    gainNode.connect(this.masterGain);
+
+    // 再生
+    noise.start(startTime);
+    noise.stop(startTime + duration);
+
+    // クリーンアップ（タイムアウトを使用）
+    setTimeout(() => {
+      try {
+        noise.disconnect();
+        noiseFilter.disconnect();
+        gainNode.disconnect();
+      } catch (e) {
+        // Already disconnected
+      }
+    }, duration * 1000 + 100);
   }
 }

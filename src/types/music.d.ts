@@ -77,6 +77,22 @@ export interface ArpeggioPattern {
 }
 
 /**
+ * ドラムパターン
+ */
+export interface DrumPattern {
+  /** パターン名 */
+  name: string;
+  /** キックドラムのタイミング（秒） */
+  kick: number[];
+  /** スネアドラムのタイミング（秒） */
+  snare: number[];
+  /** ハイハットのタイミング（秒） */
+  hihat: number[];
+  /** パターンの長さ（秒） */
+  duration: number;
+}
+
+/**
  * 音楽セクション
  */
 export interface MusicSection {
@@ -88,6 +104,8 @@ export interface MusicSection {
   bass?: BassPattern;
   /** アルペジオパターン（オプション） */
   arpeggio?: ArpeggioPattern;
+  /** ドラムパターン（オプション） */
+  drums?: DrumPattern;
   /** 持続時間（秒） */
   duration: number;
   /** スタイル */
@@ -139,6 +157,8 @@ export interface MusicStyle {
   bassPatterns: BassPattern[];
   /** アルペジオパターン */
   arpeggioPatterns: ArpeggioPattern[];
+  /** ドラムパターン */
+  drumPatterns: DrumPattern[];
   /** スタイルの持続時間範囲（秒） */
   durationRange: [number, number];
 }

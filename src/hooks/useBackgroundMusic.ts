@@ -136,6 +136,11 @@ export function useBackgroundMusic() {
         });
       }
 
+      // ドラムを再生（存在する場合）
+      if (section.drums) {
+        engine.playDrums(section.drums, section.duration, sectionStartTime);
+      }
+
       // 次のセクションへ
       nextScheduleTimeRef.current += section.duration;
       currentSectionIndexRef.current++;

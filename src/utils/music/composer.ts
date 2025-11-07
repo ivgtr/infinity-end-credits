@@ -16,6 +16,7 @@ export class MusicComposer {
   private lastHadMelody = false;
   private lastHadBass = false;
   private lastHadArpeggio = false;
+  private lastHadDrums = false;
 
   constructor() {
     // 初期スタイルをランダムに選択
@@ -118,6 +119,21 @@ export class MusicComposer {
       this.lastHadArpeggio = false;
     }
 
+    // ドラムパターンを選択
+    let drums = undefined;
+    if (
+      layers.includeDrums &&
+      this.currentStyle.drumPatterns.length > 0
+    ) {
+      drums =
+        this.currentStyle.drumPatterns[
+          Math.floor(Math.random() * this.currentStyle.drumPatterns.length)
+        ]!;
+      this.lastHadDrums = true;
+    } else {
+      this.lastHadDrums = false;
+    }
+
     // 履歴に追加
     this.progressionHistory.push(progression.name);
     if (this.progressionHistory.length > this.maxHistorySize) {
@@ -133,6 +149,7 @@ export class MusicComposer {
       melody,
       bass,
       arpeggio,
+      drums,
       duration: chordDuration,
       style: this.currentStyle,
     };
@@ -146,6 +163,7 @@ export class MusicComposer {
     includeMelody: boolean;
     includeBass: boolean;
     includeArpeggio: boolean;
+    includeDrums: boolean;
   } {
     // セクション番号に基づいたパターン
     const sectionMod = this.sectionCount % 8;
@@ -154,6 +172,7 @@ export class MusicComposer {
     let melodyProb = this.getMelodyProbability();
     let bassProb = this.getBassProbability();
     let arpeggioProb = this.getArpeggioProbability();
+    let drumsProb = this.getDrumsProbability();
 
     // ダイナミクスパターン: 徐々にレイヤーを追加/削除
     if (sectionMod === 0 || sectionMod === 4) {
@@ -161,29 +180,34 @@ export class MusicComposer {
       melodyProb *= 0.3;
       bassProb *= 0.5;
       arpeggioProb *= 0.3;
+      drumsProb *= 0.4;
     } else if (sectionMod === 2 || sectionMod === 6) {
       // クライマックス: すべてのレイヤー
       melodyProb *= 1.5;
       bassProb *= 1.3;
       arpeggioProb *= 1.2;
+      drumsProb *= 1.4;
     }
 
     // 前のセクションとの連続性を考慮
     // 同じレイヤーが続きすぎないように
-    if (this.lastHadMelody && this.lastHadBass && this.lastHadArpeggio) {
+    if (this.lastHadMelody && this.lastHadBass && this.lastHadArpeggio && this.lastHadDrums) {
       // すべてあった場合、少し減らす
       melodyProb *= 0.7;
       arpeggioProb *= 0.6;
-    } else if (!this.lastHadMelody && !this.lastHadBass && !this.lastHadArpeggio) {
+      drumsProb *= 0.7;
+    } else if (!this.lastHadMelody && !this.lastHadBass && !this.lastHadArpeggio && !this.lastHadDrums) {
       // 何もなかった場合、増やす
       melodyProb *= 1.5;
       bassProb *= 1.5;
+      drumsProb *= 1.3;
     }
 
     return {
       includeMelody: Math.random() < melodyProb,
       includeBass: Math.random() < bassProb,
       includeArpeggio: Math.random() < arpeggioProb,
+      includeDrums: Math.random() < drumsProb,
     };
   }
 
@@ -283,6 +307,26 @@ export class MusicComposer {
   }
 
   /**
+   * ドラムの出現確率を取得
+   */
+  private getDrumsProbability(): number {
+    switch (this.currentStyle.type) {
+      case "grand":
+        return 0.6; // 壮大: ドラム適度
+      case "monotonous":
+        return 0.0; // 退屈: ドラムなし
+      case "bright":
+        return 0.85; // 明るい: ドラム多め
+      case "dark":
+        return 0.75; // ダーク: ドラム多め
+      case "ambient":
+        return 0.0; // アンビエント: ドラムなし
+      default:
+        return 0.5;
+    }
+  }
+
+  /**
    * 履歴とスタイルをリセット
    */
   public reset(): void {
@@ -294,5 +338,6 @@ export class MusicComposer {
     this.lastHadMelody = false;
     this.lastHadBass = false;
     this.lastHadArpeggio = false;
+    this.lastHadDrums = false;
   }
 }

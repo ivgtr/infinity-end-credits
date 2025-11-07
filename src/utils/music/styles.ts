@@ -1,4 +1,4 @@
-import type { MusicStyle, ArpeggioPattern, BassPattern } from "@/types/music";
+import type { MusicStyle, ArpeggioPattern, BassPattern, DrumPattern } from "@/types/music";
 import { NOTES } from "./patterns";
 
 /**
@@ -58,6 +58,47 @@ export const ARPEGGIO_PATTERNS: ArpeggioPattern[] = [
     pattern: [0, 2, 1, 0, 2, 0, 1, 2], // ランダムパターン
     noteDuration: 0.3,
     speed: 1.2,
+  },
+];
+
+/**
+ * 共通ドラムパターン
+ */
+export const DRUM_PATTERNS: DrumPattern[] = [
+  {
+    name: "Basic 4/4",
+    kick: [0, 2],
+    snare: [1, 3],
+    hihat: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
+    duration: 4,
+  },
+  {
+    name: "Epic Slow",
+    kick: [0, 2.5],
+    snare: [2],
+    hihat: [0, 1, 2, 3, 4, 5],
+    duration: 6,
+  },
+  {
+    name: "Energetic",
+    kick: [0, 1, 2, 3],
+    snare: [1, 3],
+    hihat: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
+    duration: 4,
+  },
+  {
+    name: "Heavy Rock",
+    kick: [0, 0.5, 2, 2.5],
+    snare: [1, 3],
+    hihat: [0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75],
+    duration: 4,
+  },
+  {
+    name: "Minimal Beat",
+    kick: [0, 3],
+    snare: [2],
+    hihat: [0, 1, 2, 3],
+    duration: 4,
   },
 ];
 
@@ -181,6 +222,7 @@ export const GRAND_STYLE: MusicStyle = {
   ],
   bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Octave Jump"].includes(p.name)),
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Up-Down"].includes(p.name)),
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Epic Slow", "Minimal Beat"].includes(p.name)),
   durationRange: [35, 55],
 };
 
@@ -268,6 +310,7 @@ export const MONOTONOUS_STYLE: MusicStyle = {
   ],
   bassPatterns: BASS_PATTERNS.filter(p => p.name === "Minimal"),
   arpeggioPatterns: [],
+  drumPatterns: [], // 退屈な雰囲気を保つためドラムなし
   durationRange: [50, 80],
 };
 
@@ -396,6 +439,7 @@ export const BRIGHT_STYLE: MusicStyle = {
   ],
   bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Walking Bass"].includes(p.name)),
   arpeggioPatterns: ARPEGGIO_PATTERNS,
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Energetic", "Basic 4/4"].includes(p.name)),
   durationRange: [30, 45],
 };
 
@@ -518,6 +562,7 @@ export const DARK_STYLE: MusicStyle = {
   ],
   bassPatterns: BASS_PATTERNS.filter(p => ["Minimal", "Root-Fifth"].includes(p.name)),
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Down", "Random"].includes(p.name)),
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Heavy Rock", "Basic 4/4"].includes(p.name)),
   durationRange: [40, 60],
 };
 
@@ -627,6 +672,7 @@ export const AMBIENT_STYLE: MusicStyle = {
   ],
   bassPatterns: BASS_PATTERNS.filter(p => p.name === "Minimal"),
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => p.name === "Up"),
+  drumPatterns: [], // 浮遊感を保つためドラムなし
   durationRange: [55, 90],
 };
 
