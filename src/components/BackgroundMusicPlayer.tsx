@@ -33,9 +33,18 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
   // 自動再生
   useEffect(() => {
     if (autoPlay && !isPlaying) {
-      play();
+      const startPlayback = async () => {
+        await play();
+
+        // play()後にエンジンが初期化されているので、音量を再設定
+        const savedVolume = localStorage.getItem(VOLUME_STORAGE_KEY);
+        const vol = savedVolume ? parseFloat(savedVolume) : DEFAULT_VOLUME;
+        setVolume(vol);
+      };
+
+      startPlayback();
     }
-  }, [autoPlay, isPlaying, play]);
+  }, [autoPlay, isPlaying, play, setVolume]);
 
   // クリックハンドラー
   const handleClick = () => {
