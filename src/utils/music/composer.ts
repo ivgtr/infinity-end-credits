@@ -1,0 +1,402 @@
+import type { MusicSection, MusicStyle } from "@/types/music";
+import { getRandomStyle } from "./styles";
+
+/**
+ * 音楽作曲アルゴリズム
+ * スタイルを切り替えながら、無限に音楽を生成
+ * 革新的な生成アルゴリズムでダイナミクスと多様性を提供
+ */
+export class MusicComposer {
+  private currentStyle: MusicStyle;
+  private currentStyleElapsedTime: number = 0;
+  private currentStyleDuration: number = 0;
+  private progressionHistory: string[] = [];
+  private maxHistorySize = 3;
+  private sectionCount = 0;
+  private lastHadMelody = false;
+  private lastHadBass = false;
+  private lastHadArpeggio = false;
+  private lastHadDrums = false;
+  private totalElapsedTime: number = 0; // 総再生時間（全スタイル通じて）
+
+  constructor() {
+    // 初期スタイルをランダムに選択
+    this.currentStyle = getRandomStyle();
+    this.currentStyleDuration = this.getRandomDuration();
+    console.log(
+      `🎵 初期スタイル: ${this.currentStyle.name} (${this.currentStyleDuration}秒間)`
+    );
+  }
+
+  /**
+   * 現在のスタイルを取得
+   */
+  public getCurrentStyle(): MusicStyle {
+    return this.currentStyle;
+  }
+
+  /**
+   * 新しい音楽セクションを生成
+   * スタイルの持続時間を追跡し、必要に応じて切り替え
+   */
+  public generateSection(): MusicSection {
+    // スタイル切り替えが必要かチェック
+    if (this.currentStyleElapsedTime >= this.currentStyleDuration) {
+      this.switchStyle();
+    }
+
+    // 現在のスタイルからコード進行を選択
+    let progression =
+      this.currentStyle.progressions[
+        Math.floor(Math.random() * this.currentStyle.progressions.length)
+      ]!;
+
+    // 履歴を考慮して重複を避ける
+    let attempts = 0;
+    const maxAttempts = 10;
+    while (
+      this.progressionHistory.includes(progression.name) &&
+      attempts < maxAttempts &&
+      this.currentStyle.progressions.length > 1
+    ) {
+      progression =
+        this.currentStyle.progressions[
+          Math.floor(Math.random() * this.currentStyle.progressions.length)
+        ]!;
+      attempts++;
+    }
+
+    // セクションの長さを計算
+    const chordDuration = progression.chords.reduce(
+      (sum, chord) => sum + chord.duration,
+      0
+    );
+
+    // レイヤーの選択（革新的アルゴリズム）
+    const layers = this.selectLayers();
+
+    // メロディーパターンを選択
+    let melody = undefined;
+    if (
+      layers.includeMelody &&
+      this.currentStyle.melodyPatterns.length > 0
+    ) {
+      melody =
+        this.currentStyle.melodyPatterns[
+          Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
+        ]!;
+      this.lastHadMelody = true;
+    } else {
+      this.lastHadMelody = false;
+    }
+
+    // ベースラインパターンを選択
+    let bass = undefined;
+    if (
+      layers.includeBass &&
+      this.currentStyle.bassPatterns.length > 0
+    ) {
+      bass =
+        this.currentStyle.bassPatterns[
+          Math.floor(Math.random() * this.currentStyle.bassPatterns.length)
+        ]!;
+      this.lastHadBass = true;
+    } else {
+      this.lastHadBass = false;
+    }
+
+    // アルペジオパターンを選択
+    let arpeggio = undefined;
+    if (
+      layers.includeArpeggio &&
+      this.currentStyle.arpeggioPatterns.length > 0
+    ) {
+      arpeggio =
+        this.currentStyle.arpeggioPatterns[
+          Math.floor(Math.random() * this.currentStyle.arpeggioPatterns.length)
+        ]!;
+      this.lastHadArpeggio = true;
+    } else {
+      this.lastHadArpeggio = false;
+    }
+
+    // ドラムパターンを選択
+    let drums = undefined;
+    if (
+      layers.includeDrums &&
+      this.currentStyle.drumPatterns.length > 0
+    ) {
+      drums =
+        this.currentStyle.drumPatterns[
+          Math.floor(Math.random() * this.currentStyle.drumPatterns.length)
+        ]!;
+      this.lastHadDrums = true;
+    } else {
+      this.lastHadDrums = false;
+    }
+
+    // 履歴に追加
+    this.progressionHistory.push(progression.name);
+    if (this.progressionHistory.length > this.maxHistorySize) {
+      this.progressionHistory.shift();
+    }
+
+    // 経過時間を更新
+    this.currentStyleElapsedTime += chordDuration;
+    this.totalElapsedTime += chordDuration;
+    this.sectionCount++;
+
+    return {
+      progression,
+      melody,
+      bass,
+      arpeggio,
+      drums,
+      duration: chordDuration,
+      style: this.currentStyle,
+    };
+  }
+
+  /**
+   * レイヤー選択アルゴリズム
+   * ダイナミクスと多様性を提供するために、レイヤーを戦略的に選択
+   */
+  private selectLayers(): {
+    includeMelody: boolean;
+    includeBass: boolean;
+    includeArpeggio: boolean;
+    includeDrums: boolean;
+  } {
+    // セクション番号に基づいたパターン
+    const sectionMod = this.sectionCount % 8;
+
+    // スタイルごとのベース確率
+    let melodyProb = this.getMelodyProbability();
+    let bassProb = this.getBassProbability();
+    let arpeggioProb = this.getArpeggioProbability();
+    let drumsProb = this.getDrumsProbability();
+
+    // 時間経過による進化: 徐々にレイヤーが豊かになる
+    const evolutionMultiplier = this.getEvolutionMultiplier();
+    melodyProb *= evolutionMultiplier;
+    bassProb *= evolutionMultiplier;
+    arpeggioProb *= evolutionMultiplier;
+    drumsProb *= evolutionMultiplier;
+
+    // ダイナミクスパターン: 徐々にレイヤーを追加/削除
+    if (sectionMod === 0 || sectionMod === 4) {
+      // ビルドアップ: 最小限から開始
+      melodyProb *= 0.3;
+      bassProb *= 0.5;
+      arpeggioProb *= 0.3;
+      drumsProb *= 0.4;
+    } else if (sectionMod === 2 || sectionMod === 6) {
+      // クライマックス: すべてのレイヤー
+      melodyProb *= 1.5;
+      bassProb *= 1.3;
+      arpeggioProb *= 1.2;
+      drumsProb *= 1.4;
+    }
+
+    // 前のセクションとの連続性を考慮
+    // 同じレイヤーが続きすぎないように
+    if (this.lastHadMelody && this.lastHadBass && this.lastHadArpeggio && this.lastHadDrums) {
+      // すべてあった場合、少し減らす
+      melodyProb *= 0.7;
+      arpeggioProb *= 0.6;
+      drumsProb *= 0.7;
+    } else if (!this.lastHadMelody && !this.lastHadBass && !this.lastHadArpeggio && !this.lastHadDrums) {
+      // 何もなかった場合、増やす
+      melodyProb *= 1.5;
+      bassProb *= 1.5;
+      drumsProb *= 1.3;
+    }
+
+    return {
+      includeMelody: Math.random() < melodyProb,
+      includeBass: Math.random() < bassProb,
+      includeArpeggio: Math.random() < arpeggioProb,
+      includeDrums: Math.random() < drumsProb,
+    };
+  }
+
+  /**
+   * 複数のセクションを生成
+   */
+  public generateSections(count: number): MusicSection[] {
+    const sections: MusicSection[] = [];
+    for (let i = 0; i < count; i++) {
+      sections.push(this.generateSection());
+    }
+    return sections;
+  }
+
+  /**
+   * スタイルを切り替え
+   */
+  private switchStyle(): void {
+    // 現在のスタイルと異なる新しいスタイルを選択
+    this.currentStyle = getRandomStyle(this.currentStyle.type);
+    this.currentStyleElapsedTime = 0;
+    this.currentStyleDuration = this.getRandomDuration();
+    this.progressionHistory = []; // 履歴をクリア
+    this.sectionCount = 0; // セクションカウントをリセット
+
+    console.log(
+      `🎵 スタイル切り替え: ${this.currentStyle.name} (${this.currentStyleDuration}秒間)`
+    );
+  }
+
+  /**
+   * スタイルの持続時間をランダムに決定
+   */
+  private getRandomDuration(): number {
+    const [min, max] = this.currentStyle.durationRange;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  /**
+   * メロディーの出現確率を取得（スタイルに応じて調整）
+   */
+  private getMelodyProbability(): number {
+    switch (this.currentStyle.type) {
+      case "grand":
+        return 0.85; // 壮大: メロディー多め
+      case "monotonous":
+        return 0.35; // 退屈: メロディー少なめ
+      case "bright":
+        return 0.9; // 明るい: メロディー多め
+      case "dark":
+        return 0.65; // ダーク: 適度
+      case "ambient":
+        return 0.45; // アンビエント: 適度
+      case "jazzy":
+        return 0.80; // ジャジー: ジャズはメロディ重要
+      case "retro":
+        return 0.88; // レトロ: 80年代はメロディ重視
+      case "electronic":
+        return 0.75; // エレクトロニック: メロディも重要だがアルペジオがメイン
+      default:
+        return 0.7;
+    }
+  }
+
+  /**
+   * ベースの出現確率を取得
+   */
+  private getBassProbability(): number {
+    switch (this.currentStyle.type) {
+      case "grand":
+        return 0.75; // 壮大: ベース多め
+      case "monotonous":
+        return 0.4; // 退屈: ベース少なめ
+      case "bright":
+        return 0.85; // 明るい: ベース多め
+      case "dark":
+        return 0.8; // ダーク: ベース多め
+      case "ambient":
+        return 0.3; // アンビエント: ベース少なめ
+      case "jazzy":
+        return 0.90; // ジャジー: ウォーキングベースが重要
+      case "retro":
+        return 0.85; // レトロ: シンセベースが重要
+      case "electronic":
+        return 0.85; // エレクトロニック: ベースラインが重要
+      default:
+        return 0.65;
+    }
+  }
+
+  /**
+   * アルペジオの出現確率を取得
+   */
+  private getArpeggioProbability(): number {
+    switch (this.currentStyle.type) {
+      case "grand":
+        return 0.6; // 壮大: 適度
+      case "monotonous":
+        return 0.2; // 退屈: アルペジオほぼなし
+      case "bright":
+        return 0.8; // 明るい: アルペジオ多め
+      case "dark":
+        return 0.5; // ダーク: 適度
+      case "ambient":
+        return 0.6; // アンビエント: 適度
+      case "jazzy":
+        return 0.70; // ジャジー: コンピング的なアルペジオ
+      case "retro":
+        return 0.75; // レトロ: シンセアルペジオ
+      case "electronic":
+        return 0.90; // エレクトロニック: アルペジオが特徴的
+      default:
+        return 0.5;
+    }
+  }
+
+  /**
+   * ドラムの出現確率を取得
+   */
+  private getDrumsProbability(): number {
+    switch (this.currentStyle.type) {
+      case "grand":
+        return 0.6; // 壮大: ドラム適度
+      case "monotonous":
+        return 0.0; // 退屈: ドラムなし
+      case "bright":
+        return 0.85; // 明るい: ドラム多め
+      case "dark":
+        return 0.75; // ダーク: ドラム多め
+      case "ambient":
+        return 0.0; // アンビエント: ドラムなし
+      case "jazzy":
+        return 0.65; // ジャジー: スウィング感のためドラム適度
+      case "retro":
+        return 0.80; // レトロ: 80年代ポップはドラム重要
+      case "electronic":
+        return 0.85; // エレクトロニック: リズム重視、ドラム多め
+      default:
+        return 0.5;
+    }
+  }
+
+  /**
+   * 時間経過による進化係数を取得
+   * 時間が経つにつれて音楽が豊かになる
+   */
+  private getEvolutionMultiplier(): number {
+    const elapsed = this.totalElapsedTime;
+
+    if (elapsed < 60) {
+      // 最初の1分: 控えめに開始（70%）
+      return 0.7;
+    } else if (elapsed < 300) {
+      // 1-5分: 通常（100%）
+      return 1.0;
+    } else if (elapsed < 900) {
+      // 5-15分: やや豊か（120%）
+      return 1.2;
+    } else if (elapsed < 1800) {
+      // 15-30分: 豊か（140%）
+      return 1.4;
+    } else {
+      // 30分以上: 非常に豊か（160%）
+      return 1.6;
+    }
+  }
+
+  /**
+   * 履歴とスタイルをリセット
+   */
+  public reset(): void {
+    this.currentStyle = getRandomStyle();
+    this.currentStyleElapsedTime = 0;
+    this.currentStyleDuration = this.getRandomDuration();
+    this.progressionHistory = [];
+    this.sectionCount = 0;
+    this.lastHadMelody = false;
+    this.lastHadBass = false;
+    this.lastHadArpeggio = false;
+    this.lastHadDrums = false;
+    this.totalElapsedTime = 0;
+  }
+}
