@@ -270,6 +270,12 @@ export class MusicComposer {
         return 0.65; // ダーク: 適度
       case "ambient":
         return 0.45; // アンビエント: 適度
+      case "jazzy":
+        return 0.80; // ジャジー: ジャズはメロディ重要
+      case "retro":
+        return 0.88; // レトロ: 80年代はメロディ重視
+      case "electronic":
+        return 0.75; // エレクトロニック: メロディも重要だがアルペジオがメイン
       default:
         return 0.7;
     }
@@ -290,6 +296,12 @@ export class MusicComposer {
         return 0.8; // ダーク: ベース多め
       case "ambient":
         return 0.3; // アンビエント: ベース少なめ
+      case "jazzy":
+        return 0.90; // ジャジー: ウォーキングベースが重要
+      case "retro":
+        return 0.85; // レトロ: シンセベースが重要
+      case "electronic":
+        return 0.85; // エレクトロニック: ベースラインが重要
       default:
         return 0.65;
     }
@@ -310,6 +322,12 @@ export class MusicComposer {
         return 0.5; // ダーク: 適度
       case "ambient":
         return 0.6; // アンビエント: 適度
+      case "jazzy":
+        return 0.70; // ジャジー: コンピング的なアルペジオ
+      case "retro":
+        return 0.75; // レトロ: シンセアルペジオ
+      case "electronic":
+        return 0.90; // エレクトロニック: アルペジオが特徴的
       default:
         return 0.5;
     }
@@ -330,6 +348,12 @@ export class MusicComposer {
         return 0.75; // ダーク: ドラム多め
       case "ambient":
         return 0.0; // アンビエント: ドラムなし
+      case "jazzy":
+        return 0.65; // ジャジー: スウィング感のためドラム適度
+      case "retro":
+        return 0.80; // レトロ: 80年代ポップはドラム重要
+      case "electronic":
+        return 0.85; // エレクトロニック: リズム重視、ドラム多め
       default:
         return 0.5;
     }

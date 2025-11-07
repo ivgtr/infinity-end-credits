@@ -19,7 +19,7 @@ export interface Chord {
   /** ルート音（MIDIノート番号） */
   root: number;
   /** コードタイプ（major, minor, sus4など） */
-  type: 'major' | 'minor' | 'sus4' | 'sus2' | 'maj7' | 'min7';
+  type: 'major' | 'minor' | 'sus4' | 'sus2' | 'maj7' | 'min7' | 'dom7';
   /** 持続時間（秒） */
   duration: number;
 }
@@ -115,7 +115,7 @@ export interface MusicSection {
 /**
  * 音楽スタイル
  */
-export type MusicStyleType = 'grand' | 'monotonous' | 'bright' | 'dark' | 'ambient';
+export type MusicStyleType = 'grand' | 'monotonous' | 'bright' | 'dark' | 'ambient' | 'jazzy' | 'retro' | 'electronic';
 
 /**
  * 音色パラメータ

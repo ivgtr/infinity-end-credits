@@ -23,6 +23,7 @@ export const NOTES = {
   E5: 76,
   F5: 77,
   G5: 79,
+  A5: 81,
 } as const;
 
 /**
@@ -35,6 +36,7 @@ const CHORD_INTERVALS = {
   sus2: [0, 2, 7],
   maj7: [0, 4, 7, 11],
   min7: [0, 3, 7, 10],
+  dom7: [0, 4, 7, 10],
 } as const;
 
 /**

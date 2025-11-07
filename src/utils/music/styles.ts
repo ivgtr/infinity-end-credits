@@ -677,6 +677,346 @@ export const AMBIENT_STYLE: MusicStyle = {
 };
 
 /**
+ * 6. ジャジー（Jazzy）: ジャズ風の洗練された雰囲気
+ */
+export const JAZZY_STYLE: MusicStyle = {
+  type: "jazzy",
+  name: "ジャジー",
+  description: "ジャズ風の洗練されたスウィング感",
+  soundParams: {
+    padVolume: 0.07,
+    padAttack: 0.4,
+    padRelease: 0.8,
+    leadVolume: 0.42,
+    leadAttack: 0.08,
+    leadRelease: 0.3,
+    oscillatorType: "triangle",
+  },
+  progressions: [
+    // ii-V-I (ジャズの王道進行)
+    {
+      name: "Jazz Standard",
+      tempo: 95,
+      chords: [
+        { root: NOTES.D4, type: "min7", duration: 3 },
+        { root: NOTES.G3, type: "dom7", duration: 3 },
+        { root: NOTES.C4, type: "maj7", duration: 6 },
+      ],
+    },
+    // I-vi-ii-V (Rhythm changes A section)
+    {
+      name: "Rhythm Changes",
+      tempo: 92,
+      chords: [
+        { root: NOTES.C4, type: "maj7", duration: 2 },
+        { root: NOTES.A3, type: "min7", duration: 2 },
+        { root: NOTES.D4, type: "min7", duration: 2 },
+        { root: NOTES.G3, type: "dom7", duration: 2 },
+      ],
+    },
+    // iii-vi-ii-V (Turnaround)
+    {
+      name: "Turnaround",
+      tempo: 88,
+      chords: [
+        { root: NOTES.E3, type: "min7", duration: 2.5 },
+        { root: NOTES.A3, type: "min7", duration: 2.5 },
+        { root: NOTES.D4, type: "min7", duration: 2.5 },
+        { root: NOTES.G3, type: "dom7", duration: 2.5 },
+      ],
+    },
+    // I-IV-iii-vi (Simplified jazz)
+    {
+      name: "Cool Jazz",
+      tempo: 85,
+      chords: [
+        { root: NOTES.C4, type: "maj7", duration: 3 },
+        { root: NOTES.F3, type: "maj7", duration: 3 },
+        { root: NOTES.E3, type: "min7", duration: 3 },
+        { root: NOTES.A3, type: "min7", duration: 3 },
+      ],
+    },
+    // I-bIII-bVI-bII (Modal jazz)
+    {
+      name: "Modal Jazz",
+      tempo: 90,
+      chords: [
+        { root: NOTES.C4, type: "maj7", duration: 4 },
+        { root: NOTES.D3 + 8, type: "maj7", duration: 4 }, // Eb
+        { root: NOTES.G3 + 8, type: "maj7", duration: 4 }, // Ab
+        { root: NOTES.C4 + 1, type: "maj7", duration: 4 }, // Db
+      ],
+    },
+    // vi-ii-V-I (Minor jazz)
+    {
+      name: "Minor Jazz",
+      tempo: 87,
+      chords: [
+        { root: NOTES.A3, type: "min7", duration: 3 },
+        { root: NOTES.D4, type: "min7", duration: 3 },
+        { root: NOTES.G3, type: "dom7", duration: 3 },
+        { root: NOTES.C4, type: "maj7", duration: 3 },
+      ],
+    },
+  ],
+  melodyPatterns: [
+    {
+      name: "Jazzy Walk",
+      notes: [
+        { pitch: NOTES.G5, duration: 1.5, startTime: 0, velocity: 0.38 },
+        { pitch: NOTES.F5, duration: 1, startTime: 1.5, velocity: 0.36 },
+        { pitch: NOTES.E5, duration: 1.5, startTime: 2.5, velocity: 0.37 },
+        { pitch: NOTES.D5, duration: 1, startTime: 4, velocity: 0.35 },
+        { pitch: NOTES.C5, duration: 2, startTime: 5, velocity: 0.38 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Swing Phrase",
+      notes: [
+        { pitch: NOTES.C5, duration: 1, startTime: 0, velocity: 0.36 },
+        { pitch: NOTES.E5, duration: 1.5, startTime: 1, velocity: 0.38 },
+        { pitch: NOTES.G5, duration: 1, startTime: 2.5, velocity: 0.4 },
+        { pitch: NOTES.A5, duration: 2, startTime: 3.5, velocity: 0.37 },
+        { pitch: NOTES.G5, duration: 1.5, startTime: 5.5, velocity: 0.35 },
+      ],
+      repeat: 1,
+    },
+  ],
+  bassPatterns: BASS_PATTERNS.filter(p => ["Walking Bass", "Root-Fifth"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Random", "Up-Down"].includes(p.name)),
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Basic 4/4", "Energetic"].includes(p.name)),
+  durationRange: [35, 50],
+};
+
+/**
+ * 7. レトロ（Retro）: 80年代シンセポップ風のノスタルジック
+ */
+export const RETRO_STYLE: MusicStyle = {
+  type: "retro",
+  name: "レトロ",
+  description: "80年代シンセポップ風のノスタルジック",
+  soundParams: {
+    padVolume: 0.09,
+    padAttack: 0.2,
+    padRelease: 0.5,
+    leadVolume: 0.48,
+    leadAttack: 0.03,
+    leadRelease: 0.25,
+    oscillatorType: "square",
+  },
+  progressions: [
+    // I-V-vi-IV (80s Pop standard)
+    {
+      name: "80s Pop",
+      tempo: 82,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 3 },
+        { root: NOTES.G3, type: "major", duration: 3 },
+        { root: NOTES.A3, type: "minor", duration: 3 },
+        { root: NOTES.F3, type: "major", duration: 3 },
+      ],
+    },
+    // I-IV-V-IV (Rock ballad)
+    {
+      name: "Retro Rock",
+      tempo: 78,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 3 },
+        { root: NOTES.F3, type: "major", duration: 3 },
+        { root: NOTES.G3, type: "major", duration: 2 },
+        { root: NOTES.F3, type: "major", duration: 4 },
+      ],
+    },
+    // vi-IV-I-V (Synthwave)
+    {
+      name: "Synthwave",
+      tempo: 85,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 3 },
+        { root: NOTES.F3, type: "major", duration: 3 },
+        { root: NOTES.C4, type: "major", duration: 3 },
+        { root: NOTES.G3, type: "sus4", duration: 3 },
+      ],
+    },
+    // I-vi-IV-V (Doo-wop progression)
+    {
+      name: "Nostalgic Doo-wop",
+      tempo: 80,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 2.5 },
+        { root: NOTES.A3, type: "minor", duration: 2.5 },
+        { root: NOTES.F3, type: "major", duration: 2.5 },
+        { root: NOTES.G3, type: "major", duration: 2.5 },
+      ],
+    },
+    // I-bVII-IV-I (Mixolydian retro)
+    {
+      name: "Retro Mixolydian",
+      tempo: 76,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 4 },
+        { root: NOTES.A3 + 10, type: "major", duration: 4 }, // Bb
+        { root: NOTES.F3, type: "major", duration: 4 },
+        { root: NOTES.C4, type: "major", duration: 4 },
+      ],
+    },
+    // I-V-IV-IV (New Wave)
+    {
+      name: "New Wave",
+      tempo: 88,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 2 },
+        { root: NOTES.G3, type: "major", duration: 2 },
+        { root: NOTES.F3, type: "sus4", duration: 2 },
+        { root: NOTES.F3, type: "major", duration: 2 },
+      ],
+    },
+  ],
+  melodyPatterns: [
+    {
+      name: "Synth Lead",
+      notes: [
+        { pitch: NOTES.C5, duration: 1.5, startTime: 0, velocity: 0.42 },
+        { pitch: NOTES.E5, duration: 1.5, startTime: 1.5, velocity: 0.44 },
+        { pitch: NOTES.G5, duration: 2, startTime: 3, velocity: 0.46 },
+        { pitch: NOTES.E5, duration: 1, startTime: 5, velocity: 0.42 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Nostalgic Riff",
+      notes: [
+        { pitch: NOTES.G5, duration: 1, startTime: 0, velocity: 0.44 },
+        { pitch: NOTES.G5, duration: 1, startTime: 1, velocity: 0.42 },
+        { pitch: NOTES.A5, duration: 1, startTime: 2, velocity: 0.45 },
+        { pitch: NOTES.G5, duration: 1, startTime: 3, velocity: 0.43 },
+        { pitch: NOTES.E5, duration: 2, startTime: 4, velocity: 0.41 },
+      ],
+      repeat: 1,
+    },
+  ],
+  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Octave Jump"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up-Down", "Up"].includes(p.name)),
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Basic 4/4", "Energetic"].includes(p.name)),
+  durationRange: [32, 48],
+};
+
+/**
+ * 8. エレクトロニック（Electronic）: モダンなエレクトロニックサウンド
+ */
+export const ELECTRONIC_STYLE: MusicStyle = {
+  type: "electronic",
+  name: "エレクトロニック",
+  description: "モダンなエレクトロニックサウンド、アルペジオ重視",
+  soundParams: {
+    padVolume: 0.08,
+    padAttack: 0.15,
+    padRelease: 0.4,
+    leadVolume: 0.46,
+    leadAttack: 0.02,
+    leadRelease: 0.2,
+    oscillatorType: "sawtooth",
+  },
+  progressions: [
+    // i-VI-III-VII (EDM progression)
+    {
+      name: "EDM Standard",
+      tempo: 100,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 3 },
+        { root: NOTES.F3, type: "major", duration: 3 },
+        { root: NOTES.C4, type: "major", duration: 3 },
+        { root: NOTES.G3, type: "major", duration: 3 },
+      ],
+    },
+    // I-V-vi-iii (Progressive house)
+    {
+      name: "Progressive House",
+      tempo: 105,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 2.5 },
+        { root: NOTES.G3, type: "major", duration: 2.5 },
+        { root: NOTES.A3, type: "minor", duration: 2.5 },
+        { root: NOTES.E3, type: "minor", duration: 2.5 },
+      ],
+    },
+    // vi-IV-I-V (Melodic electronic)
+    {
+      name: "Melodic Electronic",
+      tempo: 95,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 3 },
+        { root: NOTES.F3, type: "major", duration: 3 },
+        { root: NOTES.C4, type: "major", duration: 3 },
+        { root: NOTES.G3, type: "sus4", duration: 3 },
+      ],
+    },
+    // I-vi-IV-V (Electro pop)
+    {
+      name: "Electro Pop",
+      tempo: 110,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 2 },
+        { root: NOTES.A3, type: "minor", duration: 2 },
+        { root: NOTES.F3, type: "major", duration: 2 },
+        { root: NOTES.G3, type: "major", duration: 2 },
+      ],
+    },
+    // I-IV-vi-V (Future bass)
+    {
+      name: "Future Bass",
+      tempo: 98,
+      chords: [
+        { root: NOTES.C4, type: "maj7", duration: 3 },
+        { root: NOTES.F3, type: "maj7", duration: 3 },
+        { root: NOTES.A3, type: "min7", duration: 3 },
+        { root: NOTES.G3, type: "sus4", duration: 3 },
+      ],
+    },
+    // vi-I-V-IV (Chill electronic)
+    {
+      name: "Chill Electronic",
+      tempo: 92,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 3.5 },
+        { root: NOTES.C4, type: "major", duration: 3.5 },
+        { root: NOTES.G3, type: "sus2", duration: 3.5 },
+        { root: NOTES.F3, type: "major", duration: 3.5 },
+      ],
+    },
+  ],
+  melodyPatterns: [
+    {
+      name: "Digital Pulse",
+      notes: [
+        { pitch: NOTES.C5, duration: 0.8, startTime: 0, velocity: 0.44 },
+        { pitch: NOTES.E5, duration: 0.8, startTime: 0.8, velocity: 0.46 },
+        { pitch: NOTES.G5, duration: 0.8, startTime: 1.6, velocity: 0.48 },
+        { pitch: NOTES.E5, duration: 0.8, startTime: 2.4, velocity: 0.45 },
+        { pitch: NOTES.C5, duration: 1.6, startTime: 3.2, velocity: 0.42 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Synth Sequence",
+      notes: [
+        { pitch: NOTES.G5, duration: 1, startTime: 0, velocity: 0.46 },
+        { pitch: NOTES.A5, duration: 1, startTime: 1, velocity: 0.47 },
+        { pitch: NOTES.C5 + 12, duration: 1.5, startTime: 2, velocity: 0.48 },
+        { pitch: NOTES.A5, duration: 1, startTime: 3.5, velocity: 0.45 },
+        { pitch: NOTES.G5, duration: 1.5, startTime: 4.5, velocity: 0.43 },
+      ],
+      repeat: 1,
+    },
+  ],
+  bassPatterns: BASS_PATTERNS.filter(p => ["Walking Bass", "Octave Jump"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS, // すべてのアルペジオパターンを使用（アルペジオ重視）
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Energetic", "Heavy Rock"].includes(p.name)),
+  durationRange: [28, 42],
+};
+
+/**
  * すべての音楽スタイル
  */
 export const ALL_MUSIC_STYLES: MusicStyle[] = [
@@ -685,6 +1025,9 @@ export const ALL_MUSIC_STYLES: MusicStyle[] = [
   BRIGHT_STYLE,
   DARK_STYLE,
   AMBIENT_STYLE,
+  JAZZY_STYLE,
+  RETRO_STYLE,
+  ELECTRONIC_STYLE,
 ];
 
 /**
