@@ -10,7 +10,8 @@ type Work = {
 };
 
 // メモリリーク防止：保持する最大作品数
-const MAX_WORKS = 20;
+// 30作品程度なら十分軽量で、削除頻度も低く抑えられる
+const MAX_WORKS = 30;
 
 export const useCredits = () => {
   const [titles, setTitles] = useState<string[]>([]);

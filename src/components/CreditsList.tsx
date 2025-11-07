@@ -27,13 +27,13 @@ export const CreditsList = ({
   // メモリリーク防止: titlesが減った場合（古いアイテムが削除された場合）にスクロール位置を調整
   useEffect(() => {
     if (titles.length < prevTitlesLengthRef.current && titles.length > 0) {
-      // アイテムが削除された場合、スクロール位置をリセットして継続
-      // 急激なジャンプを避けるため、現在位置を保持しつつ正規化
-      const container = containerRef.current;
-      if (container && movingRef.current < -5000) {
-        // スクロール位置が深すぎる場合のみリセット
-        movingRef.current = -2000;
-      }
+      // アイテムが削除された場合、削除されたアイテム分だけスクロール位置を前進させる
+      // これにより、視覚的なジャンプなしでメモリを解放できる
+      const deletedCount = prevTitlesLengthRef.current - titles.length;
+      // 1作品あたりの平均高さを2000pxと仮定して調整
+      const estimatedHeight = deletedCount * 2000;
+      movingRef.current += estimatedHeight;
+      // 注: この調整により、ユーザーには何も変化が見えず、スクロールは滑らかに継続
     }
     prevTitlesLengthRef.current = titles.length;
   }, [titles.length]);
