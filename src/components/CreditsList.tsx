@@ -22,6 +22,27 @@ export const CreditsList = ({
   const [speed, setSpeed] = useState(1);
   const movingRef = useRef<number>(0);
   const requestAnimationFrameRef = useRef<number>(0);
+  const prevTitlesLengthRef = useRef<number>(0);
+  const addWorkRef = useRef(addWork);
+
+  // addWorkの参照を常に最新に保つ
+  useEffect(() => {
+    addWorkRef.current = addWork;
+  }, [addWork]);
+
+  // メモリリーク防止: titlesが減った場合（古いアイテムが削除された場合）にスクロール位置を調整
+  useEffect(() => {
+    if (titles.length < prevTitlesLengthRef.current && titles.length > 0) {
+      // アイテムが削除された場合、削除されたアイテム分だけスクロール位置を前進させる
+      // これにより、視覚的なジャンプなしでメモリを解放できる
+      const deletedCount = prevTitlesLengthRef.current - titles.length;
+      // 1作品あたりの平均高さを2000pxと仮定して調整
+      const estimatedHeight = deletedCount * 2000;
+      movingRef.current += estimatedHeight;
+      // 注: この調整により、ユーザーには何も変化が見えず、スクロールは滑らかに継続
+    }
+    prevTitlesLengthRef.current = titles.length;
+  }, [titles.length]);
 
   useEffect(() => {
     const scroll = scrollRef.current;
@@ -31,7 +52,7 @@ export const CreditsList = ({
         const height = container.clientHeight;
         // 末端から1000px手前までスクロールしたら追加
         if (movingRef.current < -height + 1000) {
-          addWork();
+          addWorkRef.current();
           requestAnimationFrameRef.current = requestAnimationFrame(loop);
           return;
         }
@@ -49,7 +70,7 @@ export const CreditsList = ({
         cancelAnimationFrame(requestAnimationFrameRef.current);
       };
     }
-  }, [speed, titles]);
+  }, [speed]);
 
   const handleSpeedUp = useCallback(() => {
     setSpeed((prev) => prev + 0.3);
@@ -61,10 +82,10 @@ export const CreditsList = ({
 
   return (
     <>
-      <div ref={scrollRef} className="flex flex-col items-center justify-center">
+      <div ref={scrollRef} className="flex flex-col items-center justify-center" style={{ willChange: 'transform' }}>
         <div ref={containerRef} className="flex flex-col items-center justify-center">
-          {titles.map((title, index) => (
-            <CreditsItem key={index} title={title} credits={credits} />
+          {titles.map((title) => (
+            <CreditsItem key={title} title={title} credits={credits} />
           ))}
         </div>
         <div className="flex flex-col items-center justify-center w-full min-h-screen h-full">

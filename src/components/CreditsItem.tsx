@@ -1,7 +1,9 @@
+import { memo } from "react";
 import { CreditsTitle } from "./CreaditsTitle";
 import { CreditsRole } from "./CreditsRole";
 
-export const CreditsItem = ({
+// React.memoで最適化: titleとcredits[title]が変わらない限り再レンダリングしない
+export const CreditsItem = memo(({
   title,
   credits,
 }: {
@@ -115,4 +117,8 @@ export const CreditsItem = ({
       </div>
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  // カスタム比較関数: titleとcredits[title]のみを比較
+  return prevProps.title === nextProps.title &&
+         prevProps.credits[prevProps.title] === nextProps.credits[nextProps.title];
+});

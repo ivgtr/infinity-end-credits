@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CreditsItem } from "./CreditsItem";
 
+// メモリリーク防止: useCreditsフックで最大30作品に制限されているため、
+// このコンポーネントではDOMノード数も自動的に制限される
+// ネイティブスクロールを使用しているため、ブラウザが自動的にオフスクリーン要素を最適化
 export const ManualCreditsList = ({
   titles,
   credits,
@@ -34,8 +37,8 @@ export const ManualCreditsList = ({
     >
       <div className="flex flex-col items-center justify-center">
         <div ref={containerRef} className="flex flex-col items-center justify-center">
-          {titles.map((title, index) => (
-            <CreditsItem key={index} title={title} credits={credits} />
+          {titles.map((title) => (
+            <CreditsItem key={title} title={title} credits={credits} />
           ))}
         </div>
         <div className="flex flex-col items-center justify-center w-full min-h-screen">
