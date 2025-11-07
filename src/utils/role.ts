@@ -610,18 +610,90 @@ export const generateRoleStaff = () => {
   const staffs: Staffs = [];
   const roles = EVANGELIONRole;
 
-  // 必須役職を追加
-  const addRole = (roleKey: keyof typeof EVANGELIONRole, customMax?: number) => {
+  // 役職ごとの適切な人数範囲を定義
+  const staffCountRanges: { [key: string]: { min: number; max: number } } = {
+    // コアスタッフ（少数）
+    "監督": { min: 1, max: 1 },
+    "総監督": { min: 1, max: 1 },
+    "企画・原作・脚本": { min: 1, max: 3 },
+    "エグゼクティブ・プロデューサー": { min: 1, max: 3 },
+
+    // デザイン・監督系（少数〜中規模）
+    "キャラクターデザイン": { min: 1, max: 3 },
+    "キャラクターデザイン原案": { min: 1, max: 2 },
+    "メカニックデザイン": { min: 2, max: 8 },
+    "主・メカニックデザイン": { min: 1, max: 3 },
+    "美術設定": { min: 2, max: 6 },
+    "総作画監督": { min: 1, max: 3 },
+    "作画監督": { min: 3, max: 12 },
+    "メカ作画監督": { min: 2, max: 8 },
+    "画コンテ": { min: 2, max: 8 },
+
+    // 大規模スタッフ（アニメーション）
+    "原画": { min: 20, max: 50 },
+    "第二原画": { min: 15, max: 35 },
+    "動画": { min: 25, max: 60 },
+    "動画検査": { min: 5, max: 15 },
+
+    // 色彩・仕上げ系（中〜大規模）
+    "色彩設計": { min: 1, max: 3 },
+    "色指定検査": { min: 3, max: 8 },
+    "仕上げ": { min: 20, max: 45 },
+    "仕上げ検査補佐": { min: 3, max: 10 },
+    "仕上げ管理": { min: 2, max: 6 },
+    "仕上げ協力": { min: 5, max: 15 },
+
+    // 美術系（中規模）
+    "美術監督": { min: 1, max: 3 },
+    "美術": { min: 8, max: 20 },
+    "背景": { min: 15, max: 35 },
+    "美術2Dワークス": { min: 5, max: 15 },
+    "美術制作管理": { min: 2, max: 6 },
+
+    // CGI系（中〜大規模）
+    "CGI監督": { min: 1, max: 3 },
+    "CGIアニメーター": { min: 10, max: 25 },
+    "CGIモデラー": { min: 8, max: 20 },
+    "CGIアートディレクター": { min: 1, max: 3 },
+    "2DCGI・モーショングラフィックスデザイナー": { min: 5, max: 15 },
+    "レンダリングアーティスト": { min: 5, max: 12 },
+    "テクニカルアーティスト": { min: 3, max: 10 },
+
+    // 撮影系（中規模）
+    "撮影監督": { min: 1, max: 3 },
+    "撮影": { min: 10, max: 25 },
+    "撮影管理": { min: 2, max: 6 },
+    "特技監督": { min: 1, max: 3 },
+    "編集": { min: 2, max: 5 },
+    "編集助手": { min: 3, max: 8 },
+
+    // 音響・音楽系
+    "声ノ出演": { min: 12, max: 30 },
+    "音楽": { min: 1, max: 3 },
+    "音響制作": { min: 2, max: 5 },
+    "音響効果": { min: 3, max: 8 },
+    "録音": { min: 2, max: 6 },
+    "台詞演出": { min: 1, max: 3 },
+
+    // 制作系（中規模）
+    "制作": { min: 3, max: 8 },
+    "制作統括プロデューサー": { min: 1, max: 3 },
+    "アニメーションプロデューサー": { min: 2, max: 6 },
+    "制作進行": { min: 8, max: 20 },
+    "制作進行補佐": { min: 5, max: 12 },
+  };
+
+  // 役職を追加する関数
+  const addRole = (roleKey: keyof typeof EVANGELIONRole, customMin?: number, customMax?: number) => {
     const role = roles[roleKey];
     if (!role) return;
 
-    const max = customMax || role.max;
-    // より現実的な人数分布（1-3人が多い）
-    const memberCount = Math.random() < 0.7
-      ? Math.floor(Math.random() * 3) + 1
-      : Math.floor(Math.random() * max) + 1;
+    const range = staffCountRanges[roleKey] || { min: 1, max: 5 };
+    const min = customMin !== undefined ? customMin : range.min;
+    const max = customMax !== undefined ? customMax : range.max;
 
-    const members = generateNames(Math.min(memberCount, max));
+    const memberCount = Math.floor(Math.random() * (max - min + 1)) + min;
+    const members = generateNames(memberCount);
 
     staffs.push({
       role: roleKey,
@@ -631,19 +703,21 @@ export const generateRoleStaff = () => {
 
   // 総監督（20%の確率）
   if (Math.random() < 0.2) {
-    addRole("総監督", 1);
+    addRole("総監督");
   }
 
   // 監督（必須）
-  addRole("監督", 1);
+  addRole("監督");
 
   // 企画・原作・脚本（必須）
-  addRole("企画・原作・脚本", 1);
+  addRole("企画・原作・脚本");
 
-  // コアアニメーション（90%の確率）
-  if (Math.random() < 0.9) {
+  // コアアニメーション（ほぼ必須 - 95%の確率）
+  if (Math.random() < 0.95) {
     const animationRoles = roleCategories.animation;
-    const selectedCount = Math.floor(Math.random() * animationRoles.length) + 2;
+    // より多くの役職を選択（全体の60-100%）
+    const minCount = Math.ceil(animationRoles.length * 0.6);
+    const selectedCount = Math.floor(Math.random() * (animationRoles.length - minCount + 1)) + minCount;
     const selectedRoles = animationRoles
       .sort(() => Math.random() - 0.5)
       .slice(0, selectedCount);
@@ -655,10 +729,12 @@ export const generateRoleStaff = () => {
     });
   }
 
-  // 色彩・美術（80%の確率）
-  if (Math.random() < 0.8) {
+  // 色彩・美術（ほぼ必須 - 95%の確率）
+  if (Math.random() < 0.95) {
     const artRoles = roleCategories.artAndColor;
-    const selectedCount = Math.floor(Math.random() * artRoles.length) + 2;
+    // より多くの役職を選択（全体の60-100%）
+    const minCount = Math.ceil(artRoles.length * 0.6);
+    const selectedCount = Math.floor(Math.random() * (artRoles.length - minCount + 1)) + minCount;
     const selectedRoles = artRoles
       .sort(() => Math.random() - 0.5)
       .slice(0, selectedCount);
@@ -670,10 +746,12 @@ export const generateRoleStaff = () => {
     });
   }
 
-  // CGI（50%の確率）
-  if (Math.random() < 0.5) {
+  // CGI（70%の確率、含む場合は多めに）
+  if (Math.random() < 0.7) {
     const cgiRoles = roleCategories.cgi;
-    const selectedCount = Math.floor(Math.random() * cgiRoles.length) + 1;
+    // より多くのCGIスタッフを含める
+    const minCount = Math.ceil(cgiRoles.length * 0.5);
+    const selectedCount = Math.floor(Math.random() * (cgiRoles.length - minCount + 1)) + minCount;
     const selectedRoles = cgiRoles
       .sort(() => Math.random() - 0.5)
       .slice(0, selectedCount);
@@ -685,13 +763,14 @@ export const generateRoleStaff = () => {
     });
   }
 
-  // 撮影関連（70%の確率）
-  if (Math.random() < 0.7) {
+  // 撮影関連（ほぼ必須 - 90%の確率）
+  if (Math.random() < 0.9) {
     const photoRoles = roleCategories.photography;
-    const selectedCount = Math.floor(Math.random() * photoRoles.length) + 2;
+    // すべての撮影関連役職を含める
+    const selectedCount = Math.floor(Math.random() * 2) + photoRoles.length - 1;
     const selectedRoles = photoRoles
       .sort(() => Math.random() - 0.5)
-      .slice(0, selectedCount);
+      .slice(0, Math.min(selectedCount, photoRoles.length));
 
     selectedRoles.forEach((roleKey) => {
       if (roleKey in roles) {
@@ -700,13 +779,14 @@ export const generateRoleStaff = () => {
     });
   }
 
-  // 音響・音楽（85%の確率）
-  if (Math.random() < 0.85) {
+  // 音響・音楽（ほぼ必須 - 95%の確率）
+  if (Math.random() < 0.95) {
     const soundRoles = roleCategories.sound;
-    const selectedCount = Math.floor(Math.random() * soundRoles.length) + 2;
+    // すべての音響関連役職を含める
+    const selectedCount = Math.floor(Math.random() * 2) + soundRoles.length - 1;
     const selectedRoles = soundRoles
       .sort(() => Math.random() - 0.5)
-      .slice(0, selectedCount);
+      .slice(0, Math.min(selectedCount, soundRoles.length));
 
     selectedRoles.forEach((roleKey) => {
       if (roleKey in roles) {
@@ -715,13 +795,14 @@ export const generateRoleStaff = () => {
     });
   }
 
-  // 制作関連（90%の確率）
-  if (Math.random() < 0.9) {
+  // 制作関連（ほぼ必須 - 95%の確率）
+  if (Math.random() < 0.95) {
     const prodRoles = roleCategories.production;
-    const selectedCount = Math.floor(Math.random() * prodRoles.length) + 2;
+    // すべての制作関連役職を含める
+    const selectedCount = Math.floor(Math.random() * 2) + prodRoles.length - 1;
     const selectedRoles = prodRoles
       .sort(() => Math.random() - 0.5)
-      .slice(0, selectedCount);
+      .slice(0, Math.min(selectedCount, prodRoles.length));
 
     selectedRoles.forEach((roleKey) => {
       if (roleKey in roles) {
@@ -730,10 +811,10 @@ export const generateRoleStaff = () => {
     });
   }
 
-  // 特殊技術（30%の確率）
-  if (Math.random() < 0.3) {
+  // 特殊技術（50%の確率）
+  if (Math.random() < 0.5) {
     const specialRoles = roleCategories.specialTech;
-    const selectedCount = Math.floor(Math.random() * specialRoles.length) + 1;
+    const selectedCount = Math.floor(Math.random() * specialRoles.length) + 2;
     const selectedRoles = specialRoles
       .sort(() => Math.random() - 0.5)
       .slice(0, selectedCount);
@@ -745,11 +826,11 @@ export const generateRoleStaff = () => {
     });
   }
 
-  // 企業・組織セクションを追加（60%の確率）
-  if (Math.random() < 0.6) {
-    // 製作委員会
-    if (Math.random() < 0.7) {
-      const committeeCount = Math.floor(Math.random() * 5) + 3;
+  // 企業・組織セクションを追加（80%の確率で多めに）
+  if (Math.random() < 0.8) {
+    // 製作委員会（80%の確率）
+    if (Math.random() < 0.8) {
+      const committeeCount = Math.floor(Math.random() * 8) + 5; // 5-12社
       const companies = [];
       for (let i = 0; i < committeeCount; i++) {
         companies.push(generateCompanyName("committee"));
@@ -760,9 +841,9 @@ export const generateRoleStaff = () => {
       });
     }
 
-    // 制作協力
-    if (Math.random() < 0.5) {
-      const cooperationCount = Math.floor(Math.random() * 4) + 1;
+    // 制作協力（70%の確率）
+    if (Math.random() < 0.7) {
+      const cooperationCount = Math.floor(Math.random() * 6) + 3; // 3-8社
       const companies = [];
       for (let i = 0; i < cooperationCount; i++) {
         companies.push(generateCompanyName("studio"));
@@ -773,18 +854,18 @@ export const generateRoleStaff = () => {
       });
     }
 
-    // 各種協力企業
+    // 各種協力企業（確率を上げてより多く含める）
     const cooperationTypes = [
-      { role: "機材協力", probability: 0.3 },
-      { role: "音響協力", probability: 0.3 },
-      { role: "取材・考証協力", probability: 0.2 },
-      { role: "ロケーション協力", probability: 0.2 },
-      { role: "協力", probability: 0.4 },
+      { role: "機材協力", probability: 0.6, min: 2, max: 6 },
+      { role: "音響協力", probability: 0.5, min: 1, max: 4 },
+      { role: "取材・考証協力", probability: 0.4, min: 2, max: 5 },
+      { role: "ロケーション協力", probability: 0.3, min: 1, max: 4 },
+      { role: "協力", probability: 0.6, min: 3, max: 8 },
     ];
 
-    cooperationTypes.forEach(({ role, probability }) => {
+    cooperationTypes.forEach(({ role, probability, min, max }) => {
       if (Math.random() < probability && role in roles) {
-        const count = Math.floor(Math.random() * 3) + 1;
+        const count = Math.floor(Math.random() * (max - min + 1)) + min;
         const companies = [];
         for (let i = 0; i < count; i++) {
           companies.push(generateCompanyName("general"));
@@ -797,9 +878,9 @@ export const generateRoleStaff = () => {
     });
   }
 
-  // Special Thanks（20%の確率）
-  if (Math.random() < 0.2) {
-    const thanksCount = Math.floor(Math.random() * 10) + 5;
+  // Special Thanks（40%の確率で多めに）
+  if (Math.random() < 0.4) {
+    const thanksCount = Math.floor(Math.random() * 20) + 15; // 15-34人
     const people = generateNames(thanksCount);
     staffs.push({
       role: "協力",
