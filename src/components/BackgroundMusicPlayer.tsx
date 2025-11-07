@@ -4,12 +4,17 @@ import { useEffect, useState } from "react";
 const VOLUME_STORAGE_KEY = "bgm-volume";
 const DEFAULT_VOLUME = 0.15;
 
+interface BackgroundMusicPlayerProps {
+  /** 自動再生フラグ */
+  autoPlay?: boolean;
+}
+
 /**
  * バックグラウンドミュージックプレイヤー
  * 画面右下に配置される音楽コントロール
  */
-export function BackgroundMusicPlayer() {
-  const { isPlaying, toggle, setVolume } = useBackgroundMusic();
+export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlayerProps) {
+  const { isPlaying, play, toggle, setVolume } = useBackgroundMusic();
   const [volume, setVolumeState] = useState(DEFAULT_VOLUME);
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
@@ -24,6 +29,13 @@ export function BackgroundMusicPlayer() {
       setVolume(DEFAULT_VOLUME);
     }
   }, [setVolume]);
+
+  // 自動再生
+  useEffect(() => {
+    if (autoPlay && !isPlaying) {
+      play();
+    }
+  }, [autoPlay, isPlaying, play]);
 
   // クリックハンドラー
   const handleClick = () => {
