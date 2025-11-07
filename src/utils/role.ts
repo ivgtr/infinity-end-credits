@@ -1008,10 +1008,10 @@ export const generateRoleStaff = () => {
     });
   }
 
-  // index順でソート
+  // index順でソート（未定義の役職にはデフォルト値を使用）
   const sortedStaffs = staffs.sort((a, b) => {
-    const aIndex = roles[a.role].index;
-    const bIndex = roles[b.role].index;
+    const aIndex = roles[a.role]?.index ?? 999;
+    const bIndex = roles[b.role]?.index ?? 999;
     return aIndex - bIndex;
   });
 
