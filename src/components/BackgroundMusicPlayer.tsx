@@ -16,7 +16,7 @@ interface BackgroundMusicPlayerProps {
 export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlayerProps) {
   const { isPlaying, play, toggle, setVolume } = useBackgroundMusic();
   const [volume, setVolumeState] = useState(DEFAULT_VOLUME);
-  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
+  const [showUI, setShowUI] = useState(true);
 
   // 初期化時にローカルストレージから音量を読み込む
   useEffect(() => {
@@ -46,11 +46,6 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
     }
   }, [autoPlay, isPlaying, play, setVolume]);
 
-  // クリックハンドラー
-  const handleClick = () => {
-    toggle();
-  };
-
   // 音量変更ハンドラー
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(e.target.value);
@@ -72,66 +67,44 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
     }
   };
 
-  // キーボードショートカット（スペースキーで再生/停止）
+  // キーボードショートカット
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      // スペースキーが押された場合
-      if (e.code === "Space" && e.target === document.body) {
+      // 入力フィールドなどでキーを押した場合は無視
+      if (e.target !== document.body) return;
+
+      // スペースキー: ミュート/ミュート解除
+      if (e.code === "Space") {
         e.preventDefault();
-        toggle();
+        handleMuteToggle();
+      }
+
+      // Hキー: UI表示/非表示
+      if (e.code === "KeyH") {
+        e.preventDefault();
+        setShowUI(prev => !prev);
       }
     };
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [toggle]);
+  }, [volume]);
+
+  // UI非表示時は何も表示しない
+  if (!showUI) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
       <div className="flex flex-col items-end gap-2">
-        {/* 音量スライダー */}
-        {showVolumeSlider && (
-          <div className="flex items-center gap-3 px-4 py-3 bg-black/70 rounded-full shadow-lg animate-fadeIn">
-            <button
-              onClick={handleMuteToggle}
-              className="text-white hover:text-gray-300 transition-colors"
-              aria-label={volume > 0 ? "ミュート" : "ミュート解除"}
-            >
-              {volume === 0 ? (
-                <VolumeOffIcon />
-              ) : volume < 0.33 ? (
-                <VolumeLowIcon />
-              ) : volume < 0.66 ? (
-                <VolumeMediumIcon />
-              ) : (
-                <VolumeHighIcon />
-              )}
-            </button>
-
-            <input
-              type="range"
-              min="0"
-              max="0.5"
-              step="0.01"
-              value={volume}
-              onChange={handleVolumeChange}
-              className="w-24 h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer slider"
-              aria-label="音量調整"
-            />
-
-            <span className="text-white text-xs w-10 text-right">
-              {Math.round((volume / 0.5) * 100)}%
-            </span>
-          </div>
-        )}
-
-        {/* メインコントロール */}
-        <div className="flex items-center gap-2">
-          {/* 音量ボタン */}
+        {/* 音量調整UI */}
+        <div className="flex items-center gap-3 px-4 py-3 bg-black/70 rounded-full shadow-lg">
+          {/* ミュート/ミュート解除ボタン */}
           <button
-            onClick={() => setShowVolumeSlider(!showVolumeSlider)}
-            className="p-3 bg-black/70 hover:bg-black/90 text-white rounded-full shadow-lg transition-all duration-200 hover:scale-105"
-            aria-label="音量調整を表示"
+            onClick={handleMuteToggle}
+            className="text-white hover:text-gray-300 transition-colors"
+            aria-label={volume > 0 ? "ミュート" : "ミュート解除"}
           >
             {volume === 0 ? (
               <VolumeOffIcon />
@@ -144,48 +117,40 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
             )}
           </button>
 
-          {/* 再生/停止ボタン */}
+          {/* 音量スライダー */}
+          <input
+            type="range"
+            min="0"
+            max="0.5"
+            step="0.01"
+            value={volume}
+            onChange={handleVolumeChange}
+            className="w-24 h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer slider"
+            aria-label="音量調整"
+          />
+
+          {/* 音量パーセント表示 */}
+          <span className="text-white text-xs w-10 text-right">
+            {Math.round((volume / 0.5) * 100)}%
+          </span>
+
+          {/* UI非表示ボタン */}
           <button
-            onClick={handleClick}
-            className="flex items-center gap-2 px-4 py-3 bg-black/70 hover:bg-black/90 text-white rounded-full shadow-lg transition-all duration-200 hover:scale-105"
-            aria-label={isPlaying ? "音楽を停止" : "音楽を再生"}
+            onClick={() => setShowUI(false)}
+            className="text-white/60 hover:text-white transition-colors ml-2"
+            aria-label="UIを非表示"
           >
-            {isPlaying ? (
-              <>
-                <PauseIcon />
-                <span className="text-sm">BGM停止</span>
-              </>
-            ) : (
-              <>
-                <PlayIcon />
-                <span className="text-sm">BGM再生</span>
-              </>
-            )}
+            <EyeOffIcon />
           </button>
         </div>
 
         {/* ヒントテキスト */}
         <div className="text-xs text-white/60 text-center">
-          スペースキーで切替
+          Space: ミュート切替 / H: UI非表示
         </div>
       </div>
 
       <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .animate-fadeIn {
-          animation: fadeIn 0.2s ease-out;
-        }
-
         /* カスタムスライダースタイル */
         .slider::-webkit-slider-thumb {
           appearance: none;
@@ -220,9 +185,9 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
 }
 
 /**
- * 再生アイコン
+ * 目を閉じたアイコン（UI非表示）
  */
-function PlayIcon() {
+function EyeOffIcon() {
   return (
     <svg
       className="w-5 h-5"
@@ -230,23 +195,7 @@ function PlayIcon() {
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M8 5v14l11-7z" />
-    </svg>
-  );
-}
-
-/**
- * 一時停止アイコン
- */
-function PauseIcon() {
-  return (
-    <svg
-      className="w-5 h-5"
-      fill="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+      <path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z" />
     </svg>
   );
 }
