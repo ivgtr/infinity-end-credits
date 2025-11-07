@@ -15,26 +15,31 @@ export function StartScreen({ onStart }: StartScreenProps) {
       </div>
 
       {/* 中央のアイコンボタン */}
-      <div className="flex gap-12">
+      <div className="flex gap-16">
         {/* BGMありボタン */}
         <button
           onClick={() => onStart(true)}
-          className="flex flex-col items-center gap-3 p-8 rounded-2xl hover:bg-white/5 transition-all group"
+          className="flex flex-col items-center gap-4 p-6 transition-all group"
           aria-label="BGMありで開始"
         >
-          <div className="w-20 h-20 flex items-center justify-center text-white/80 group-hover:text-white group-hover:scale-110 transition-all">
-            <VolumeIcon />
+          <div className="w-16 h-16 rounded-full border-2 border-white/40 flex items-center justify-center text-white/60 group-hover:border-white/80 group-hover:text-white/90 group-hover:scale-105 transition-all">
+            <div className="w-8 h-8">
+              <VolumeIcon />
+            </div>
           </div>
+          <span className="text-white/30 text-xs">※BGMが再生されます</span>
         </button>
 
         {/* ミュートボタン */}
         <button
           onClick={() => onStart(false)}
-          className="flex flex-col items-center gap-3 p-8 rounded-2xl hover:bg-white/5 transition-all group"
+          className="flex flex-col items-center gap-4 p-6 transition-all group"
           aria-label="ミュートで開始"
         >
-          <div className="w-20 h-20 flex items-center justify-center text-white/80 group-hover:text-white group-hover:scale-110 transition-all">
-            <MuteIcon />
+          <div className="w-16 h-16 rounded-full border-2 border-white/40 flex items-center justify-center text-white/60 group-hover:border-white/80 group-hover:text-white/90 group-hover:scale-105 transition-all">
+            <div className="w-8 h-8">
+              <MuteIcon />
+            </div>
           </div>
         </button>
       </div>
