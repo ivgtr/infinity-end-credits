@@ -29,6 +29,54 @@ export const BASS_PATTERNS: BassPattern[] = [
     durations: [4],
     rhythm: [0],
   },
+  {
+    name: "Jazzy Walk",
+    pattern: [0, 2, 4, 5, 7, 5, 4, 2], // ジャズウォーキング
+    durations: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
+    rhythm: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
+  },
+  {
+    name: "Syncopated Funk",
+    pattern: [0, 0, 7, 5], // シンコペーション
+    durations: [0.5, 1.5, 1, 1],
+    rhythm: [0, 0.5, 2, 3],
+  },
+  {
+    name: "Rock Steady",
+    pattern: [0, 0, 7, 7], // ロックベース
+    durations: [1, 1, 1, 1],
+    rhythm: [0, 1, 2, 3],
+  },
+  {
+    name: "Bouncy Pop",
+    pattern: [0, 7, 5, 7], // ポップベース
+    durations: [1, 0.5, 0.5, 1],
+    rhythm: [0, 1, 1.5, 2],
+  },
+  {
+    name: "Driving Eighth",
+    pattern: [0, 0, 7, 7, 5, 5, 7, 7], // 8分音符ドライブ
+    durations: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
+    rhythm: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
+  },
+  {
+    name: "Deep Pulse",
+    pattern: [0, 0, 0, 7], // ディープハウス風
+    durations: [1, 1, 1, 1],
+    rhythm: [0, 1, 2, 3],
+  },
+  {
+    name: "Rhythmic Groove",
+    pattern: [0, 7, 5, 3], // グルーブベース
+    durations: [1.5, 0.5, 1, 1],
+    rhythm: [0, 1.5, 2, 3],
+  },
+  {
+    name: "Classic Arpeggio Bass",
+    pattern: [0, 4, 7, 12], // アルペジオ風ベース
+    durations: [1, 1, 1, 1],
+    rhythm: [0, 1, 2, 3],
+  },
 ];
 
 /**
@@ -58,6 +106,42 @@ export const ARPEGGIO_PATTERNS: ArpeggioPattern[] = [
     pattern: [0, 2, 1, 0, 2, 0, 1, 2], // ランダムパターン
     noteDuration: 0.3,
     speed: 1.2,
+  },
+  {
+    name: "Fast Cascade",
+    pattern: [0, 1, 2, 2, 1, 0], // 速いカスケード
+    noteDuration: 0.2,
+    speed: 1.8,
+  },
+  {
+    name: "Triplet",
+    pattern: [0, 1, 2], // 3連符
+    noteDuration: 0.33,
+    speed: 1.3,
+  },
+  {
+    name: "Slow Wave",
+    pattern: [0, 2, 1, 0], // ゆったりした波
+    noteDuration: 0.7,
+    speed: 0.8,
+  },
+  {
+    name: "Bounce",
+    pattern: [0, 2, 0, 1, 0, 2], // バウンス
+    noteDuration: 0.35,
+    speed: 1.1,
+  },
+  {
+    name: "Broken Chord",
+    pattern: [0, 2, 1, 2, 0, 1], // 分散和音
+    noteDuration: 0.4,
+    speed: 1.0,
+  },
+  {
+    name: "Syncopated",
+    pattern: [0, 1, 0, 2, 1, 0, 2, 0], // シンコペーション
+    noteDuration: 0.28,
+    speed: 1.4,
   },
 ];
 
@@ -219,9 +303,51 @@ export const GRAND_STYLE: MusicStyle = {
       ],
       repeat: 1,
     },
+    {
+      name: "Majestic Ascent",
+      notes: [
+        { pitch: NOTES.E5, duration: 2.5, startTime: 0, velocity: 0.31 },
+        { pitch: NOTES.G5, duration: 2.5, startTime: 2.5, velocity: 0.33 },
+        { pitch: NOTES.A5, duration: 2, startTime: 5, velocity: 0.35 },
+        { pitch: NOTES.G5, duration: 3, startTime: 7, velocity: 0.32 },
+        { pitch: NOTES.E5, duration: 4, startTime: 10, velocity: 0.3 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Triumphant Arc",
+      notes: [
+        { pitch: NOTES.C5, duration: 2, startTime: 0, velocity: 0.32 },
+        { pitch: NOTES.G5, duration: 3, startTime: 2, velocity: 0.36 },
+        { pitch: NOTES.E5, duration: 2, startTime: 5, velocity: 0.34 },
+        { pitch: NOTES.G5, duration: 4, startTime: 7, velocity: 0.35 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Noble Journey",
+      notes: [
+        { pitch: NOTES.G5, duration: 3, startTime: 0, velocity: 0.33 },
+        { pitch: NOTES.A5, duration: 2, startTime: 3, velocity: 0.35 },
+        { pitch: NOTES.C5 + 12, duration: 3, startTime: 5, velocity: 0.37 },
+        { pitch: NOTES.A5, duration: 2, startTime: 8, velocity: 0.34 },
+        { pitch: NOTES.G5, duration: 3, startTime: 10, velocity: 0.31 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Epic Resolution",
+      notes: [
+        { pitch: NOTES.E5, duration: 3, startTime: 0, velocity: 0.32 },
+        { pitch: NOTES.D5, duration: 2, startTime: 3, velocity: 0.3 },
+        { pitch: NOTES.C5, duration: 2, startTime: 5, velocity: 0.31 },
+        { pitch: NOTES.G5, duration: 5, startTime: 7, velocity: 0.36 },
+      ],
+      repeat: 1,
+    },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Octave Jump"].includes(p.name)),
-  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Up-Down"].includes(p.name)),
+  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Octave Jump", "Classic Arpeggio Bass", "Rhythmic Groove"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Up-Down", "Slow Wave", "Broken Chord"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Epic Slow", "Minimal Beat"].includes(p.name)),
   durationRange: [35, 55],
 };
@@ -304,6 +430,37 @@ export const MONOTONOUS_STYLE: MusicStyle = {
       notes: [
         { pitch: NOTES.E5, duration: 8, startTime: 0, velocity: 0.2 },
         { pitch: NOTES.C5, duration: 8, startTime: 8, velocity: 0.2 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Minimal Drone",
+      notes: [
+        { pitch: NOTES.G5, duration: 12, startTime: 0, velocity: 0.18 },
+        { pitch: NOTES.E5, duration: 12, startTime: 12, velocity: 0.18 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Sparse Echo",
+      notes: [
+        { pitch: NOTES.D5, duration: 10, startTime: 0, velocity: 0.19 },
+        { pitch: NOTES.A4, duration: 10, startTime: 10, velocity: 0.19 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Empty Space",
+      notes: [
+        { pitch: NOTES.C5, duration: 14, startTime: 0, velocity: 0.17 },
+        { pitch: NOTES.G4, duration: 14, startTime: 14, velocity: 0.17 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Long Breath",
+      notes: [
+        { pitch: NOTES.E5, duration: 16, startTime: 0, velocity: 0.18 },
       ],
       repeat: 1,
     },
@@ -436,9 +593,52 @@ export const BRIGHT_STYLE: MusicStyle = {
       ],
       repeat: 2,
     },
+    {
+      name: "Joyful Leap",
+      notes: [
+        { pitch: NOTES.E5, duration: 1, startTime: 0, velocity: 0.39 },
+        { pitch: NOTES.G5, duration: 1, startTime: 1, velocity: 0.41 },
+        { pitch: NOTES.A5, duration: 1.5, startTime: 2, velocity: 0.43 },
+        { pitch: NOTES.G5, duration: 1, startTime: 3.5, velocity: 0.41 },
+        { pitch: NOTES.E5, duration: 1.5, startTime: 4.5, velocity: 0.38 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Sunny Day",
+      notes: [
+        { pitch: NOTES.C5, duration: 1.5, startTime: 0, velocity: 0.37 },
+        { pitch: NOTES.D5, duration: 1, startTime: 1.5, velocity: 0.38 },
+        { pitch: NOTES.E5, duration: 1.5, startTime: 2.5, velocity: 0.4 },
+        { pitch: NOTES.G5, duration: 2, startTime: 4, velocity: 0.42 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Upbeat Jump",
+      notes: [
+        { pitch: NOTES.G5, duration: 0.7, startTime: 0, velocity: 0.41 },
+        { pitch: NOTES.G5, duration: 0.7, startTime: 0.7, velocity: 0.4 },
+        { pitch: NOTES.A5, duration: 1, startTime: 1.4, velocity: 0.43 },
+        { pitch: NOTES.E5, duration: 1.5, startTime: 2.4, velocity: 0.39 },
+        { pitch: NOTES.C5, duration: 2, startTime: 3.9, velocity: 0.37 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Playful Dance",
+      notes: [
+        { pitch: NOTES.E5, duration: 0.8, startTime: 0, velocity: 0.39 },
+        { pitch: NOTES.D5, duration: 0.8, startTime: 0.8, velocity: 0.37 },
+        { pitch: NOTES.E5, duration: 0.8, startTime: 1.6, velocity: 0.39 },
+        { pitch: NOTES.G5, duration: 1.2, startTime: 2.4, velocity: 0.42 },
+        { pitch: NOTES.E5, duration: 1.6, startTime: 3.6, velocity: 0.38 },
+      ],
+      repeat: 2,
+    },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Walking Bass"].includes(p.name)),
-  arpeggioPatterns: ARPEGGIO_PATTERNS,
+  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Walking Bass", "Bouncy Pop", "Driving Eighth", "Rhythmic Groove"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => !["Slow Wave"].includes(p.name)), // ゆったり以外全て
   drumPatterns: DRUM_PATTERNS.filter(p => ["Energetic", "Basic 4/4"].includes(p.name)),
   durationRange: [30, 45],
 };
@@ -559,9 +759,48 @@ export const DARK_STYLE: MusicStyle = {
       ],
       repeat: 1,
     },
+    {
+      name: "Shadow Walk",
+      notes: [
+        { pitch: NOTES.D5, duration: 3, startTime: 0, velocity: 0.29 },
+        { pitch: NOTES.C5, duration: 3, startTime: 3, velocity: 0.28 },
+        { pitch: NOTES.A4, duration: 3, startTime: 6, velocity: 0.27 },
+        { pitch: NOTES.G4, duration: 4, startTime: 9, velocity: 0.25 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Gothic Lament",
+      notes: [
+        { pitch: NOTES.E5, duration: 4, startTime: 0, velocity: 0.31 },
+        { pitch: NOTES.D5, duration: 3, startTime: 4, velocity: 0.29 },
+        { pitch: NOTES.C5, duration: 3, startTime: 7, velocity: 0.28 },
+        { pitch: NOTES.D5, duration: 5, startTime: 10, velocity: 0.27 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Doom March",
+      notes: [
+        { pitch: NOTES.A4, duration: 3, startTime: 0, velocity: 0.3 },
+        { pitch: NOTES.A4, duration: 2, startTime: 3, velocity: 0.29 },
+        { pitch: NOTES.G4, duration: 3, startTime: 5, velocity: 0.28 },
+        { pitch: NOTES.E4, duration: 4, startTime: 8, velocity: 0.26 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Ominous Whisper",
+      notes: [
+        { pitch: NOTES.C5, duration: 5, startTime: 0, velocity: 0.27 },
+        { pitch: NOTES.A4, duration: 4, startTime: 5, velocity: 0.26 },
+        { pitch: NOTES.G4, duration: 5, startTime: 9, velocity: 0.25 },
+      ],
+      repeat: 1,
+    },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Minimal", "Root-Fifth"].includes(p.name)),
-  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Down", "Random"].includes(p.name)),
+  bassPatterns: BASS_PATTERNS.filter(p => ["Minimal", "Root-Fifth", "Rock Steady", "Deep Pulse"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Down", "Random", "Slow Wave", "Broken Chord"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Heavy Rock", "Basic 4/4"].includes(p.name)),
   durationRange: [40, 60],
 };
@@ -669,9 +908,42 @@ export const AMBIENT_STYLE: MusicStyle = {
       ],
       repeat: 1,
     },
+    {
+      name: "Floating Dream",
+      notes: [
+        { pitch: NOTES.E5, duration: 10, startTime: 0, velocity: 0.24 },
+        { pitch: NOTES.D5, duration: 10, startTime: 10, velocity: 0.23 },
+        { pitch: NOTES.C5, duration: 10, startTime: 20, velocity: 0.22 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Ethereal Drift",
+      notes: [
+        { pitch: NOTES.A5, duration: 12, startTime: 0, velocity: 0.26 },
+        { pitch: NOTES.G5, duration: 12, startTime: 12, velocity: 0.24 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Cosmic Wind",
+      notes: [
+        { pitch: NOTES.C5, duration: 15, startTime: 0, velocity: 0.23 },
+        { pitch: NOTES.G5, duration: 15, startTime: 15, velocity: 0.24 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Silent Orbit",
+      notes: [
+        { pitch: NOTES.D5, duration: 18, startTime: 0, velocity: 0.22 },
+        { pitch: NOTES.A4, duration: 18, startTime: 18, velocity: 0.21 },
+      ],
+      repeat: 1,
+    },
   ],
   bassPatterns: BASS_PATTERNS.filter(p => p.name === "Minimal"),
-  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => p.name === "Up"),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Slow Wave", "Triplet"].includes(p.name)),
   drumPatterns: [], // 浮遊感を保つためドラムなし
   durationRange: [55, 90],
 };
@@ -782,9 +1054,53 @@ export const JAZZY_STYLE: MusicStyle = {
       ],
       repeat: 1,
     },
+    {
+      name: "Blue Note Run",
+      notes: [
+        { pitch: NOTES.E5, duration: 1, startTime: 0, velocity: 0.37 },
+        { pitch: NOTES.D5, duration: 1.2, startTime: 1, velocity: 0.36 },
+        { pitch: NOTES.C5, duration: 1, startTime: 2.2, velocity: 0.38 },
+        { pitch: NOTES.A4, duration: 1.5, startTime: 3.2, velocity: 0.35 },
+        { pitch: NOTES.G4, duration: 2, startTime: 4.7, velocity: 0.34 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Bebop Lick",
+      notes: [
+        { pitch: NOTES.C5, duration: 0.8, startTime: 0, velocity: 0.37 },
+        { pitch: NOTES.D5, duration: 0.8, startTime: 0.8, velocity: 0.38 },
+        { pitch: NOTES.E5, duration: 1, startTime: 1.6, velocity: 0.39 },
+        { pitch: NOTES.G5, duration: 1.2, startTime: 2.6, velocity: 0.4 },
+        { pitch: NOTES.E5, duration: 1, startTime: 3.8, velocity: 0.37 },
+        { pitch: NOTES.C5, duration: 1.5, startTime: 4.8, velocity: 0.36 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Cool Stride",
+      notes: [
+        { pitch: NOTES.A5, duration: 1.2, startTime: 0, velocity: 0.38 },
+        { pitch: NOTES.G5, duration: 1, startTime: 1.2, velocity: 0.37 },
+        { pitch: NOTES.E5, duration: 1.5, startTime: 2.2, velocity: 0.36 },
+        { pitch: NOTES.D5, duration: 2, startTime: 3.7, velocity: 0.35 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Smooth Glide",
+      notes: [
+        { pitch: NOTES.D5, duration: 1.5, startTime: 0, velocity: 0.36 },
+        { pitch: NOTES.E5, duration: 1, startTime: 1.5, velocity: 0.37 },
+        { pitch: NOTES.G5, duration: 1.5, startTime: 2.5, velocity: 0.39 },
+        { pitch: NOTES.A5, duration: 1.5, startTime: 4, velocity: 0.38 },
+        { pitch: NOTES.G5, duration: 2, startTime: 5.5, velocity: 0.36 },
+      ],
+      repeat: 1,
+    },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Walking Bass", "Root-Fifth"].includes(p.name)),
-  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Random", "Up-Down"].includes(p.name)),
+  bassPatterns: BASS_PATTERNS.filter(p => ["Walking Bass", "Root-Fifth", "Jazzy Walk", "Syncopated Funk"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Random", "Up-Down", "Syncopated", "Broken Chord"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Basic 4/4", "Energetic"].includes(p.name)),
   durationRange: [35, 50],
 };
@@ -895,9 +1211,52 @@ export const RETRO_STYLE: MusicStyle = {
       ],
       repeat: 1,
     },
+    {
+      name: "80s Hook",
+      notes: [
+        { pitch: NOTES.E5, duration: 1, startTime: 0, velocity: 0.43 },
+        { pitch: NOTES.G5, duration: 1, startTime: 1, velocity: 0.45 },
+        { pitch: NOTES.A5, duration: 1.5, startTime: 2, velocity: 0.47 },
+        { pitch: NOTES.G5, duration: 1.5, startTime: 3.5, velocity: 0.44 },
+        { pitch: NOTES.E5, duration: 2, startTime: 5, velocity: 0.42 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Retro Pop",
+      notes: [
+        { pitch: NOTES.C5, duration: 1.2, startTime: 0, velocity: 0.42 },
+        { pitch: NOTES.D5, duration: 1.2, startTime: 1.2, velocity: 0.43 },
+        { pitch: NOTES.E5, duration: 1, startTime: 2.4, velocity: 0.45 },
+        { pitch: NOTES.G5, duration: 1.5, startTime: 3.4, velocity: 0.46 },
+        { pitch: NOTES.E5, duration: 2, startTime: 4.9, velocity: 0.43 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Neon Nights",
+      notes: [
+        { pitch: NOTES.A5, duration: 1.5, startTime: 0, velocity: 0.45 },
+        { pitch: NOTES.G5, duration: 1, startTime: 1.5, velocity: 0.43 },
+        { pitch: NOTES.E5, duration: 1, startTime: 2.5, velocity: 0.42 },
+        { pitch: NOTES.G5, duration: 2, startTime: 3.5, velocity: 0.44 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Synth Cascade",
+      notes: [
+        { pitch: NOTES.G5, duration: 1, startTime: 0, velocity: 0.44 },
+        { pitch: NOTES.E5, duration: 1, startTime: 1, velocity: 0.43 },
+        { pitch: NOTES.D5, duration: 1, startTime: 2, velocity: 0.42 },
+        { pitch: NOTES.C5, duration: 1.5, startTime: 3, velocity: 0.41 },
+        { pitch: NOTES.E5, duration: 2, startTime: 4.5, velocity: 0.43 },
+      ],
+      repeat: 1,
+    },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Octave Jump"].includes(p.name)),
-  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up-Down", "Up"].includes(p.name)),
+  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Octave Jump", "Bouncy Pop", "Rock Steady"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up-Down", "Up", "Fast Cascade", "Bounce"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Basic 4/4", "Energetic"].includes(p.name)),
   durationRange: [32, 48],
 };
@@ -1009,8 +1368,51 @@ export const ELECTRONIC_STYLE: MusicStyle = {
       ],
       repeat: 1,
     },
+    {
+      name: "EDM Drop",
+      notes: [
+        { pitch: NOTES.E5, duration: 0.7, startTime: 0, velocity: 0.47 },
+        { pitch: NOTES.G5, duration: 0.7, startTime: 0.7, velocity: 0.48 },
+        { pitch: NOTES.A5, duration: 1, startTime: 1.4, velocity: 0.49 },
+        { pitch: NOTES.C5 + 12, duration: 1.2, startTime: 2.4, velocity: 0.48 },
+        { pitch: NOTES.A5, duration: 1, startTime: 3.6, velocity: 0.46 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Electro Rise",
+      notes: [
+        { pitch: NOTES.C5, duration: 0.9, startTime: 0, velocity: 0.44 },
+        { pitch: NOTES.D5, duration: 0.9, startTime: 0.9, velocity: 0.45 },
+        { pitch: NOTES.E5, duration: 0.9, startTime: 1.8, velocity: 0.46 },
+        { pitch: NOTES.G5, duration: 0.9, startTime: 2.7, velocity: 0.48 },
+        { pitch: NOTES.A5, duration: 1.5, startTime: 3.6, velocity: 0.49 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Future Bass Lead",
+      notes: [
+        { pitch: NOTES.G5, duration: 1.2, startTime: 0, velocity: 0.47 },
+        { pitch: NOTES.A5, duration: 1, startTime: 1.2, velocity: 0.48 },
+        { pitch: NOTES.E5, duration: 1, startTime: 2.2, velocity: 0.45 },
+        { pitch: NOTES.G5, duration: 1.5, startTime: 3.2, velocity: 0.46 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Progressive Build",
+      notes: [
+        { pitch: NOTES.A5, duration: 0.8, startTime: 0, velocity: 0.47 },
+        { pitch: NOTES.G5, duration: 0.8, startTime: 0.8, velocity: 0.46 },
+        { pitch: NOTES.E5, duration: 0.8, startTime: 1.6, velocity: 0.45 },
+        { pitch: NOTES.C5, duration: 1, startTime: 2.4, velocity: 0.44 },
+        { pitch: NOTES.E5, duration: 1.5, startTime: 3.4, velocity: 0.46 },
+      ],
+      repeat: 1,
+    },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Walking Bass", "Octave Jump"].includes(p.name)),
+  bassPatterns: BASS_PATTERNS.filter(p => ["Walking Bass", "Octave Jump", "Deep Pulse", "Driving Eighth", "Syncopated Funk"].includes(p.name)),
   arpeggioPatterns: ARPEGGIO_PATTERNS, // すべてのアルペジオパターンを使用（アルペジオ重視）
   drumPatterns: DRUM_PATTERNS.filter(p => ["Energetic", "Heavy Rock"].includes(p.name)),
   durationRange: [28, 42],
