@@ -58,4 +58,51 @@ export interface MusicSection {
   melody?: MelodyPattern;
   /** 持続時間（秒） */
   duration: number;
+  /** スタイル */
+  style: MusicStyle;
+}
+
+/**
+ * 音楽スタイル
+ */
+export type MusicStyleType = 'grand' | 'monotonous' | 'bright' | 'dark' | 'ambient';
+
+/**
+ * 音色パラメータ
+ */
+export interface SoundParameters {
+  /** パッド音の音量 */
+  padVolume: number;
+  /** パッド音のアタック時間 */
+  padAttack: number;
+  /** パッド音のリリース時間 */
+  padRelease: number;
+  /** メロディー音の音量 */
+  leadVolume: number;
+  /** メロディー音のアタック時間 */
+  leadAttack: number;
+  /** メロディー音のリリース時間 */
+  leadRelease: number;
+  /** オシレータータイプ */
+  oscillatorType: OscillatorType;
+}
+
+/**
+ * 音楽スタイル定義
+ */
+export interface MusicStyle {
+  /** スタイルタイプ */
+  type: MusicStyleType;
+  /** スタイル名 */
+  name: string;
+  /** 説明 */
+  description: string;
+  /** 音色パラメータ */
+  soundParams: SoundParameters;
+  /** コード進行パターン */
+  progressions: ChordProgression[];
+  /** メロディーパターン */
+  melodyPatterns: MelodyPattern[];
+  /** スタイルの持続時間範囲（秒） */
+  durationRange: [number, number];
 }

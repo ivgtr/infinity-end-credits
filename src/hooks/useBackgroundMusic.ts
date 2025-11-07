@@ -92,11 +92,12 @@ export function useBackgroundMusic() {
       }
 
       const sectionStartTime = nextScheduleTimeRef.current;
+      const soundParams = section.style.soundParams;
 
       // コード進行を再生
       let chordStartTime = sectionStartTime;
       section.progression.chords.forEach((chord) => {
-        engine.playChord(chord, chordStartTime);
+        engine.playChord(chord, soundParams, chordStartTime);
         chordStartTime += chord.duration;
       });
 
@@ -110,6 +111,7 @@ export function useBackgroundMusic() {
                 ...note,
                 startTime: sectionStartTime + note.startTime + (section.duration * r) / repeat,
               },
+              soundParams,
               0
             );
           });

@@ -1,4 +1,4 @@
-import type { Chord, Note } from "@/types/music";
+import type { Chord, Note, SoundParameters } from "@/types/music";
 import { getChordNotes } from "./patterns";
 
 /**
@@ -89,7 +89,7 @@ export class MusicEngine {
   /**
    * コードを再生（パッド音）
    */
-  public playChord(chord: Chord, startTime?: number): void {
+  public playChord(chord: Chord, soundParams: SoundParameters, startTime?: number): void {
     if (!this.audioContext || !this.masterGain || !this.isPlaying) {
       return;
     }
@@ -100,14 +100,20 @@ export class MusicEngine {
 
     // 各コード音を再生
     chordNotes.forEach((midiNote, index) => {
-      this.playPadNote(midiNote, start, chord.duration, 0.08 + index * 0.01);
+      this.playPadNote(
+        midiNote,
+        start,
+        chord.duration,
+        soundParams.padVolume + index * 0.01,
+        soundParams
+      );
     });
   }
 
   /**
    * メロディーノートを再生
    */
-  public playMelodyNote(note: Note, startTime?: number): void {
+  public playMelodyNote(note: Note, soundParams: SoundParameters, startTime?: number): void {
     if (!this.audioContext || !this.masterGain || !this.isPlaying) {
       return;
     }
@@ -116,7 +122,7 @@ export class MusicEngine {
     const start = startTime ?? now + note.startTime;
     const velocity = note.velocity ?? 0.3;
 
-    this.playLeadNote(note.pitch, start, note.duration, velocity);
+    this.playLeadNote(note.pitch, start, note.duration, velocity, soundParams);
   }
 
   /**
@@ -127,7 +133,8 @@ export class MusicEngine {
     midiNote: number,
     startTime: number,
     duration: number,
-    volume: number
+    volume: number,
+    soundParams: SoundParameters
   ): void {
     if (!this.audioContext || !this.masterGain) {
       return;
@@ -135,14 +142,14 @@ export class MusicEngine {
 
     const freq = midiToFrequency(midiNote);
 
-    // オシレーター1: サイン波（基音）
+    // オシレーター1: メイン波形
     const osc1 = this.audioContext.createOscillator();
-    osc1.type = "sine";
+    osc1.type = soundParams.oscillatorType;
     osc1.frequency.value = freq;
 
-    // オシレーター2: トライアングル波（倍音）
+    // オシレーター2: サブ波形（サイン波で低音を補強）
     const osc2 = this.audioContext.createOscillator();
-    osc2.type = "triangle";
+    osc2.type = "sine";
     osc2.frequency.value = freq;
 
     // ゲインノード（エンベロープ用）
@@ -154,14 +161,17 @@ export class MusicEngine {
     osc2.connect(gainNode);
     gainNode.connect(this.masterGain);
 
-    // エンベロープ: 非常にゆっくりとしたアタックとリリース
-    const attackTime = 0.8;
-    const releaseTime = 1.2;
+    // エンベロープ: スタイルごとのアタック/リリース
+    const attackTime = soundParams.padAttack;
+    const releaseTime = soundParams.padRelease;
     const sustainLevel = volume;
 
     gainNode.gain.setValueAtTime(0, startTime);
     gainNode.gain.linearRampToValueAtTime(sustainLevel, startTime + attackTime);
-    gainNode.gain.setValueAtTime(sustainLevel, startTime + duration - releaseTime);
+    gainNode.gain.setValueAtTime(
+      sustainLevel,
+      startTime + Math.max(duration - releaseTime, attackTime)
+    );
     gainNode.gain.linearRampToValueAtTime(0, startTime + duration);
 
     // 再生
@@ -192,7 +202,8 @@ export class MusicEngine {
     midiNote: number,
     startTime: number,
     duration: number,
-    velocity: number
+    velocity: number,
+    soundParams: SoundParameters
   ): void {
     if (!this.audioContext || !this.masterGain) {
       return;
@@ -200,9 +211,9 @@ export class MusicEngine {
 
     const freq = midiToFrequency(midiNote);
 
-    // オシレーター: トライアングル波
+    // オシレーター: スタイルに応じた波形
     const osc = this.audioContext.createOscillator();
-    osc.type = "triangle";
+    osc.type = soundParams.oscillatorType;
     osc.frequency.value = freq;
 
     // ゲインノード（エンベロープ用）
@@ -213,10 +224,10 @@ export class MusicEngine {
     osc.connect(gainNode);
     gainNode.connect(this.masterGain);
 
-    // エンベロープ: 適度なアタックとリリース
-    const attackTime = 0.1;
-    const releaseTime = 0.3;
-    const sustainLevel = velocity * 0.4;
+    // エンベロープ: スタイルごとのアタック/リリース
+    const attackTime = soundParams.leadAttack;
+    const releaseTime = soundParams.leadRelease;
+    const sustainLevel = velocity * soundParams.leadVolume;
 
     gainNode.gain.setValueAtTime(0, startTime);
     gainNode.gain.linearRampToValueAtTime(sustainLevel, startTime + attackTime);
