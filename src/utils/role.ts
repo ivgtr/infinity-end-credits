@@ -2,7 +2,7 @@ import type { Roles } from "@/types/role";
 import type { Staffs } from "@/types/staff";
 
 import { getKeys } from "./object";
-import { generateNames, generateCompanyName } from "./generate";
+import { generateNames, generateCompanyName, generateCharacterName } from "./generate";
 
 const EVANGELIONRole: Roles = {
   "企画・原作・脚本": {
@@ -610,77 +610,77 @@ export const generateRoleStaff = () => {
   const staffs: Staffs = [];
   const roles = EVANGELIONRole;
 
-  // 役職ごとの適切な人数範囲を定義
+  // 役職ごとの適切な人数範囲を定義（さらに増量）
   const staffCountRanges: { [key: string]: { min: number; max: number } } = {
     // コアスタッフ（少数）
     "監督": { min: 1, max: 1 },
     "総監督": { min: 1, max: 1 },
     "企画・原作・脚本": { min: 1, max: 3 },
-    "エグゼクティブ・プロデューサー": { min: 1, max: 3 },
+    "エグゼクティブ・プロデューサー": { min: 1, max: 5 },
 
     // デザイン・監督系（少数〜中規模）
-    "キャラクターデザイン": { min: 1, max: 3 },
-    "キャラクターデザイン原案": { min: 1, max: 2 },
-    "メカニックデザイン": { min: 2, max: 8 },
-    "主・メカニックデザイン": { min: 1, max: 3 },
-    "美術設定": { min: 2, max: 6 },
-    "総作画監督": { min: 1, max: 3 },
-    "作画監督": { min: 3, max: 12 },
-    "メカ作画監督": { min: 2, max: 8 },
-    "画コンテ": { min: 2, max: 8 },
+    "キャラクターデザイン": { min: 1, max: 4 },
+    "キャラクターデザイン原案": { min: 1, max: 3 },
+    "メカニックデザイン": { min: 3, max: 12 },
+    "主・メカニックデザイン": { min: 1, max: 4 },
+    "美術設定": { min: 3, max: 10 },
+    "総作画監督": { min: 1, max: 4 },
+    "作画監督": { min: 5, max: 18 },
+    "メカ作画監督": { min: 3, max: 12 },
+    "画コンテ": { min: 3, max: 12 },
 
-    // 大規模スタッフ（アニメーション）
-    "原画": { min: 20, max: 50 },
-    "第二原画": { min: 15, max: 35 },
-    "動画": { min: 25, max: 60 },
-    "動画検査": { min: 5, max: 15 },
+    // 大規模スタッフ（アニメーション）- 大幅増量
+    "原画": { min: 35, max: 80 },
+    "第二原画": { min: 25, max: 60 },
+    "動画": { min: 40, max: 100 },
+    "動画検査": { min: 8, max: 25 },
 
-    // 色彩・仕上げ系（中〜大規模）
-    "色彩設計": { min: 1, max: 3 },
-    "色指定検査": { min: 3, max: 8 },
-    "仕上げ": { min: 20, max: 45 },
-    "仕上げ検査補佐": { min: 3, max: 10 },
-    "仕上げ管理": { min: 2, max: 6 },
-    "仕上げ協力": { min: 5, max: 15 },
+    // 色彩・仕上げ系（中〜大規模）- 増量
+    "色彩設計": { min: 1, max: 4 },
+    "色指定検査": { min: 5, max: 15 },
+    "仕上げ": { min: 30, max: 70 },
+    "仕上げ検査補佐": { min: 5, max: 15 },
+    "仕上げ管理": { min: 3, max: 10 },
+    "仕上げ協力": { min: 10, max: 25 },
 
-    // 美術系（中規模）
-    "美術監督": { min: 1, max: 3 },
-    "美術": { min: 8, max: 20 },
-    "背景": { min: 15, max: 35 },
-    "美術2Dワークス": { min: 5, max: 15 },
-    "美術制作管理": { min: 2, max: 6 },
+    // 美術系（中規模）- 増量
+    "美術監督": { min: 1, max: 4 },
+    "美術": { min: 12, max: 30 },
+    "背景": { min: 25, max: 55 },
+    "美術2Dワークス": { min: 8, max: 20 },
+    "美術制作管理": { min: 3, max: 10 },
 
-    // CGI系（中〜大規模）
-    "CGI監督": { min: 1, max: 3 },
-    "CGIアニメーター": { min: 10, max: 25 },
-    "CGIモデラー": { min: 8, max: 20 },
-    "CGIアートディレクター": { min: 1, max: 3 },
-    "2DCGI・モーショングラフィックスデザイナー": { min: 5, max: 15 },
-    "レンダリングアーティスト": { min: 5, max: 12 },
-    "テクニカルアーティスト": { min: 3, max: 10 },
+    // CGI系（中〜大規模）- 増量
+    "CGI監督": { min: 1, max: 4 },
+    "CGIアニメーター": { min: 15, max: 40 },
+    "CGIモデラー": { min: 12, max: 35 },
+    "CGIアートディレクター": { min: 1, max: 4 },
+    "2DCGI・モーショングラフィックスデザイナー": { min: 8, max: 20 },
+    "レンダリングアーティスト": { min: 8, max: 18 },
+    "テクニカルアーティスト": { min: 5, max: 15 },
 
-    // 撮影系（中規模）
-    "撮影監督": { min: 1, max: 3 },
-    "撮影": { min: 10, max: 25 },
-    "撮影管理": { min: 2, max: 6 },
-    "特技監督": { min: 1, max: 3 },
-    "編集": { min: 2, max: 5 },
-    "編集助手": { min: 3, max: 8 },
+    // 撮影系（中規模）- 増量
+    "撮影監督": { min: 1, max: 4 },
+    "撮影": { min: 15, max: 40 },
+    "撮影管理": { min: 3, max: 10 },
+    "特技監督": { min: 1, max: 4 },
+    "編集": { min: 2, max: 8 },
+    "編集助手": { min: 5, max: 12 },
 
     // 音響・音楽系
-    "声ノ出演": { min: 12, max: 30 },
-    "音楽": { min: 1, max: 3 },
-    "音響制作": { min: 2, max: 5 },
-    "音響効果": { min: 3, max: 8 },
-    "録音": { min: 2, max: 6 },
-    "台詞演出": { min: 1, max: 3 },
+    "声ノ出演": { min: 20, max: 50 },
+    "音楽": { min: 1, max: 5 },
+    "音響制作": { min: 3, max: 8 },
+    "音響効果": { min: 5, max: 12 },
+    "録音": { min: 3, max: 10 },
+    "台詞演出": { min: 1, max: 4 },
 
-    // 制作系（中規模）
-    "制作": { min: 3, max: 8 },
-    "制作統括プロデューサー": { min: 1, max: 3 },
-    "アニメーションプロデューサー": { min: 2, max: 6 },
-    "制作進行": { min: 8, max: 20 },
-    "制作進行補佐": { min: 5, max: 12 },
+    // 制作系（中規模）- 増量
+    "制作": { min: 5, max: 15 },
+    "制作統括プロデューサー": { min: 1, max: 5 },
+    "アニメーションプロデューサー": { min: 3, max: 10 },
+    "制作進行": { min: 12, max: 30 },
+    "制作進行補佐": { min: 8, max: 20 },
   };
 
   // 役職を追加する関数
@@ -700,6 +700,19 @@ export const generateRoleStaff = () => {
       members,
     });
   };
+
+  // ===== キャスト/声優セクション（必須・大規模） =====
+  const castCount = Math.floor(Math.random() * 30) + 30; // 30-59人
+  const castMembers: string[] = [];
+  for (let i = 0; i < castCount; i++) {
+    const characterName = generateCharacterName();
+    const actorName = generateNames(1)[0];
+    castMembers.push(`${characterName}：${actorName}`);
+  }
+  staffs.push({
+    role: "声ノ出演",
+    members: castMembers,
+  });
 
   // 総監督（20%の確率）
   if (Math.random() < 0.2) {
@@ -826,61 +839,168 @@ export const generateRoleStaff = () => {
     });
   }
 
-  // 企業・組織セクションを追加（80%の確率で多めに）
-  if (Math.random() < 0.8) {
-    // 製作委員会（80%の確率）
-    if (Math.random() < 0.8) {
-      const committeeCount = Math.floor(Math.random() * 8) + 5; // 5-12社
-      const companies = [];
-      for (let i = 0; i < committeeCount; i++) {
-        companies.push(generateCompanyName("committee"));
-      }
-      staffs.push({
-        role: "製作",
-        members: companies,
-      });
+  // ===== 協力会社とそのスタッフ詳細セクション =====
+  // 原画協力（90%の確率）
+  if (Math.random() < 0.9) {
+    const studioCount = Math.floor(Math.random() * 5) + 4; // 4-8スタジオ
+    const cooperationMembers: string[] = [];
+    for (let i = 0; i < studioCount; i++) {
+      const studioName = generateCompanyName("studio");
+      cooperationMembers.push(studioName);
+      // 各スタジオのスタッフ
+      const staffCount = Math.floor(Math.random() * 15) + 8; // 8-22人
+      const studioStaff = generateNames(staffCount);
+      studioStaff.forEach(name => cooperationMembers.push(`　${name}`));
     }
-
-    // 制作協力（70%の確率）
-    if (Math.random() < 0.7) {
-      const cooperationCount = Math.floor(Math.random() * 6) + 3; // 3-8社
-      const companies = [];
-      for (let i = 0; i < cooperationCount; i++) {
-        companies.push(generateCompanyName("studio"));
-      }
-      staffs.push({
-        role: "制作協力",
-        members: companies,
-      });
-    }
-
-    // 各種協力企業（確率を上げてより多く含める）
-    const cooperationTypes = [
-      { role: "機材協力", probability: 0.6, min: 2, max: 6 },
-      { role: "音響協力", probability: 0.5, min: 1, max: 4 },
-      { role: "取材・考証協力", probability: 0.4, min: 2, max: 5 },
-      { role: "ロケーション協力", probability: 0.3, min: 1, max: 4 },
-      { role: "協力", probability: 0.6, min: 3, max: 8 },
-    ];
-
-    cooperationTypes.forEach(({ role, probability, min, max }) => {
-      if (Math.random() < probability && role in roles) {
-        const count = Math.floor(Math.random() * (max - min + 1)) + min;
-        const companies = [];
-        for (let i = 0; i < count; i++) {
-          companies.push(generateCompanyName("general"));
-        }
-        staffs.push({
-          role: role as keyof typeof EVANGELIONRole,
-          members: companies,
-        });
-      }
+    staffs.push({
+      role: "原画協力" as keyof typeof EVANGELIONRole,
+      members: cooperationMembers,
     });
   }
 
-  // Special Thanks（40%の確率で多めに）
-  if (Math.random() < 0.4) {
-    const thanksCount = Math.floor(Math.random() * 20) + 15; // 15-34人
+  // 動画協力（90%の確率）
+  if (Math.random() < 0.9) {
+    const studioCount = Math.floor(Math.random() * 6) + 4; // 4-9スタジオ
+    const cooperationMembers: string[] = [];
+    for (let i = 0; i < studioCount; i++) {
+      const studioName = generateCompanyName("studio");
+      cooperationMembers.push(studioName);
+      // 各スタジオのスタッフ
+      const staffCount = Math.floor(Math.random() * 20) + 10; // 10-29人
+      const studioStaff = generateNames(staffCount);
+      studioStaff.forEach(name => cooperationMembers.push(`　${name}`));
+    }
+    staffs.push({
+      role: "動画協力" as keyof typeof EVANGELIONRole,
+      members: cooperationMembers,
+    });
+  }
+
+  // 仕上げ協力（85%の確率）
+  if (Math.random() < 0.85) {
+    const studioCount = Math.floor(Math.random() * 5) + 3; // 3-7スタジオ
+    const cooperationMembers: string[] = [];
+    for (let i = 0; i < studioCount; i++) {
+      const studioName = generateCompanyName("studio");
+      cooperationMembers.push(studioName);
+      // 各スタジオのスタッフ
+      const staffCount = Math.floor(Math.random() * 18) + 8; // 8-25人
+      const studioStaff = generateNames(staffCount);
+      studioStaff.forEach(name => cooperationMembers.push(`　${name}`));
+    }
+    staffs.push({
+      role: "仕上げ協力",
+      members: cooperationMembers,
+    });
+  }
+
+  // 背景協力（80%の確率）
+  if (Math.random() < 0.8) {
+    const studioCount = Math.floor(Math.random() * 4) + 3; // 3-6スタジオ
+    const cooperationMembers: string[] = [];
+    for (let i = 0; i < studioCount; i++) {
+      const studioName = generateCompanyName("studio");
+      cooperationMembers.push(studioName);
+      // 各スタジオのスタッフ
+      const staffCount = Math.floor(Math.random() * 12) + 6; // 6-17人
+      const studioStaff = generateNames(staffCount);
+      studioStaff.forEach(name => cooperationMembers.push(`　${name}`));
+    }
+    staffs.push({
+      role: "背景協力" as keyof typeof EVANGELIONRole,
+      members: cooperationMembers,
+    });
+  }
+
+  // 撮影協力（75%の確率）
+  if (Math.random() < 0.75) {
+    const studioCount = Math.floor(Math.random() * 4) + 2; // 2-5スタジオ
+    const cooperationMembers: string[] = [];
+    for (let i = 0; i < studioCount; i++) {
+      const studioName = generateCompanyName("studio");
+      cooperationMembers.push(studioName);
+      // 各スタジオのスタッフ
+      const staffCount = Math.floor(Math.random() * 10) + 5; // 5-14人
+      const studioStaff = generateNames(staffCount);
+      studioStaff.forEach(name => cooperationMembers.push(`　${name}`));
+    }
+    staffs.push({
+      role: "撮影協力" as keyof typeof EVANGELIONRole,
+      members: cooperationMembers,
+    });
+  }
+
+  // CGI協力（60%の確率）
+  if (Math.random() < 0.6) {
+    const studioCount = Math.floor(Math.random() * 3) + 2; // 2-4スタジオ
+    const cooperationMembers: string[] = [];
+    for (let i = 0; i < studioCount; i++) {
+      const studioName = generateCompanyName("studio");
+      cooperationMembers.push(studioName);
+      // 各スタジオのスタッフ
+      const staffCount = Math.floor(Math.random() * 12) + 6; // 6-17人
+      const studioStaff = generateNames(staffCount);
+      studioStaff.forEach(name => cooperationMembers.push(`　${name}`));
+    }
+    staffs.push({
+      role: "CGI協力" as keyof typeof EVANGELIONRole,
+      members: cooperationMembers,
+    });
+  }
+
+  // ===== 企業・組織セクション =====
+  // 製作委員会（90%の確率）
+  if (Math.random() < 0.9) {
+    const committeeCount = Math.floor(Math.random() * 10) + 8; // 8-17社
+    const companies = [];
+    for (let i = 0; i < committeeCount; i++) {
+      companies.push(generateCompanyName("committee"));
+    }
+    staffs.push({
+      role: "製作",
+      members: companies,
+    });
+  }
+
+  // 制作協力（80%の確率）
+  if (Math.random() < 0.8) {
+    const cooperationCount = Math.floor(Math.random() * 8) + 5; // 5-12社
+    const companies = [];
+    for (let i = 0; i < cooperationCount; i++) {
+      companies.push(generateCompanyName("studio"));
+    }
+    staffs.push({
+      role: "制作協力",
+      members: companies,
+    });
+  }
+
+  // 各種協力企業（確率を上げてより多く含める）
+  const cooperationTypes = [
+    { role: "機材協力", probability: 0.7, min: 3, max: 8 },
+    { role: "音響協力", probability: 0.6, min: 2, max: 6 },
+    { role: "取材・考証協力", probability: 0.5, min: 3, max: 7 },
+    { role: "ロケーション協力", probability: 0.4, min: 2, max: 5 },
+    { role: "協力", probability: 0.7, min: 5, max: 12 },
+  ];
+
+  cooperationTypes.forEach(({ role, probability, min, max }) => {
+    if (Math.random() < probability && role in roles) {
+      const count = Math.floor(Math.random() * (max - min + 1)) + min;
+      const companies = [];
+      for (let i = 0; i < count; i++) {
+        companies.push(generateCompanyName("general"));
+      }
+      staffs.push({
+        role: role as keyof typeof EVANGELIONRole,
+        members: companies,
+      });
+    }
+  });
+
+  // Special Thanks（50%の確率で多めに）
+  if (Math.random() < 0.5) {
+    const thanksCount = Math.floor(Math.random() * 30) + 20; // 20-49人
     const people = generateNames(thanksCount);
     staffs.push({
       role: "協力",
