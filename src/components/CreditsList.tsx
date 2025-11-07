@@ -22,6 +22,21 @@ export const CreditsList = ({
   const [speed, setSpeed] = useState(1);
   const movingRef = useRef<number>(0);
   const requestAnimationFrameRef = useRef<number>(0);
+  const prevTitlesLengthRef = useRef<number>(0);
+
+  // メモリリーク防止: titlesが減った場合（古いアイテムが削除された場合）にスクロール位置を調整
+  useEffect(() => {
+    if (titles.length < prevTitlesLengthRef.current && titles.length > 0) {
+      // アイテムが削除された場合、スクロール位置をリセットして継続
+      // 急激なジャンプを避けるため、現在位置を保持しつつ正規化
+      const container = containerRef.current;
+      if (container && movingRef.current < -5000) {
+        // スクロール位置が深すぎる場合のみリセット
+        movingRef.current = -2000;
+      }
+    }
+    prevTitlesLengthRef.current = titles.length;
+  }, [titles.length]);
 
   useEffect(() => {
     const scroll = scrollRef.current;

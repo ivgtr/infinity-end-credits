@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CreditsItem } from "./CreditsItem";
 
+// メモリリーク防止: useCreditsフックで最大20作品に制限されているため、
+// このコンポーネントではDOMノード数も自動的に制限される
 export const ManualCreditsList = ({
   titles,
   credits,
