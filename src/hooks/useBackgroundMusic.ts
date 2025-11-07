@@ -15,6 +15,9 @@ export function useBackgroundMusic() {
   const currentSectionIndexRef = useRef(0);
   const sectionsRef = useRef<MusicSection[]>([]);
   const nextScheduleTimeRef = useRef(0);
+  const previousStyleTypeRef = useRef<string | null>(null);
+
+  const CROSSFADE_DURATION = 1.5; // クロスフェード時間（秒）
 
   /**
    * 初期化
@@ -93,6 +96,34 @@ export function useBackgroundMusic() {
 
       const sectionStartTime = nextScheduleTimeRef.current;
       const soundParams = section.style.soundParams;
+
+      // スタイル切り替えの検知とクロスフェード
+      const currentStyleType = section.style.type;
+      const previousStyleType = previousStyleTypeRef.current;
+
+      if (previousStyleType && previousStyleType !== currentStyleType) {
+        // スタイルが切り替わった場合：フェードアウト → フェードイン
+        // fadeOut: 新セクション開始前にフェードアウトを完了させる
+        const fadeOutStart = Math.max(now, sectionStartTime - CROSSFADE_DURATION);
+        const fadeOutDuration = sectionStartTime - fadeOutStart;
+
+        if (fadeOutDuration > 0) {
+          engine.fadeOut(fadeOutDuration, fadeOutStart);
+        }
+
+        // fadeIn: 新セクション開始時からフェードイン
+        engine.fadeIn(CROSSFADE_DURATION, sectionStartTime);
+
+        console.log(
+          `🎵 スタイル切り替え: ${previousStyleType} → ${currentStyleType} (${CROSSFADE_DURATION}秒クロスフェード)`
+        );
+      } else if (!previousStyleType) {
+        // 最初のセクション：フェードインで開始
+        engine.fadeIn(CROSSFADE_DURATION, sectionStartTime);
+      }
+
+      // 現在のスタイルを記憶
+      previousStyleTypeRef.current = currentStyleType;
 
       // コード進行を再生
       let chordStartTime = sectionStartTime;

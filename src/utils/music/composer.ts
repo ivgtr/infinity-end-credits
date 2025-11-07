@@ -17,6 +17,7 @@ export class MusicComposer {
   private lastHadBass = false;
   private lastHadArpeggio = false;
   private lastHadDrums = false;
+  private totalElapsedTime: number = 0; // 総再生時間（全スタイル通じて）
 
   constructor() {
     // 初期スタイルをランダムに選択
@@ -142,6 +143,7 @@ export class MusicComposer {
 
     // 経過時間を更新
     this.currentStyleElapsedTime += chordDuration;
+    this.totalElapsedTime += chordDuration;
     this.sectionCount++;
 
     return {
@@ -173,6 +175,13 @@ export class MusicComposer {
     let bassProb = this.getBassProbability();
     let arpeggioProb = this.getArpeggioProbability();
     let drumsProb = this.getDrumsProbability();
+
+    // 時間経過による進化: 徐々にレイヤーが豊かになる
+    const evolutionMultiplier = this.getEvolutionMultiplier();
+    melodyProb *= evolutionMultiplier;
+    bassProb *= evolutionMultiplier;
+    arpeggioProb *= evolutionMultiplier;
+    drumsProb *= evolutionMultiplier;
 
     // ダイナミクスパターン: 徐々にレイヤーを追加/削除
     if (sectionMod === 0 || sectionMod === 4) {
@@ -327,6 +336,31 @@ export class MusicComposer {
   }
 
   /**
+   * 時間経過による進化係数を取得
+   * 時間が経つにつれて音楽が豊かになる
+   */
+  private getEvolutionMultiplier(): number {
+    const elapsed = this.totalElapsedTime;
+
+    if (elapsed < 60) {
+      // 最初の1分: 控えめに開始（70%）
+      return 0.7;
+    } else if (elapsed < 300) {
+      // 1-5分: 通常（100%）
+      return 1.0;
+    } else if (elapsed < 900) {
+      // 5-15分: やや豊か（120%）
+      return 1.2;
+    } else if (elapsed < 1800) {
+      // 15-30分: 豊か（140%）
+      return 1.4;
+    } else {
+      // 30分以上: 非常に豊か（160%）
+      return 1.6;
+    }
+  }
+
+  /**
    * 履歴とスタイルをリセット
    */
   public reset(): void {
@@ -339,5 +373,6 @@ export class MusicComposer {
     this.lastHadBass = false;
     this.lastHadArpeggio = false;
     this.lastHadDrums = false;
+    this.totalElapsedTime = 0;
   }
 }

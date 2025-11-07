@@ -14,6 +14,7 @@ function midiToFrequency(midi: number): number {
 export class MusicEngine {
   private audioContext: AudioContext | null = null;
   private masterGain: GainNode | null = null;
+  private fadeGain: GainNode | null = null;
   private activeOscillators: Set<OscillatorNode> = new Set();
   private isPlaying = false;
 
@@ -27,9 +28,16 @@ export class MusicEngine {
 
     try {
       this.audioContext = new AudioContext();
+
+      // マスターゲイン（全体音量制御）
       this.masterGain = this.audioContext.createGain();
       this.masterGain.gain.value = 0.15; // 全体的に控えめな音量
       this.masterGain.connect(this.audioContext.destination);
+
+      // フェードゲイン（クロスフェード用）
+      this.fadeGain = this.audioContext.createGain();
+      this.fadeGain.gain.value = 1.0; // 初期状態はフル
+      this.fadeGain.connect(this.masterGain);
 
       // AudioContextを開始（ユーザーインタラクション後に必要）
       if (this.audioContext.state === 'suspended') {
@@ -159,7 +167,7 @@ export class MusicEngine {
     // 接続
     osc1.connect(gainNode);
     osc2.connect(gainNode);
-    gainNode.connect(this.masterGain);
+    gainNode.connect(this.fadeGain!);
 
     // エンベロープ: スタイルごとのアタック/リリース
     const attackTime = soundParams.padAttack;
@@ -222,7 +230,7 @@ export class MusicEngine {
 
     // 接続
     osc.connect(gainNode);
-    gainNode.connect(this.masterGain);
+    gainNode.connect(this.fadeGain!);
 
     // エンベロープ: スタイルごとのアタック/リリース
     const attackTime = soundParams.leadAttack;
@@ -269,6 +277,62 @@ export class MusicEngine {
    */
   public getCurrentTime(): number {
     return this.audioContext?.currentTime ?? 0;
+  }
+
+  /**
+   * フェードイン（クロスフェード用）
+   * @param duration フェード時間（秒）
+   * @param startTime 開始時刻（省略時は現在時刻）
+   */
+  public fadeIn(duration: number, startTime?: number): void {
+    if (!this.audioContext || !this.fadeGain) {
+      return;
+    }
+
+    const start = startTime ?? this.audioContext.currentTime;
+    const fadeGain = this.fadeGain.gain;
+
+    // 現在の値をキャンセル
+    fadeGain.cancelScheduledValues(start);
+    fadeGain.setValueAtTime(fadeGain.value, start);
+
+    // フェードイン
+    fadeGain.linearRampToValueAtTime(1.0, start + duration);
+  }
+
+  /**
+   * フェードアウト（クロスフェード用）
+   * @param duration フェード時間（秒）
+   * @param startTime 開始時刻（省略時は現在時刻）
+   */
+  public fadeOut(duration: number, startTime?: number): void {
+    if (!this.audioContext || !this.fadeGain) {
+      return;
+    }
+
+    const start = startTime ?? this.audioContext.currentTime;
+    const fadeGain = this.fadeGain.gain;
+
+    // 現在の値をキャンセル
+    fadeGain.cancelScheduledValues(start);
+    fadeGain.setValueAtTime(fadeGain.value, start);
+
+    // フェードアウト
+    fadeGain.linearRampToValueAtTime(0.0, start + duration);
+  }
+
+  /**
+   * フェードゲインを即座にリセット
+   * @param value リセット値（デフォルト: 1.0）
+   */
+  public resetFade(value: number = 1.0): void {
+    if (!this.audioContext || !this.fadeGain) {
+      return;
+    }
+
+    const now = this.audioContext.currentTime;
+    this.fadeGain.gain.cancelScheduledValues(now);
+    this.fadeGain.gain.setValueAtTime(value, now);
   }
 
   /**
@@ -324,7 +388,7 @@ export class MusicEngine {
 
     // 接続
     osc.connect(gainNode);
-    gainNode.connect(this.masterGain);
+    gainNode.connect(this.fadeGain!);
 
     // エンベロープ: ベースらしい短いアタックと適度なリリース
     const attackTime = 0.05;
@@ -417,7 +481,7 @@ export class MusicEngine {
 
     // 接続
     osc.connect(gainNode);
-    gainNode.connect(this.masterGain);
+    gainNode.connect(this.fadeGain!);
 
     // エンベロープ: 短いアタックとリリース
     const attackTime = 0.02;
@@ -508,7 +572,7 @@ export class MusicEngine {
 
     // 接続
     osc.connect(gainNode);
-    gainNode.connect(this.masterGain);
+    gainNode.connect(this.fadeGain!);
 
     // 再生
     osc.start(startTime);
@@ -566,7 +630,7 @@ export class MusicEngine {
     noise.connect(noiseFilter);
     noiseFilter.connect(gainNode);
     tone.connect(gainNode);
-    gainNode.connect(this.masterGain);
+    gainNode.connect(this.fadeGain!);
 
     // 再生
     noise.start(startTime);
@@ -622,7 +686,7 @@ export class MusicEngine {
     // 接続
     noise.connect(noiseFilter);
     noiseFilter.connect(gainNode);
-    gainNode.connect(this.masterGain);
+    gainNode.connect(this.fadeGain!);
 
     // 再生
     noise.start(startTime);
