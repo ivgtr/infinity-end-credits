@@ -48,7 +48,7 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
 
       {/* 右下のコントロールUIを縦並びに配置 */}
       {showUI && (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 controls-ui">
           <SpeedControl onSpeedChange={handleSpeedChange} />
           <BackgroundMusicPlayer autoPlay={autoPlayMusic} />
 

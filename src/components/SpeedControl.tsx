@@ -49,35 +49,54 @@ export function SpeedControl({ onSpeedChange }: SpeedControlProps) {
 
   // スペースバーで倍速/等速切り替え
   useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       // 入力フィールドなどでキーを押した場合は無視
       if (e.target !== document.body) return;
 
-      // スペースキー: 倍速/等速切り替え
-      if (e.code === "Space") {
+      // スペースキー: 2倍速にする
+      if (e.code === "Space" && !isDoublespeed) {
         e.preventDefault();
-        handleDoublespeedToggle();
+        setIsDoublespeed(true);
+        onSpeedChange(2);
       }
     };
 
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [speed, isDoublespeed]);
+    const handleKeyUp = (e: KeyboardEvent) => {
+      // 入力フィールドなどでキーを押した場合は無視
+      if (e.target !== document.body) return;
+
+      // スペースキー: 元の速度に戻す
+      if (e.code === "Space" && isDoublespeed) {
+        e.preventDefault();
+        setIsDoublespeed(false);
+        onSpeedChange(speed);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [speed, isDoublespeed, onSpeedChange]);
 
   // 画面長押しで倍速/等速切り替え（PC/SP両対応）
   useEffect(() => {
     const handleMouseDown = (e: MouseEvent | TouchEvent) => {
       // UIコントロール部分のクリックは無視
       const target = e.target as HTMLElement;
-      if (target.closest('.speed-control-ui')) {
+      if (target.closest('.controls-ui')) {
         return;
       }
 
       isLongPressingRef.current = false;
       longPressTimerRef.current = window.setTimeout(() => {
+        // 長押し検出：2倍速にする
         isLongPressingRef.current = true;
-        handleDoublespeedToggle();
-      }, 500); // 500msの長押しで倍速切り替え
+        setIsDoublespeed(true);
+        onSpeedChange(2);
+      }, 500); // 500msの長押しで倍速
     };
 
     const handleMouseUp = () => {
@@ -86,10 +105,11 @@ export function SpeedControl({ onSpeedChange }: SpeedControlProps) {
         longPressTimerRef.current = null;
       }
 
-      // 長押しが完了していた場合、離した時に元に戻す
+      // 長押しが完了していた場合、離した時に元の速度に戻す
       if (isLongPressingRef.current) {
         isLongPressingRef.current = false;
-        handleDoublespeedToggle();
+        setIsDoublespeed(false);
+        onSpeedChange(speed);
       }
     };
 
@@ -108,7 +128,7 @@ export function SpeedControl({ onSpeedChange }: SpeedControlProps) {
         clearTimeout(longPressTimerRef.current);
       }
     };
-  }, [speed, isDoublespeed]);
+  }, [speed, onSpeedChange]);
 
   // 速度変更ハンドラー
   const handleSpeedSelect = (newSpeed: number) => {
@@ -118,19 +138,6 @@ export function SpeedControl({ onSpeedChange }: SpeedControlProps) {
     setIsMenuOpen(false);
     // 倍速状態をリセット
     setIsDoublespeed(false);
-  };
-
-  // 倍速/等速切り替え
-  const handleDoublespeedToggle = () => {
-    if (isDoublespeed) {
-      // 等速に戻す
-      setIsDoublespeed(false);
-      onSpeedChange(speed);
-    } else {
-      // 2倍速にする（等速に対して2倍、固定）
-      setIsDoublespeed(true);
-      onSpeedChange(2);
-    }
   };
 
   const currentDisplaySpeed = isDoublespeed ? 2 : speed;
