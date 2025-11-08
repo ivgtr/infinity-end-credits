@@ -1,6 +1,47 @@
 import type { MusicSection, MusicStyle } from "@/types/music";
 import { getRandomStyle } from "./styles";
-import { generateMusicalMelody, SCALES } from "./patterns";
+import {
+  generateMusicalMelody,
+  SCALES,
+  createMozartRocket,
+  createFateMotif,
+  createAlbertiBass,
+  createBaroqueSequence,
+  createOctaveJump,
+  createPentatonicRock,
+  createSyncopated8Beat,
+  createBlueNoteDescend,
+  createBebopChromatic,
+  createIIVITurnaround,
+  createInsenDescend,
+  createCelticRoll,
+  createHijazMaqam,
+  createRagaOrnament,
+  createArpeggiatorSeq,
+  createDropBuild,
+  createSidechainRhythm,
+} from "./patterns";
+
+// 定型パターン生成関数のマッピング
+const FAMOUS_PATTERN_FUNCTIONS: Record<string, (root: number, duration: number) => any> = {
+  createMozartRocket,
+  createFateMotif,
+  createAlbertiBass,
+  createBaroqueSequence,
+  createOctaveJump,
+  createPentatonicRock,
+  createSyncopated8Beat,
+  createBlueNoteDescend,
+  createBebopChromatic,
+  createIIVITurnaround,
+  createInsenDescend,
+  createCelticRoll,
+  createHijazMaqam,
+  createRagaOrnament,
+  createArpeggiatorSeq,
+  createDropBuild,
+  createSidechainRhythm,
+};
 
 /**
  * 音楽作曲アルゴリズム
@@ -76,24 +117,22 @@ export class MusicComposer {
     // レイヤーの選択（革新的アルゴリズム）
     const layers = this.selectLayers();
 
-    // メロディーパターンを選択（50%の確率でスケールベースの生成を使用）
+    // メロディーパターンを選択（3つの方法から選択）
+    // 33%: スケールベース生成、33%: 定型パターン生成、33%: 既存パターン
     let melody = undefined;
     if (
       layers.includeMelody &&
       this.currentStyle.melodyPatterns.length > 0
     ) {
-      const useScaleBasedMelody = Math.random() < 0.5;
+      const rand = Math.random();
+      const rootNote = progression.chords[0]!.root;
 
-      if (useScaleBasedMelody && this.currentStyle.scales.length > 0) {
-        // スケールベースのメロディーを生成
+      if (rand < 0.33 && this.currentStyle.scales.length > 0) {
+        // 方法1: スケールベースのメロディーを生成
         const randomScale = this.currentStyle.scales[
           Math.floor(Math.random() * this.currentStyle.scales.length)
         ]!;
 
-        // コード進行の最初のコードのルート音を使用
-        const rootNote = progression.chords[0]!.root;
-
-        // スケールが存在するか確認
         if (randomScale in SCALES) {
           melody = generateMusicalMelody(
             rootNote,
@@ -101,14 +140,34 @@ export class MusicComposer {
             chordDuration
           );
         } else {
-          // スケールが見つからない場合は既存パターンを使用
+          // フォールバック: 既存パターン
+          melody =
+            this.currentStyle.melodyPatterns[
+              Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
+            ]!;
+        }
+      } else if (
+        rand < 0.66 &&
+        this.currentStyle.famousPatterns &&
+        this.currentStyle.famousPatterns.length > 0
+      ) {
+        // 方法2: 定型パターン生成
+        const randomFamousPattern = this.currentStyle.famousPatterns[
+          Math.floor(Math.random() * this.currentStyle.famousPatterns.length)
+        ]!;
+
+        const patternFunction = FAMOUS_PATTERN_FUNCTIONS[randomFamousPattern];
+        if (patternFunction) {
+          melody = patternFunction(rootNote, chordDuration);
+        } else {
+          // フォールバック: 既存パターン
           melody =
             this.currentStyle.melodyPatterns[
               Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
             ]!;
         }
       } else {
-        // 既存のメロディーパターンを使用
+        // 方法3: 既存のメロディーパターンを使用
         melody =
           this.currentStyle.melodyPatterns[
             Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)

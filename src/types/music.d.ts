@@ -163,4 +163,6 @@ export interface MusicStyle {
   durationRange: [number, number];
   /** 推奨スケール/モード（スケールベースのメロディー生成に使用） */
   scales: string[];
+  /** 有名な定型パターン生成関数名（オプション） */
+  famousPatterns?: string[];
 }

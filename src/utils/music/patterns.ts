@@ -420,3 +420,432 @@ export function generateMusicalMelody(
     repeat: 1,
   };
 }
+
+/**
+ * ====================
+ * 有名な定型メロディパターン生成関数
+ * ====================
+ */
+
+/**
+ * クラシック音楽の定型パターン
+ */
+
+/**
+ * モーツァルト・ロケット（急速上昇アルペジオ）
+ * 1度→3度→5度→8度（オクターブ）の典型的な上昇パターン
+ */
+export function createMozartRocket(root: number, duration: number): MelodyPattern {
+  const noteCount = 8;
+  const noteDuration = duration / noteCount;
+  const notes: Note[] = [];
+
+  // 1度→3度→5度→8度（オクターブ）の上昇
+  const intervals = [0, 4, 7, 12, 0, 4, 7, 12];
+
+  for (let i = 0; i < noteCount; i++) {
+    notes.push({
+      pitch: root + intervals[i]! + 12,
+      duration: noteDuration * 0.9,
+      startTime: noteDuration * i,
+      velocity: 0.3 + (i * 0.02),
+    });
+  }
+
+  return { name: "Mozart Rocket", notes, repeat: 1 };
+}
+
+/**
+ * 運命の動機（短短短長リズム）
+ * ベートーヴェン交響曲第5番の有名なリズムパターン
+ */
+export function createFateMotif(root: number, duration: number): MelodyPattern {
+  const shortDur = duration / 8;
+  const longDur = duration / 2;
+
+  return {
+    name: "Fate Motif",
+    notes: [
+      { pitch: root + 7 + 12, duration: shortDur, startTime: 0, velocity: 0.35 },
+      { pitch: root + 7 + 12, duration: shortDur, startTime: shortDur, velocity: 0.35 },
+      { pitch: root + 7 + 12, duration: shortDur, startTime: shortDur * 2, velocity: 0.35 },
+      { pitch: root + 4 + 12, duration: longDur, startTime: shortDur * 3, velocity: 0.38 },
+    ],
+    repeat: 1,
+  };
+}
+
+/**
+ * アルベルティバス（分散和音：低-高-中-高）
+ * クラシック時代のピアノ伴奏の典型パターン
+ */
+export function createAlbertiBass(root: number, duration: number): MelodyPattern {
+  const noteDuration = duration / 8;
+  const notes: Note[] = [];
+
+  // パターン: 1度-5度-3度-5度を繰り返す
+  const pattern = [0, 7, 4, 7];
+
+  for (let rep = 0; rep < 2; rep++) {
+    pattern.forEach((interval, i) => {
+      notes.push({
+        pitch: root + interval + 24,
+        duration: noteDuration * 0.9,
+        startTime: noteDuration * (i + rep * 4),
+        velocity: 0.28,
+      });
+    });
+  }
+
+  return { name: "Alberti Bass", notes, repeat: 1 };
+}
+
+/**
+ * バロック・セクエンス（音型の反復移動）
+ * 同じパターンを異なる音程で繰り返す
+ */
+export function createBaroqueSequence(root: number, duration: number): MelodyPattern {
+  const noteDur = duration / 12;
+  const notes: Note[] = [];
+
+  // 基本パターン: 上昇3音
+  const basePattern = [0, 2, 4];
+  
+  // パターンを3回、異なる開始音で繰り返す
+  const startNotes = [0, 2, 4, 7];
+
+  startNotes.forEach((start, groupIndex) => {
+    basePattern.forEach((interval, i) => {
+      notes.push({
+        pitch: root + start + interval + 24,
+        duration: noteDur * 0.9,
+        startTime: noteDur * (i + groupIndex * 3),
+        velocity: 0.3,
+      });
+    });
+  });
+
+  return { name: "Baroque Sequence", notes, repeat: 1 };
+}
+
+/**
+ * ポップス/ロックの定番パターン
+ */
+
+/**
+ * オクターブジャンプ（主音→オクターブ上→5度）
+ * キャッチーなフックラインの定番
+ */
+export function createOctaveJump(root: number, duration: number): MelodyPattern {
+  return {
+    name: "Octave Jump",
+    notes: [
+      { pitch: root + 24, duration: duration * 0.25, startTime: 0, velocity: 0.35 },
+      { pitch: root + 36, duration: duration * 0.4, startTime: duration * 0.25, velocity: 0.38 },
+      { pitch: root + 31, duration: duration * 0.35, startTime: duration * 0.65, velocity: 0.33 },
+    ],
+    repeat: 1,
+  };
+}
+
+/**
+ * ペンタトニック・ロック（典型的なロックリフ）
+ * マイナーペンタトニックスケールの順次進行
+ */
+export function createPentatonicRock(root: number, duration: number): MelodyPattern {
+  const noteDur = duration / 5;
+  // マイナーペンタトニック: 1度→♭3度→4度→5度→♭7度
+  const intervals = [0, 3, 5, 7, 10];
+  const notes: Note[] = [];
+
+  intervals.forEach((interval, i) => {
+    notes.push({
+      pitch: root + interval + 24,
+      duration: noteDur * 0.85,
+      startTime: noteDur * i,
+      velocity: 0.32 + (Math.random() * 0.06),
+    });
+  });
+
+  return { name: "Pentatonic Rock", notes, repeat: 1 };
+}
+
+/**
+ * シンコペーション8ビート（裏拍強調）
+ * ファンク/ディスコの典型的なリズムパターン
+ */
+export function createSyncopated8Beat(root: number, duration: number): MelodyPattern {
+  const noteDur = duration / 8;
+  const notes: Note[] = [];
+
+  // リズムパターン: 裏拍を強調
+  const pattern = [
+    { interval: 0, velocity: 0.25 },
+    { interval: 2, velocity: 0.35 }, // 裏拍強調
+    { interval: 4, velocity: 0.28 },
+    { interval: 2, velocity: 0.36 }, // 裏拍強調
+    { interval: 0, velocity: 0.26 },
+    { interval: 4, velocity: 0.34 }, // 裏拍強調
+    { interval: 7, velocity: 0.3 },
+    { interval: 4, velocity: 0.32 },
+  ];
+
+  pattern.forEach(({ interval, velocity }, i) => {
+    notes.push({
+      pitch: root + interval + 24,
+      duration: noteDur * 0.7,
+      startTime: noteDur * i,
+      velocity,
+    });
+  });
+
+  return { name: "Syncopated 8-Beat", notes, repeat: 1 };
+}
+
+/**
+ * ジャズの定型リック
+ */
+
+/**
+ * ブルーノート下降（♭7→♭6→5→♭3）
+ * ブルース感を出す定番の下降フレーズ
+ */
+export function createBlueNoteDescend(root: number, duration: number): MelodyPattern {
+  const noteDur = duration / 4;
+  const intervals = [10, 8, 7, 3]; // ♭7, ♭6, 5, ♭3
+  const notes: Note[] = [];
+
+  intervals.forEach((interval, i) => {
+    notes.push({
+      pitch: root + interval + 24,
+      duration: noteDur * 0.9,
+      startTime: noteDur * i,
+      velocity: 0.31 - (i * 0.02),
+    });
+  });
+
+  return { name: "Blue Note Descend", notes, repeat: 1 };
+}
+
+/**
+ * ビバップ・クロマチック（スケール音 + 半音階）
+ * ジャズのスムーズな音の連結
+ */
+export function createBebopChromatic(root: number, duration: number): MelodyPattern {
+  const noteDur = duration / 8;
+  // 1→2→♯2→3→4→♯4→5→6の半音階的上昇
+  const intervals = [0, 2, 3, 4, 5, 6, 7, 9];
+  const notes: Note[] = [];
+
+  intervals.forEach((interval, i) => {
+    notes.push({
+      pitch: root + interval + 24,
+      duration: noteDur * 0.85,
+      startTime: noteDur * i,
+      velocity: 0.29 + (i * 0.01),
+    });
+  });
+
+  return { name: "Bebop Chromatic", notes, repeat: 1 };
+}
+
+/**
+ * ii-V-I ターンアラウンド
+ * ジャズで最も一般的なコード進行に合わせたフレーズ
+ */
+export function createIIVITurnaround(root: number, duration: number): MelodyPattern {
+  const noteDur = duration / 6;
+  // ドリアン→ミクソリディアン→メジャーの順次進行
+  const intervals = [2, 4, 5, 7, 9, 11];
+  const notes: Note[] = [];
+
+  intervals.forEach((interval, i) => {
+    notes.push({
+      pitch: root + interval + 24,
+      duration: noteDur * 0.95,
+      startTime: noteDur * i,
+      velocity: 0.31,
+    });
+  });
+
+  return { name: "ii-V-I Turnaround", notes, repeat: 1 };
+}
+
+/**
+ * 民族音楽の定型パターン
+ */
+
+/**
+ * 陰旋下降（日本の演歌風）
+ * 日本的な哀愁を帯びた下降メロディ
+ */
+export function createInsenDescend(root: number, duration: number): MelodyPattern {
+  const noteDur = duration / 5;
+  // レ→ド→ラ→ファ→ミ（相対音程）
+  const intervals = [2, 0, -3, -5, -7];
+  const notes: Note[] = [];
+
+  intervals.forEach((interval, i) => {
+    notes.push({
+      pitch: root + interval + 24,
+      duration: noteDur * 1.1,
+      startTime: noteDur * i,
+      velocity: 0.33 - (i * 0.015),
+    });
+  });
+
+  return { name: "Insen Descend", notes, repeat: 1 };
+}
+
+/**
+ * ケルト・ロール（装飾音の連続）
+ * アイルランド/スコットランドの伝統音楽風
+ */
+export function createCelticRoll(root: number, duration: number): MelodyPattern {
+  const noteDur = duration / 12;
+  const notes: Note[] = [];
+
+  // 主音周辺の細かい装飾
+  const pattern = [0, 2, 0, -2, 0, 2, 4, 2, 0, 2, 4, 7];
+
+  pattern.forEach((interval, i) => {
+    notes.push({
+      pitch: root + interval + 24,
+      duration: noteDur * 0.8,
+      startTime: noteDur * i,
+      velocity: 0.27 + (Math.random() * 0.08),
+    });
+  });
+
+  return { name: "Celtic Roll", notes, repeat: 1 };
+}
+
+/**
+ * ヒジャーズ・マカーム（中東の音階）
+ * 増2度を含むエキゾチックな音程
+ */
+export function createHijazMaqam(root: number, duration: number): MelodyPattern {
+  const noteDur = duration / 6;
+  // ヒジャーズ: 半音→増2度→半音の特徴的な音程
+  const intervals = [0, 1, 5, 6, 7, 10];
+  const notes: Note[] = [];
+
+  intervals.forEach((interval, i) => {
+    notes.push({
+      pitch: root + interval + 24,
+      duration: noteDur * 0.95,
+      startTime: noteDur * i,
+      velocity: 0.32,
+    });
+  });
+
+  return { name: "Hijaz Maqam", notes, repeat: 1 };
+}
+
+/**
+ * ラーガ・オーナメント（インド古典音楽）
+ * 主音周辺の細かい装飾音
+ */
+export function createRagaOrnament(root: number, duration: number): MelodyPattern {
+  const noteDur = duration / 10;
+  const notes: Note[] = [];
+
+  // 主音周辺の装飾: 上下の補助音を使った装飾
+  const pattern = [0, 1, 0, -1, 0, 2, 1, 0, 2, 4];
+
+  pattern.forEach((interval, i) => {
+    notes.push({
+      pitch: root + interval + 24,
+      duration: noteDur * 0.7,
+      startTime: noteDur * i,
+      velocity: 0.28 + (Math.random() * 0.08),
+    });
+  });
+
+  return { name: "Raga Ornament", notes, repeat: 1 };
+}
+
+/**
+ * 現代電子音楽パターン
+ */
+
+/**
+ * アルペジエイター・シーケンス（16分音符の均等アルペジオ）
+ * EDM/トランスの定番パターン
+ */
+export function createArpeggiatorSeq(root: number, duration: number): MelodyPattern {
+  const noteDur = duration / 16;
+  const notes: Note[] = [];
+
+  // 1-3-5-8のアルペジオを4回繰り返す
+  const pattern = [0, 4, 7, 12];
+
+  for (let rep = 0; rep < 4; rep++) {
+    pattern.forEach((interval, i) => {
+      notes.push({
+        pitch: root + interval + 24,
+        duration: noteDur * 0.75,
+        startTime: noteDur * (i + rep * 4),
+        velocity: 0.28,
+      });
+    });
+  }
+
+  return { name: "Arpeggiator Sequence", notes, repeat: 1 };
+}
+
+/**
+ * ドロップ・ビルド（徐々に上昇→急降下）
+ * ダブステップ/トラップの定番テクニック
+ */
+export function createDropBuild(root: number, duration: number): MelodyPattern {
+  const notes: Note[] = [];
+
+  // ビルドアップ（徐々に上昇）
+  for (let i = 0; i < 6; i++) {
+    notes.push({
+      pitch: root + (i * 2) + 24,
+      duration: duration * 0.1,
+      startTime: duration * 0.12 * i,
+      velocity: 0.25 + (i * 0.02),
+    });
+  }
+
+  // ドロップ（急降下）
+  notes.push({
+    pitch: root + 12,
+    duration: duration * 0.3,
+    startTime: duration * 0.72,
+    velocity: 0.4,
+  });
+
+  return { name: "Drop Build", notes, repeat: 1 };
+}
+
+/**
+ * サイドチェイン・リズム（キックに合わせた音量変動風）
+ * ハウス/エレクトロの典型的なグルーヴ
+ */
+export function createSidechainRhythm(root: number, duration: number): MelodyPattern {
+  const noteDur = duration / 4;
+  const notes: Note[] = [];
+
+  // キックのタイミングで音量が下がるイメージ
+  const pattern = [
+    { interval: 0, velocity: 0.2 },  // キック（小）
+    { interval: 4, velocity: 0.35 }, // オフビート（大）
+    { interval: 7, velocity: 0.22 }, // キック（小）
+    { interval: 4, velocity: 0.36 }, // オフビート（大）
+  ];
+
+  pattern.forEach(({ interval, velocity }, i) => {
+    notes.push({
+      pitch: root + interval + 24,
+      duration: noteDur * 0.9,
+      startTime: noteDur * i,
+      velocity,
+    });
+  });
+
+  return { name: "Sidechain Rhythm", notes, repeat: 1 };
+}
