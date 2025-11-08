@@ -1,8 +1,24 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const FilmEffects = () => {
   const grainCanvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number>(0);
+  const [flickerOpacity, setFlickerOpacity] = useState(0);
+
+  // フリッカー（明滅）効果
+  useEffect(() => {
+    const flicker = () => {
+      // 0〜0.05のランダムな暗さ（非常に控えめ）
+      const newOpacity = Math.random() * 0.05;
+      setFlickerOpacity(newOpacity);
+
+      // 次の明滅までのランダムな時間（500ms〜3000ms）
+      const nextFlicker = Math.random() * 2500 + 500;
+      setTimeout(flicker, nextFlicker);
+    };
+
+    flicker();
+  }, []);
 
   useEffect(() => {
     const canvas = grainCanvasRef.current;
@@ -99,6 +115,17 @@ export const FilmEffects = () => {
             )
           `,
           opacity: 0.4,
+        }}
+      />
+
+      {/* フリッカー（明滅）効果 */}
+      <div
+        className="fixed inset-0 w-full h-full pointer-events-none"
+        style={{
+          zIndex: 14,
+          background: "rgba(0, 0, 0, 1)",
+          opacity: flickerOpacity,
+          transition: "opacity 0.1s ease-out",
         }}
       />
     </>
