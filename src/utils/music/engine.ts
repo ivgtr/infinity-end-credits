@@ -1,5 +1,5 @@
 import type { Chord, Note, SoundParameters, BassPattern, ArpeggioPattern, DrumPattern } from "@/types/music";
-import { getChordNotes } from "./patterns";
+import { getChordNotes } from "./core/helpers";
 
 /**
  * MIDIノート番号から周波数に変換
