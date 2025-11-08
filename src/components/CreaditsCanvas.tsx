@@ -75,8 +75,6 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
             />
           )}
 
-          <SpeedControl onSpeedChange={handleSpeedChange} />
-          <BackgroundMusicPlayer autoPlay={autoPlayMusic} />
           <button
             onClick={() => setShowUI(false)}
             className="px-3 py-2 bg-black/70 rounded-full shadow-lg text-white hover:bg-black/80 transition-colors flex items-center justify-center"
@@ -85,6 +83,8 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
           >
             👁
           </button>
+          <SpeedControl onSpeedChange={handleSpeedChange} />
+          <BackgroundMusicPlayer autoPlay={autoPlayMusic} />
           <button
             onClick={() => setShowStatsModal(true)}
             className="px-3 py-2 bg-black/70 rounded-full shadow-lg text-white hover:bg-black/80 transition-colors flex items-center justify-center text-sm"
