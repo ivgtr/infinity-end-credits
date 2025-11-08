@@ -2,11 +2,13 @@ import { useCallback, useEffect, useState } from "react";
 import { CreditsList } from "./CreditsList";
 import { useCredits } from "@/hooks/useCredits";
 import { useViewingStats } from "@/hooks/useViewingStats";
+import { useEasterEggStats } from "@/hooks/useEasterEggStats";
 import { SpeedControl } from "./SpeedControl";
 import { BackgroundMusicPlayer } from "./BackgroundMusicPlayer";
 import { StatsModal } from "./StatsModal";
 import { FilmEffects } from "./FilmEffects";
 import { Letterbox } from "./Letterbox";
+import type { EasterEggType } from "@/types/credits";
 
 interface CreditsCanvasProps {
   autoPlayMusic?: boolean;
@@ -15,6 +17,7 @@ interface CreditsCanvasProps {
 export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => {
   const { titles, credits, addRandomWork } = useCredits();
   const { stats, trackScroll, trackCreditViewed, trackWorkCompleted } = useViewingStats();
+  const { stats: easterEggStats, recordClick, resetStats } = useEasterEggStats();
   const [speed, setSpeed] = useState(1);
   const [showUI, setShowUI] = useState(true);
   const [showStatsModal, setShowStatsModal] = useState(false);
@@ -30,6 +33,10 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
   const handleSpeedChange = useCallback((newSpeed: number) => {
     setSpeed(newSpeed);
   }, []);
+
+  const handleEasterEggClick = useCallback((type: EasterEggType, creditId: number) => {
+    recordClick(type, creditId);
+  }, [recordClick]);
 
   // Hキーでの UI表示/非表示切り替え
   useEffect(() => {
@@ -63,6 +70,7 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
           onScrollDistanceChange={trackScroll}
           onCreditViewed={trackCreditViewed}
           onWorkCompleted={trackWorkCompleted}
+          onEasterEggClick={handleEasterEggClick}
         />
       )}
 
@@ -119,6 +127,8 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
         isOpen={showStatsModal}
         onClose={() => setShowStatsModal(false)}
         stats={stats}
+        easterEggStats={easterEggStats}
+        onResetEasterEggs={resetStats}
       />
     </div>
   );

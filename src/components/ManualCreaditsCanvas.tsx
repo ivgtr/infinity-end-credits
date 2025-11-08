@@ -1,19 +1,26 @@
 import { useCallback, useEffect, useState } from "react";
 import { useCredits } from "@/hooks/useCredits";
 import { useViewingStats } from "@/hooks/useViewingStats";
+import { useEasterEggStats } from "@/hooks/useEasterEggStats";
 import { ManualCreditsList } from "./ManualCreaditsList";
 import { StatsModal } from "./StatsModal";
 import { FilmEffects } from "./FilmEffects";
 import { Letterbox } from "./Letterbox";
+import type { EasterEggType } from "@/types/credits";
 
 export const ManualCreditsCanvas = () => {
   const { titles, credits, addRandomWork } = useCredits();
   const { stats, trackScroll, trackCreditViewed, trackWorkCompleted } = useViewingStats();
+  const { stats: easterEggStats, recordClick, resetStats } = useEasterEggStats();
   const [showStatsModal, setShowStatsModal] = useState(false);
 
   const addWork = useCallback(() => {
     addRandomWork();
   }, []);
+
+  const handleEasterEggClick = useCallback((type: EasterEggType, creditId: number) => {
+    recordClick(type, creditId);
+  }, [recordClick]);
 
   useEffect(() => {
     addWork();
@@ -33,6 +40,7 @@ export const ManualCreditsCanvas = () => {
           onScrollDistanceChange={trackScroll}
           onCreditViewed={trackCreditViewed}
           onWorkCompleted={trackWorkCompleted}
+          onEasterEggClick={handleEasterEggClick}
         />
       )}
 
@@ -60,6 +68,8 @@ export const ManualCreditsCanvas = () => {
         isOpen={showStatsModal}
         onClose={() => setShowStatsModal(false)}
         stats={stats}
+        easterEggStats={easterEggStats}
+        onResetEasterEggs={resetStats}
       />
     </div>
   );

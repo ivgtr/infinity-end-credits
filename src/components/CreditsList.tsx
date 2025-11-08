@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { CreditsItem } from "./CreditsItem";
-import type { Credit } from "@/types/credits";
+import type { Credit, EasterEggType } from "@/types/credits";
 
 // スクロール速度の基準値（px/sec）
 // speed=1の時に60px/secでスクロールする
@@ -14,6 +14,7 @@ export const CreditsList = ({
   onScrollDistanceChange,
   onCreditViewed,
   onWorkCompleted,
+  onEasterEggClick,
 }: {
   titles: string[];
   credits: {
@@ -24,6 +25,7 @@ export const CreditsList = ({
   onScrollDistanceChange?: (distance: number) => void;
   onCreditViewed: (credit: Credit) => void;
   onWorkCompleted: (workTitle: string) => void;
+  onEasterEggClick?: (type: EasterEggType, creditId: number) => void;
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -112,6 +114,7 @@ export const CreditsList = ({
             credits={credits}
             onCreditViewed={onCreditViewed}
             onWorkCompleted={onWorkCompleted}
+            onEasterEggClick={onEasterEggClick}
           />
         ))}
       </div>

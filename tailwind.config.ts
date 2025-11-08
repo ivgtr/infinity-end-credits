@@ -18,6 +18,8 @@ const config: Config = {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'bounce-subtle': 'bounce-subtle 2s ease-in-out infinite',
         'glitch': 'glitch 1s ease-in-out infinite',
+        'click-pulse': 'click-pulse 0.6s ease-out',
+        'sparkle': 'sparkle 0.8s ease-out',
       },
       keyframes: {
         shimmer: {
@@ -54,6 +56,34 @@ const config: Config = {
           '80%': {
             transform: 'translate(2px, -2px)',
             opacity: '0.8',
+          },
+        },
+        'click-pulse': {
+          '0%': {
+            transform: 'scale(1)',
+            opacity: '1',
+          },
+          '50%': {
+            transform: 'scale(1.1)',
+            opacity: '0.8',
+          },
+          '100%': {
+            transform: 'scale(1)',
+            opacity: '0.6',
+          },
+        },
+        sparkle: {
+          '0%': {
+            opacity: '0',
+            transform: 'scale(0.5) rotate(0deg)',
+          },
+          '50%': {
+            opacity: '1',
+            transform: 'scale(1.2) rotate(180deg)',
+          },
+          '100%': {
+            opacity: '0',
+            transform: 'scale(0.5) rotate(360deg)',
           },
         },
       },
