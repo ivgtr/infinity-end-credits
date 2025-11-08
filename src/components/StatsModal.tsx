@@ -38,25 +38,25 @@ export const StatsModal = ({ isOpen, onClose, stats }: StatsModalProps) => {
         />
 
         {/* モーダルコンテンツ */}
-        <div className="relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full mx-4 p-8 border border-white/20">
+        <div className="relative bg-black/90 rounded-lg shadow-2xl max-w-2xl w-full mx-4 p-8 border border-white/10">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-white/60 hover:text-white text-3xl leading-none"
+            className="absolute top-4 right-4 text-white/60 hover:text-white text-2xl leading-none transition-colors"
             aria-label="閉じる"
           >
             ×
           </button>
 
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-white mb-4">
+            <h2 className="text-2xl font-bold text-white mb-4">
               まだ統計データがありません
             </h2>
-            <p className="text-gray-300 mb-6">
+            <p className="text-gray-400 mb-6 text-sm">
               エンドロールを鑑賞すると、ここに統計が表示されます
             </p>
             <button
               onClick={onClose}
-              className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-semibold"
+              className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm"
             >
               閉じる
             </button>
@@ -79,95 +79,87 @@ export const StatsModal = ({ isOpen, onClose, stats }: StatsModalProps) => {
       />
 
       {/* モーダルコンテンツ */}
-      <div className="relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 rounded-2xl shadow-2xl max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-gradient-to-b from-slate-900/95 to-transparent backdrop-blur-sm z-10 p-6 pb-4">
+      <div className="relative bg-black/90 rounded-lg shadow-2xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto border border-white/10">
+        <div className="sticky top-0 bg-black/95 backdrop-blur-sm z-10 p-6 pb-4 border-b border-white/10">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-white/60 hover:text-white text-3xl leading-none transition-colors"
+            className="absolute top-4 right-4 text-white/60 hover:text-white text-2xl leading-none transition-colors"
             aria-label="閉じる"
           >
             ×
           </button>
-          <h1 className="text-4xl font-bold text-white mb-2">
-            鑑賞統計ダッシュボード
+          <h1 className="text-2xl font-bold text-white mb-1">
+            鑑賞統計
           </h1>
-          <p className="text-gray-300">あなたのエンドロール鑑賞記録</p>
+          <p className="text-gray-400 text-sm">あなたのエンドロール鑑賞記録</p>
         </div>
 
         <div className="p-6 pt-2">
           {/* メイン統計カード */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5 mt-5">
             {/* 総作品数 */}
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-5 border border-white/20">
-              <div className="text-purple-300 text-sm font-semibold mb-2">
+            <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+              <div className="text-gray-400 text-xs mb-2">
                 総作品数
               </div>
-              <div className="text-4xl font-bold text-white mb-1">
+              <div className="text-3xl font-bold text-white mb-1">
                 {stats.totalWorks.toLocaleString()}
               </div>
-              <div className="text-gray-400 text-sm">作品</div>
+              <div className="text-gray-500 text-xs">作品</div>
             </div>
 
             {/* 延べスタッフ数 */}
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-5 border border-white/20">
-              <div className="text-pink-300 text-sm font-semibold mb-2">
+            <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+              <div className="text-gray-400 text-xs mb-2">
                 延べスタッフ数
               </div>
-              <div className="text-4xl font-bold text-white mb-1">
+              <div className="text-3xl font-bold text-white mb-1">
                 {stats.totalStaff.toLocaleString()}
               </div>
-              <div className="text-gray-400 text-sm">人</div>
+              <div className="text-gray-500 text-xs">人</div>
             </div>
 
             {/* 総スクロール距離 */}
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-5 border border-white/20">
-              <div className="text-blue-300 text-sm font-semibold mb-2">
-                総スクロール距離
+            <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+              <div className="text-gray-400 text-xs mb-2">
+                スクロール距離
               </div>
-              <div className="text-4xl font-bold text-white mb-1">
+              <div className="text-3xl font-bold text-white mb-1">
                 {km.toFixed(2)}
               </div>
-              <div className="text-gray-400 text-sm">km</div>
+              <div className="text-gray-500 text-xs">km</div>
             </div>
 
             {/* 鑑賞時間 */}
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-5 border border-white/20">
-              <div className="text-green-300 text-sm font-semibold mb-2">
+            <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+              <div className="text-gray-400 text-xs mb-2">
                 鑑賞時間
               </div>
-              <div className="text-2xl font-bold text-white mb-1">
+              <div className="text-xl font-bold text-white mb-1">
                 {formatDuration(stats.totalViewingTime)}
               </div>
-              <div className="text-gray-400 text-sm">累計</div>
+              <div className="text-gray-500 text-xs">累計</div>
             </div>
           </div>
 
           {/* 役職TOP3 */}
           {topRoles.length > 0 && (
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 mb-6">
-              <h2 className="text-2xl font-bold text-white mb-5">
+            <div className="bg-white/5 rounded-lg p-5 border border-white/10 mb-5">
+              <h2 className="text-lg font-bold text-white mb-4">
                 最も多く見た役職 TOP3
               </h2>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {topRoles.map((item, index) => (
                   <div key={item.role} className="flex items-center">
-                    <div
-                      className={`text-3xl font-bold mr-4 w-10 text-center ${
-                        index === 0
-                          ? "text-yellow-400"
-                          : index === 1
-                          ? "text-gray-300"
-                          : "text-orange-400"
-                      }`}
-                    >
+                    <div className="text-xl font-bold mr-3 w-8 text-center text-gray-400">
                       {index + 1}
                     </div>
-                    <div className="flex-1 bg-white/5 rounded-lg p-3">
+                    <div className="flex-1 bg-white/5 rounded p-3 border border-white/5">
                       <div className="flex justify-between items-center">
-                        <span className="text-white text-lg font-semibold">
+                        <span className="text-white text-sm">
                           {item.role}
                         </span>
-                        <span className="text-purple-300 text-lg font-bold">
+                        <span className="text-gray-400 text-sm font-medium">
                           {item.count.toLocaleString()}人
                         </span>
                       </div>
@@ -180,18 +172,17 @@ export const StatsModal = ({ isOpen, onClose, stats }: StatsModalProps) => {
 
           {/* 面白い表現 */}
           {funMessages.length > 0 && (
-            <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-lg rounded-xl p-6 border border-purple-400/30 mb-6">
-              <h2 className="text-2xl font-bold text-white mb-5">
-                あなたの偉業
+            <div className="bg-white/5 rounded-lg p-5 border border-white/10 mb-5">
+              <h2 className="text-lg font-bold text-white mb-3">
+                記録
               </h2>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {funMessages.map((message, index) => (
                   <div
                     key={index}
-                    className="flex items-start bg-white/10 rounded-lg p-4"
+                    className="bg-white/5 rounded p-3 border border-white/5"
                   >
-                    <span className="text-2xl mr-3">🎉</span>
-                    <p className="text-white text-base flex-1">{message}</p>
+                    <p className="text-gray-300 text-sm">{message}</p>
                   </div>
                 ))}
               </div>
@@ -199,7 +190,7 @@ export const StatsModal = ({ isOpen, onClose, stats }: StatsModalProps) => {
           )}
 
           {/* フッター情報 */}
-          <div className="text-center text-gray-400 text-sm">
+          <div className="text-center text-gray-500 text-xs pt-2">
             <p>
               最終更新:{" "}
               {new Date(stats.lastUpdatedAt).toLocaleString("ja-JP")}

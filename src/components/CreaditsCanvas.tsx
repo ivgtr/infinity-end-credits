@@ -87,10 +87,10 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
           </button>
           <button
             onClick={() => setShowStatsModal(true)}
-            className="px-3 py-2 bg-purple-600/70 rounded-full shadow-lg text-white hover:bg-purple-700/80 transition-colors flex items-center justify-center text-sm font-semibold"
-            title="統計ダッシュボード"
+            className="px-3 py-2 bg-black/70 rounded-full shadow-lg text-white hover:bg-black/80 transition-colors flex items-center justify-center text-sm"
+            title="統計"
           >
-            📊 統計
+            統計
           </button>
           <div className="text-xs text-white/60 text-center">
             Space/長押し: 倍速切替 / M: ミュート / H: UI非表示

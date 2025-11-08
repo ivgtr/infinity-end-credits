@@ -28,14 +28,14 @@ export const ManualCreditsCanvas = () => {
         />
       )}
 
-      {/* 統計ダッシュボードへのボタン */}
+      {/* 統計ボタン */}
       <div className="fixed bottom-6 right-6 z-50">
         <button
           onClick={() => setShowStatsModal(true)}
-          className="px-4 py-3 bg-purple-600/70 rounded-full shadow-lg text-white hover:bg-purple-700/80 transition-colors flex items-center justify-center text-sm font-semibold"
-          title="統計ダッシュボード"
+          className="px-3 py-2 bg-black/70 rounded-full shadow-lg text-white hover:bg-black/80 transition-colors flex items-center justify-center text-sm"
+          title="統計"
         >
-          📊 統計
+          統計
         </button>
       </div>
 
