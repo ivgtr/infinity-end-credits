@@ -22,6 +22,11 @@ import {
   createArpeggiatorSeq,
   createDropBuild,
   createSidechainRhythm,
+  createEnoAmbientPad,
+  createShimmerReverb,
+  createTexturalDrone,
+  createGranularCloud,
+  createModularSequence,
 } from "./patterns";
 
 // 定型パターン生成関数のマッピング
@@ -43,6 +48,11 @@ const FAMOUS_PATTERN_FUNCTIONS: Record<string, (root: number, duration: number) 
   createArpeggiatorSeq,
   createDropBuild,
   createSidechainRhythm,
+  createEnoAmbientPad,
+  createShimmerReverb,
+  createTexturalDrone,
+  createGranularCloud,
+  createModularSequence,
 };
 
 /**
@@ -365,7 +375,7 @@ export class MusicComposer {
       case "dark":
         return 0.65; // ダーク: 適度
       case "ambient":
-        return 0.45; // アンビエント: 適度
+        return 0.60; // アンビエント: 適度（浮遊感を保ちつつ動きを追加）
       case "jazzy":
         return 0.80; // ジャジー: ジャズはメロディ重要
       case "retro":
@@ -397,7 +407,7 @@ export class MusicComposer {
       case "dark":
         return 0.8; // ダーク: ベース多め
       case "ambient":
-        return 0.3; // アンビエント: ベース少なめ
+        return 0.45; // アンビエント: ベース控えめだが存在感あり
       case "jazzy":
         return 0.90; // ジャジー: ウォーキングベースが重要
       case "retro":
@@ -429,7 +439,7 @@ export class MusicComposer {
       case "dark":
         return 0.5; // ダーク: 適度
       case "ambient":
-        return 0.6; // アンビエント: 適度
+        return 0.70; // アンビエント: テクスチャを豊かに
       case "jazzy":
         return 0.70; // ジャジー: コンピング的なアルペジオ
       case "retro":
@@ -461,7 +471,7 @@ export class MusicComposer {
       case "dark":
         return 0.75; // ダーク: ドラム多め
       case "ambient":
-        return 0.0; // アンビエント: ドラムなし
+        return 0.15; // アンビエント: 非常に控えめなリズム要素
       case "jazzy":
         return 0.65; // ジャジー: スウィング感のためドラム適度
       case "retro":

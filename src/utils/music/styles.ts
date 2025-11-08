@@ -1535,9 +1535,10 @@ export const AMBIENT_STYLE: MusicStyle = {
   ],
   bassPatterns: BASS_PATTERNS.filter(p => p.name === "Minimal"),
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Slow Wave", "Triplet"].includes(p.name)),
-  drumPatterns: [], // 浮遊感を保つためドラムなし
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Minimal Beat", "Epic Slow"].includes(p.name)), // 非常に控えめなリズム
   durationRange: [55, 90],
   scales: ["major", "minor", "dorian", "wholeTone"],
+  famousPatterns: ["createEnoAmbientPad", "createShimmerReverb", "createTexturalDrone", "createGranularCloud", "createModularSequence"],
 };
 
 /**
