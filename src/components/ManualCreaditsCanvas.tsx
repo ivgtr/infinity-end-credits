@@ -3,54 +3,31 @@ import { useCredits } from "@/hooks/useCredits";
 import { useViewingStats } from "@/hooks/useViewingStats";
 import { ManualCreditsList } from "./ManualCreaditsList";
 import { StatsModal } from "./StatsModal";
-import { TitleScreen } from "./TitleScreen";
 
 export const ManualCreditsCanvas = () => {
   const { titles, credits, addRandomWork } = useCredits();
   const { stats, trackScroll, trackCreditViewed, trackWorkCompleted } = useViewingStats();
   const [showStatsModal, setShowStatsModal] = useState(false);
-  const [showTitleScreen, setShowTitleScreen] = useState(true);
-  const [firstTitle, setFirstTitle] = useState<string>("");
 
   const addWork = useCallback(() => {
     addRandomWork();
   }, []);
 
-  // 最初のタイトルを生成してタイトル画面を表示
   useEffect(() => {
     addWork();
   }, []);
 
-  // タイトルが生成されたら記録
-  useEffect(() => {
-    if (titles.length > 0 && !firstTitle) {
-      setFirstTitle(titles[0]);
-    }
-  }, [titles, firstTitle]);
-
   return (
     <div className="min-h-screen h-full w-full">
-      {/* タイトル画面 */}
-      {showTitleScreen && firstTitle && (
-        <TitleScreen
-          title={firstTitle}
-          onComplete={() => setShowTitleScreen(false)}
-          duration={3000}
-        />
-      )}
-
-      {/* クレジットリスト（タイトル画面表示中も常にレンダリングするが、非表示） */}
       {titles.length > 0 && (
-        <div className={showTitleScreen ? "invisible" : "visible"}>
-          <ManualCreditsList
-            titles={titles}
-            credits={credits}
-            addWork={addWork}
-            onScrollDistanceChange={trackScroll}
-            onCreditViewed={trackCreditViewed}
-            onWorkCompleted={trackWorkCompleted}
-          />
-        </div>
+        <ManualCreditsList
+          titles={titles}
+          credits={credits}
+          addWork={addWork}
+          onScrollDistanceChange={trackScroll}
+          onCreditViewed={trackCreditViewed}
+          onWorkCompleted={trackWorkCompleted}
+        />
       )}
 
       {/* 統計ボタン */}
