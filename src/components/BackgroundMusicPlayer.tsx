@@ -7,15 +7,13 @@ const DEFAULT_VOLUME = 0.15;
 interface BackgroundMusicPlayerProps {
   /** 自動再生フラグ */
   autoPlay?: boolean;
-  /** UI表示フラグ */
-  showUI?: boolean;
 }
 
 /**
  * バックグラウンドミュージックプレイヤー
  * 画面右下に配置される音楽コントロール
  */
-export function BackgroundMusicPlayer({ autoPlay = false, showUI = true }: BackgroundMusicPlayerProps) {
+export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlayerProps) {
   const { isPlaying, play, toggle, setVolume } = useBackgroundMusic();
   const [volume, setVolumeState] = useState(DEFAULT_VOLUME);
   const [previousVolume, setPreviousVolume] = useState(DEFAULT_VOLUME);
@@ -102,11 +100,6 @@ export function BackgroundMusicPlayer({ autoPlay = false, showUI = true }: Backg
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [volume, previousVolume]);
-
-  // UI非表示時は何も表示しない（音楽は再生し続ける）
-  if (!showUI) {
-    return null;
-  }
 
   return (
     <div>
