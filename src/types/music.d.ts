@@ -95,6 +95,20 @@ export interface DrumPattern {
 }
 
 /**
+ * ストリングス（弦楽器）パターン
+ */
+export interface StringPattern {
+  /** パターン名 */
+  name: string;
+  /** 音符の配列 */
+  notes: Note[];
+  /** 繰り返し回数 */
+  repeat?: number;
+  /** ボイシングタイプ（密集/開離） */
+  voicing?: 'close' | 'open' | 'wide';
+}
+
+/**
  * 音楽セクション
  */
 export interface MusicSection {
@@ -108,6 +122,8 @@ export interface MusicSection {
   arpeggio?: ArpeggioPattern;
   /** ドラムパターン（オプション） */
   drums?: DrumPattern;
+  /** ストリングスパターン（オプション） */
+  strings?: StringPattern;
   /** 持続時間（秒） */
   duration: number;
   /** スタイル */
@@ -161,6 +177,8 @@ export interface MusicStyle {
   arpeggioPatterns: ArpeggioPattern[];
   /** ドラムパターン */
   drumPatterns: DrumPattern[];
+  /** ストリングスパターン（オプション） */
+  stringsPatterns?: StringPattern[];
   /** スタイルの持続時間範囲（秒） */
   durationRange: [number, number];
   /** 推奨スケール/モード（スケールベースのメロディー生成に使用） */

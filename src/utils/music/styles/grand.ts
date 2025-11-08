@@ -3,6 +3,7 @@ import { NOTES } from "../core/constants";
 import { BASS_PATTERNS } from "../patterns/base/bass";
 import { ARPEGGIO_PATTERNS } from "../patterns/base/arpeggio";
 import { DRUM_PATTERNS } from "../patterns/base/drums";
+import { STRING_PATTERNS } from "../patterns/base/strings";
 
 /**
  * 1. 壮大（Grand）: 映画のようなエピック感
@@ -299,6 +300,7 @@ export const GRAND_STYLE: MusicStyle = {
   bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Octave Jump", "Classic Arpeggio Bass", "Rhythmic Groove", "Walking Bass", "Deep Pulse"].includes(p.name)),
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Up-Down", "Slow Wave", "Broken Chord", "Triplet", "Melodic Pattern", "Sweep Up", "Octave Up"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Epic Slow", "Minimal Beat", "Pop Ballad", "Half-Time", "Waltz 3/4", "Basic 4/4"].includes(p.name)),
+  stringsPatterns: STRING_PATTERNS.filter(p => ["Soaring Strings", "Epic Swell", "Triumphant Rise", "Celestial Harmony", "Majestic Chord", "Open Voicing", "Warm Embrace", "Sustained Harmony"].includes(p.name)),
   durationRange: [35, 55],
   scales: ["major", "minor", "harmonicMinor"],
   famousPatterns: ["createMozartRocket", "createFateMotif", "createBaroqueSequence"],

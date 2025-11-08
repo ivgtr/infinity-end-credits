@@ -3,6 +3,7 @@ import { NOTES } from "../core/constants";
 import { BASS_PATTERNS } from "../patterns/base/bass";
 import { ARPEGGIO_PATTERNS } from "../patterns/base/arpeggio";
 import { DRUM_PATTERNS } from "../patterns/base/drums";
+import { STRING_PATTERNS } from "../patterns/base/strings";
 
 /**
  * 4. ダーク（Dark）: 重厚で神秘的
@@ -309,6 +310,7 @@ export const DARK_STYLE: MusicStyle = {
   bassPatterns: BASS_PATTERNS.filter(p => ["Minimal", "Root-Fifth", "Rock Steady", "Deep Pulse", "Octave Jump", "Rhythmic Groove", "Driving Eighth"].includes(p.name)),
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Down", "Random", "Slow Wave", "Broken Chord", "Reverse Cascade", "Octave Down", "Stutter", "Complex Weave"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Heavy Rock", "Basic 4/4", "Energetic", "Half-Time", "Breakbeat", "Double-Time"].includes(p.name)),
+  stringsPatterns: STRING_PATTERNS.filter(p => ["Ominous Descent", "Sinister Tremolo", "Gothic Melancholy", "Brooding Tension", "Simple Triad", "Sustained Harmony"].includes(p.name)),
   durationRange: [40, 60],
   scales: ["minor", "phrygian", "locrian", "harmonicMinor"],
 };

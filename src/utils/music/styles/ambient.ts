@@ -3,6 +3,7 @@ import { NOTES } from "../core/constants";
 import { BASS_PATTERNS } from "../patterns/base/bass";
 import { ARPEGGIO_PATTERNS } from "../patterns/base/arpeggio";
 import { DRUM_PATTERNS } from "../patterns/base/drums";
+import { STRING_PATTERNS } from "../patterns/base/strings";
 
 /**
  * 5. アンビエント（Ambient）: 浮遊感のある空間
@@ -269,6 +270,14 @@ export const AMBIENT_STYLE: MusicStyle = {
     "Half-Time",
     "Pop Ballad",
     "Waltz 3/4"
+  ].includes(p.name)),
+  stringsPatterns: STRING_PATTERNS.filter(p => [
+    "Ethereal Pad",
+    "Floating Atmosphere",
+    "Cosmic Wash",
+    "Dreamy Haze",
+    "Sparse Accent",
+    "Sustained Harmony"
   ].includes(p.name)),
   durationRange: [55, 90],
   scales: ["major", "minor", "dorian", "wholeTone"],

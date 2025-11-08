@@ -1,4 +1,4 @@
-import type { Chord, Note, SoundParameters, BassPattern, ArpeggioPattern, DrumPattern } from "@/types/music";
+import type { Chord, Note, SoundParameters, BassPattern, ArpeggioPattern, DrumPattern, StringPattern } from "@/types/music";
 import { getChordNotes } from "./core/helpers";
 
 /**
@@ -134,6 +134,24 @@ export class MusicEngine {
   }
 
   /**
+   * ストリングスパターンを再生
+   */
+  public playStrings(stringPattern: StringPattern, soundParams: SoundParameters, startTime?: number): void {
+    if (!this.audioContext || !this.masterGain || !this.isPlaying) {
+      return;
+    }
+
+    const now = this.audioContext.currentTime;
+    const start = startTime ?? now;
+
+    // 各ストリングスノートを再生
+    stringPattern.notes.forEach((note) => {
+      const velocity = note.velocity ?? 0.25;
+      this.playStringNote(note.pitch, start + note.startTime, note.duration, velocity, soundParams);
+    });
+  }
+
+  /**
    * パッド音（コード用）を再生
    * 壮大で退屈な感じを出すために、長いアタック/リリース
    */
@@ -257,6 +275,85 @@ export class MusicEngine {
       osc.disconnect();
       gainNode.disconnect();
       this.activeOscillators.delete(osc);
+    };
+  }
+
+  /**
+   * ストリングス音を再生
+   * 弦楽器アンサンブルの豊かな響きを模倣
+   * 複数のオシレーターをわずかにデチューンして厚みを出す
+   */
+  private playStringNote(
+    midiNote: number,
+    startTime: number,
+    duration: number,
+    velocity: number,
+    soundParams: SoundParameters
+  ): void {
+    if (!this.audioContext || !this.masterGain) {
+      return;
+    }
+
+    const freq = midiToFrequency(midiNote);
+
+    // ストリングスアンサンブルを模倣するため、わずかにデチューンした3つのオシレーターを使用
+    const detuneValues = [-8, 0, 8]; // セント単位のデチューン
+    const oscillators: OscillatorNode[] = [];
+
+    // ゲインノード（エンベロープ用）
+    const gainNode = this.audioContext.createGain();
+    gainNode.gain.value = 0;
+
+    detuneValues.forEach((detune) => {
+      // オシレーター: サウトゥース波（弦楽器の倍音成分を模倣）
+      const osc = this.audioContext.createOscillator();
+      osc.type = "sawtooth";
+      osc.frequency.value = freq;
+      osc.detune.value = detune;
+
+      // ローパスフィルター（高音をカットしてより柔らかく）
+      const filter = this.audioContext.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.value = 2000 + (velocity * 1000); // ベロシティで明るさを変化
+      filter.Q.value = 1;
+
+      // 接続
+      osc.connect(filter);
+      filter.connect(gainNode);
+
+      oscillators.push(osc);
+    });
+
+    // ゲインノードをマスターに接続
+    gainNode.connect(this.fadeGain!);
+
+    // エンベロープ: 弦楽器らしいゆったりとしたアタックとリリース
+    const attackTime = 0.15; // ボウが弦に当たって音が立ち上がる時間
+    const releaseTime = 0.6; // 自然な減衰
+    const sustainLevel = velocity * 0.4; // ストリングスは控えめに
+
+    gainNode.gain.setValueAtTime(0, startTime);
+    gainNode.gain.linearRampToValueAtTime(sustainLevel, startTime + attackTime);
+    gainNode.gain.setValueAtTime(
+      sustainLevel,
+      startTime + Math.max(duration - releaseTime, attackTime)
+    );
+    gainNode.gain.linearRampToValueAtTime(0, startTime + duration);
+
+    // すべてのオシレーターを再生
+    oscillators.forEach((osc) => {
+      osc.start(startTime);
+      osc.stop(startTime + duration);
+      this.activeOscillators.add(osc);
+    });
+
+    // クリーンアップ
+    oscillators[0]!.onended = () => {
+      oscillators.forEach((osc) => {
+        osc.disconnect();
+        this.activeOscillators.delete(osc);
+      });
+      gainNode.disconnect();
     };
   }
 
