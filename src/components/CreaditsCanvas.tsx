@@ -51,6 +51,16 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
         {showUI && <SpeedControl onSpeedChange={handleSpeedChange} />}
         <BackgroundMusicPlayer autoPlay={autoPlayMusic} showUI={showUI} />
         {showUI && (
+          <button
+            onClick={() => setShowUI(false)}
+            className="px-3 py-2 bg-black/70 rounded-full shadow-lg text-white hover:bg-black/80 transition-colors flex items-center justify-center"
+            aria-label="UIを非表示"
+            title="UIを非表示"
+          >
+            👁
+          </button>
+        )}
+        {showUI && (
           <div className="text-xs text-white/60 text-center">
             Space/長押し: 倍速切替 / M: ミュート / H: UI非表示
           </div>
