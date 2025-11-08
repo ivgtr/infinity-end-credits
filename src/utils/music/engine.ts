@@ -294,7 +294,8 @@ export class MusicEngine {
 
     // 現在の値をキャンセル
     fadeGain.cancelScheduledValues(start);
-    fadeGain.setValueAtTime(fadeGain.value, start);
+    // 常に0から開始してフェードイン（タイミング問題を回避）
+    fadeGain.setValueAtTime(0, start);
 
     // フェードイン
     fadeGain.linearRampToValueAtTime(1.0, start + duration);
