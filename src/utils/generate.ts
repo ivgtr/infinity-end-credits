@@ -1,16 +1,121 @@
 import { fakerJA } from "@faker-js/faker";
 
-export const generateNames = (count: number) => {
-  return fakerJA.helpers
-    .multiple(
-      () => ({
-        name: fakerJA.person.fullName(),
-      }),
-      {
-        count,
-      }
-    )
-    .map((person) => person.name);
+// 中国人名のカタカナパターン
+const generateChineseName = () => {
+  const surnames = [
+    "ワン", "リー", "チャン", "リウ", "チェン", "ヤン", "ホアン", "ジャオ", "ウー", "ジョウ",
+    "シュー", "スン", "マー", "チュー", "フー", "グオ", "リン", "ヘ", "ガオ", "ジン",
+    "シェン", "タン", "パン", "ユー", "ルー", "ツァイ", "ドン", "ウェイ", "リャン", "ダイ"
+  ];
+
+  const givenNames = [
+    "シャオミン", "ウェイ", "リー", "ジン", "ミン", "ファン", "ナ", "シュエ", "シン", "ヤン",
+    "ジュン", "ホン", "レイ", "タオ", "ペン", "イン", "メイ", "リン", "チャオ", "ジエ",
+    "ハオ", "ユエ", "シャオ", "フイ", "シュアン", "ラン", "チェン", "ドン", "ジャン", "イー"
+  ];
+
+  return `${fakerJA.helpers.arrayElement(surnames)} ${fakerJA.helpers.arrayElement(givenNames)}`;
+};
+
+// 韓国人名のカタカナパターン
+const generateKoreanName = () => {
+  const surnames = [
+    "キム", "イ", "パク", "チェ", "チョン", "カン", "チョ", "ユン", "チャン", "イム",
+    "ハン", "オ", "ソ", "シン", "クォン", "ファン", "アン", "ソン", "ペ", "ホン",
+    "リュ", "コ", "ムン", "ヤン", "ソン", "ナム", "シム", "ノ", "チュ", "ハ"
+  ];
+
+  const givenNames = [
+    "ミンジュン", "ソヒョン", "ジフン", "ユナ", "ヒョンウ", "スミン", "ドンヒョン", "ジウォン", "ミンホ", "ソヨン",
+    "ジェウン", "ハヨン", "スンホ", "イェジ", "ジュンソ", "ジヨン", "ヒョジン", "テヒョン", "ダヒョン", "ソンミン",
+    "ウンジ", "ミンジ", "ジュンヒョク", "セヨン", "ヒョンジ", "サンウ", "ヘジン", "ジョンウ", "ナヨン", "ギュミン"
+  ];
+
+  return `${fakerJA.helpers.arrayElement(surnames)} ${fakerJA.helpers.arrayElement(givenNames)}`;
+};
+
+// 欧米人名のカタカナパターン
+const generateWesternName = () => {
+  const firstNames = [
+    "ジョン", "マイケル", "デビッド", "ジェームズ", "ロバート", "ウィリアム", "リチャード", "トーマス", "チャールズ", "クリストファー",
+    "ダニエル", "マシュー", "アンソニー", "マーク", "ポール", "スティーブン", "アンドリュー", "ケネス", "ジョージ", "エドワード",
+    "メアリー", "パトリシア", "ジェニファー", "リンダ", "バーバラ", "エリザベス", "スーザン", "ジェシカ", "サラ", "カレン",
+    "ナンシー", "マーガレット", "リサ", "ベティ", "ドロシー", "サンドラ", "アシュリー", "キンバリー", "ドナ", "エミリー",
+    "アレックス", "サム", "ジョーダン", "テイラー", "モーガン", "ケイシー", "ジェイミー", "ライリー", "エイブリー", "ペイトン"
+  ];
+
+  const lastNames = [
+    "スミス", "ジョンソン", "ウィリアムズ", "ブラウン", "ジョーンズ", "ガルシア", "ミラー", "デイビス", "ロドリゲス", "マルティネス",
+    "ウィルソン", "アンダーソン", "テイラー", "トーマス", "ムーア", "ジャクソン", "マーティン", "リー", "トンプソン", "ホワイト",
+    "ハリス", "クラーク", "ルイス", "ロビンソン", "ウォーカー", "ヤング", "アレン", "キング", "ライト", "スコット",
+    "ヒル", "グリーン", "アダムス", "ベイカー", "ネルソン", "カーター", "ミッチェル", "ロバーツ", "ターナー", "フィリップス"
+  ];
+
+  return `${fakerJA.helpers.arrayElement(firstNames)} ${fakerJA.helpers.arrayElement(lastNames)}`;
+};
+
+// 日本語苗字 + 外国の名前のミックスパターン
+const generateMixedName = () => {
+  const japaneseSurnames = [
+    "佐藤", "鈴木", "高橋", "田中", "渡辺", "伊藤", "山本", "中村", "小林", "加藤",
+    "吉田", "山田", "佐々木", "山口", "松本", "井上", "木村", "林", "清水", "山崎",
+    "森", "池田", "橋本", "阿部", "石川", "山下", "中島", "石井", "小川", "前田"
+  ];
+
+  const foreignGivenNames = [
+    // 中国系
+    "シャオミン", "ウェイ", "ミン", "ジン", "ユエ",
+    // 韓国系
+    "ミンジュン", "ジフン", "ユナ", "スミン", "ソヨン",
+    // 欧米系
+    "ジョン", "マイケル", "デビッド", "エミリー", "サラ", "アレックス"
+  ];
+
+  return `${fakerJA.helpers.arrayElement(japaneseSurnames)} ${fakerJA.helpers.arrayElement(foreignGivenNames)}`;
+};
+
+// スタッフ名を生成（確率的に日本人名または外国人名を選択）
+const generateStaffName = (options?: { allowForeign?: boolean }) => {
+  // デフォルトでは外国人名を許可
+  const allowForeign = options?.allowForeign !== false;
+
+  if (!allowForeign) {
+    // 外国人名不可の場合は日本人名のみ
+    return fakerJA.person.fullName();
+  }
+
+  const rand = Math.random();
+
+  // 確率設定：
+  // 85% - 日本人名
+  // 6% - 中国人名
+  // 4% - 韓国人名
+  // 3% - 欧米人名
+  // 2% - 日本語苗字 + 外国の名前
+
+  if (rand < 0.85) {
+    return fakerJA.person.fullName();
+  } else if (rand < 0.91) {
+    // 6% 中国人名
+    return generateChineseName();
+  } else if (rand < 0.95) {
+    // 4% 韓国人名
+    return generateKoreanName();
+  } else if (rand < 0.98) {
+    // 3% 欧米人名
+    return generateWesternName();
+  } else {
+    // 2% ミックス名
+    return generateMixedName();
+  }
+};
+
+export const generateNames = (count: number, options?: { allowForeign?: boolean }) => {
+  const names: string[] = [];
+  for (let i = 0; i < count; i++) {
+    names.push(generateStaffName(options));
+  }
+  return names;
 };
 
 export const generateId = () => {

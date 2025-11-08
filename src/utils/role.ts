@@ -685,6 +685,17 @@ export const generateRoleStaff = () => {
     "制作進行補佐": { min: 8, max: 20 },
   };
 
+  // 外国人名を許可しない役職のリスト
+  const japaneseOnlyRoles: string[] = [
+    "監督",
+    "総監督",
+    "企画・原作・脚本",
+    "エグゼクティブ・プロデューサー",
+    "総作画監督",
+    "副監督",
+    "制作統括プロデューサー",
+  ];
+
   // 役職を追加する関数
   const addRole = (roleKey: keyof typeof EVANGELIONRole, customMin?: number, customMax?: number) => {
     const role = roles[roleKey];
@@ -695,7 +706,10 @@ export const generateRoleStaff = () => {
     const max = customMax !== undefined ? customMax : range.max;
 
     const memberCount = Math.floor(Math.random() * (max - min + 1)) + min;
-    const members = generateNames(memberCount);
+
+    // 特定の役職には日本人名のみを使用
+    const allowForeign = !japaneseOnlyRoles.includes(roleKey);
+    const members = generateNames(memberCount, { allowForeign });
 
     staffs.push({
       role: roleKey,
@@ -708,7 +722,8 @@ export const generateRoleStaff = () => {
   const castMembers: string[] = [];
   for (let i = 0; i < castCount; i++) {
     const characterName = generateCharacterName();
-    const actorName = generateNames(1)[0];
+    // 声優は日本人名のみ
+    const actorName = generateNames(1, { allowForeign: false })[0];
     castMembers.push(`${characterName}：${actorName}`);
   }
   staffs.push({
