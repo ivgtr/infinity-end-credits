@@ -164,6 +164,28 @@ export const DARK_STYLE: MusicStyle = {
         { root: NOTES.C4, type: "major", duration: 4 },
       ],
     },
+    // i-V7#9-i-bVI (オルタードダーク)
+    {
+      name: "Altered Dark",
+      tempo: 50,
+      chords: [
+        { root: NOTES.E3, type: "minor", duration: 5 },
+        { root: NOTES.B3, type: "dom7#9", duration: 5 },
+        { root: NOTES.E3, type: "minor", duration: 5 },
+        { root: NOTES.C4, type: "major", duration: 5 },
+      ],
+    },
+    // i-bVII7b9-bVI-V7#9 (ブラックアダーダーク)
+    {
+      name: "Blackadder Dark",
+      tempo: 48,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.G3, type: "dom7b9", duration: 4 },
+        { root: NOTES.F3, type: "major", duration: 4 },
+        { root: NOTES.E3, type: "dom7#9", duration: 4 },
+      ],
+    },
   ],
   melodyPatterns: [
     {

@@ -158,6 +158,38 @@ export const JAZZY_STYLE: MusicStyle = {
         { root: NOTES.G3, type: "dom7", duration: 4 },
       ],
     },
+    // ii-V7#9-I (ヘンドリックスコード使用)
+    {
+      name: "Hendrix Jazz",
+      tempo: 88,
+      chords: [
+        { root: NOTES.D4, type: "min7", duration: 3 },
+        { root: NOTES.G3, type: "dom7#9", duration: 3 },
+        { root: NOTES.C4, type: "maj7", duration: 6 },
+      ],
+    },
+    // I-VI7b9-ii-V7#9 (オルタードドミナント)
+    {
+      name: "Altered Dominant",
+      tempo: 90,
+      chords: [
+        { root: NOTES.C4, type: "maj7", duration: 3 },
+        { root: NOTES.A3, type: "dom7b9", duration: 3 },
+        { root: NOTES.D4, type: "min7", duration: 3 },
+        { root: NOTES.G3, type: "dom7#9", duration: 3 },
+      ],
+    },
+    // Imaj7-IV7#9-bVIImaj7-III7b9 (ブラックアダー進行)
+    {
+      name: "Blackadder Progression",
+      tempo: 85,
+      chords: [
+        { root: NOTES.C4, type: "maj7", duration: 4 },
+        { root: NOTES.F3, type: "dom7#9", duration: 4 },
+        { root: NOTES.A3 + 10, type: "maj7", duration: 4 }, // Bb maj7
+        { root: NOTES.E3, type: "dom7b9", duration: 4 },
+      ],
+    },
   ],
   melodyPatterns: [
     {

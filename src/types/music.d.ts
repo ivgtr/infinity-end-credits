@@ -20,7 +20,8 @@ export interface Chord {
   root: number;
   /** コードタイプ（major, minor, sus4など） */
   type: 'major' | 'minor' | 'sus4' | 'sus2' | 'maj7' | 'min7' | 'dom7' |
-        'maj9' | 'min9' | 'min11' | 'add9' | 'add11' | '6' | 'dim7' | 'aug';
+        'maj9' | 'min9' | 'min11' | 'add9' | 'add11' | '6' | 'dim7' | 'aug' |
+        'dom7#9' | 'dom7b9';
   /** 持続時間（秒） */
   duration: number;
 }
