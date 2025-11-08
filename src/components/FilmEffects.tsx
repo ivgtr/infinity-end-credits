@@ -66,7 +66,8 @@ export const FilmEffects = () => {
       animationFrameRef.current = requestAnimationFrame(animateGrain);
     };
 
-    animateGrain();
+    // 初回呼び出し（requestAnimationFrameで開始してcurrentTimeを取得）
+    animationFrameRef.current = requestAnimationFrame(animateGrain);
 
     return () => {
       cancelAnimationFrame(animationFrameRef.current);
