@@ -143,6 +143,66 @@ export const ARPEGGIO_PATTERNS: ArpeggioPattern[] = [
     noteDuration: 0.28,
     speed: 1.4,
   },
+  {
+    name: "Octave Up",
+    pattern: [0, 1, 2, 0, 1, 2], // オクターブ上昇パターン
+    noteDuration: 0.35,
+    speed: 1.3,
+  },
+  {
+    name: "Octave Down",
+    pattern: [2, 1, 0, 2, 1, 0], // オクターブ下降パターン
+    noteDuration: 0.35,
+    speed: 1.3,
+  },
+  {
+    name: "Alternating",
+    pattern: [0, 2, 0, 2, 1, 2, 1, 2], // 交互パターン
+    noteDuration: 0.3,
+    speed: 1.2,
+  },
+  {
+    name: "Reverse Cascade",
+    pattern: [2, 2, 1, 0, 1, 2], // 逆カスケード
+    noteDuration: 0.25,
+    speed: 1.6,
+  },
+  {
+    name: "Stutter",
+    pattern: [0, 0, 1, 1, 2, 2, 1, 1], // スタッター
+    noteDuration: 0.2,
+    speed: 1.7,
+  },
+  {
+    name: "Melodic Pattern",
+    pattern: [0, 2, 1, 0, 1, 2, 0, 1], // メロディック
+    noteDuration: 0.4,
+    speed: 1.1,
+  },
+  {
+    name: "Rhythmic Pulse",
+    pattern: [0, 1, 2, 0, 1, 2, 0, 2], // リズミック
+    noteDuration: 0.3,
+    speed: 1.4,
+  },
+  {
+    name: "Sweep Up",
+    pattern: [0, 0, 1, 1, 2, 2], // スイープアップ
+    noteDuration: 0.25,
+    speed: 1.5,
+  },
+  {
+    name: "Sweep Down",
+    pattern: [2, 2, 1, 1, 0, 0], // スイープダウン
+    noteDuration: 0.25,
+    speed: 1.5,
+  },
+  {
+    name: "Complex Weave",
+    pattern: [0, 2, 1, 0, 2, 0, 1, 2, 1, 0], // 複雑なパターン
+    noteDuration: 0.22,
+    speed: 1.6,
+  },
 ];
 
 /**
@@ -182,6 +242,55 @@ export const DRUM_PATTERNS: DrumPattern[] = [
     kick: [0, 3],
     snare: [2],
     hihat: [0, 1, 2, 3],
+    duration: 4,
+  },
+  {
+    name: "Syncopated Funk",
+    kick: [0, 0.75, 2, 2.5, 3.5],
+    snare: [1, 3],
+    hihat: [0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75],
+    duration: 4,
+  },
+  {
+    name: "Breakbeat",
+    kick: [0, 1.5, 2.75],
+    snare: [1, 2.5],
+    hihat: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
+    duration: 4,
+  },
+  {
+    name: "Half-Time",
+    kick: [0, 4],
+    snare: [2],
+    hihat: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5],
+    duration: 8,
+  },
+  {
+    name: "Double-Time",
+    kick: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
+    snare: [0.5, 1.5, 2.5, 3.5],
+    hihat: [0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75],
+    duration: 4,
+  },
+  {
+    name: "Shuffle Beat",
+    kick: [0, 2],
+    snare: [1, 3],
+    hihat: [0, 0.66, 1, 1.66, 2, 2.66, 3, 3.66],
+    duration: 4,
+  },
+  {
+    name: "House Beat",
+    kick: [0, 1, 2, 3],
+    snare: [1, 3],
+    hihat: [0.5, 1.5, 2.5, 3.5],
+    duration: 4,
+  },
+  {
+    name: "Pop Ballad",
+    kick: [0, 2.5],
+    snare: [1, 3],
+    hihat: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
     duration: 4,
   },
 ];
@@ -280,6 +389,54 @@ export const GRAND_STYLE: MusicStyle = {
         { root: NOTES.A3 + 10, type: "major", duration: 4 }, // Bb
       ],
     },
+    // I-IV-vi-iii-IV-V-I (Extended progression)
+    {
+      name: "Epic Extended",
+      tempo: 58,
+      chords: [
+        { root: NOTES.C4, type: "maj7", duration: 3 },
+        { root: NOTES.F3, type: "major", duration: 3 },
+        { root: NOTES.A3, type: "minor", duration: 3 },
+        { root: NOTES.E3, type: "minor", duration: 3 },
+        { root: NOTES.F3, type: "maj7", duration: 4 },
+        { root: NOTES.G3, type: "major", duration: 4 },
+        { root: NOTES.C4, type: "maj7", duration: 4 },
+      ],
+    },
+    // I-iii-vi-IV (Smooth descent)
+    {
+      name: "Smooth Descent",
+      tempo: 62,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 4 },
+        { root: NOTES.E3, type: "minor", duration: 4 },
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.F3, type: "maj7", duration: 4 },
+      ],
+    },
+    // IV-I-V-vi (Plagal to authentic)
+    {
+      name: "Plagal Epic",
+      tempo: 59,
+      chords: [
+        { root: NOTES.F3, type: "major", duration: 5 },
+        { root: NOTES.C4, type: "major", duration: 5 },
+        { root: NOTES.G3, type: "sus4", duration: 3 },
+        { root: NOTES.G3, type: "major", duration: 2 },
+        { root: NOTES.A3, type: "minor", duration: 5 },
+      ],
+    },
+    // I-V-IV-bVII (Mixolydian epic)
+    {
+      name: "Mixolydian Epic",
+      tempo: 63,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 4 },
+        { root: NOTES.G3, type: "major", duration: 4 },
+        { root: NOTES.F3, type: "major", duration: 4 },
+        { root: NOTES.A3 + 10, type: "major", duration: 4 }, // Bb
+      ],
+    },
   ],
   melodyPatterns: [
     {
@@ -342,6 +499,68 @@ export const GRAND_STYLE: MusicStyle = {
         { pitch: NOTES.D5, duration: 2, startTime: 3, velocity: 0.3 },
         { pitch: NOTES.C5, duration: 2, startTime: 5, velocity: 0.31 },
         { pitch: NOTES.G5, duration: 5, startTime: 7, velocity: 0.36 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Soaring Flight",
+      notes: [
+        { pitch: NOTES.C5, duration: 2, startTime: 0, velocity: 0.3 },
+        { pitch: NOTES.D5, duration: 2, startTime: 2, velocity: 0.31 },
+        { pitch: NOTES.E5, duration: 2, startTime: 4, velocity: 0.33 },
+        { pitch: NOTES.G5, duration: 2, startTime: 6, velocity: 0.35 },
+        { pitch: NOTES.A5, duration: 3, startTime: 8, velocity: 0.37 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Grand Fanfare",
+      notes: [
+        { pitch: NOTES.G5, duration: 2, startTime: 0, velocity: 0.35 },
+        { pitch: NOTES.C5 + 12, duration: 3, startTime: 2, velocity: 0.38 },
+        { pitch: NOTES.G5, duration: 2, startTime: 5, velocity: 0.34 },
+        { pitch: NOTES.E5, duration: 4, startTime: 7, velocity: 0.32 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Triumphant Call",
+      notes: [
+        { pitch: NOTES.E5, duration: 1.5, startTime: 0, velocity: 0.33 },
+        { pitch: NOTES.G5, duration: 1.5, startTime: 1.5, velocity: 0.35 },
+        { pitch: NOTES.C5 + 12, duration: 2, startTime: 3, velocity: 0.37 },
+        { pitch: NOTES.A5, duration: 2, startTime: 5, velocity: 0.36 },
+        { pitch: NOTES.G5, duration: 3, startTime: 7, velocity: 0.34 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Majestic Wave",
+      notes: [
+        { pitch: NOTES.D5, duration: 2.5, startTime: 0, velocity: 0.31 },
+        { pitch: NOTES.G5, duration: 2.5, startTime: 2.5, velocity: 0.35 },
+        { pitch: NOTES.E5, duration: 2, startTime: 5, velocity: 0.33 },
+        { pitch: NOTES.C5, duration: 4, startTime: 7, velocity: 0.3 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Victorious Climb",
+      notes: [
+        { pitch: NOTES.C5, duration: 2, startTime: 0, velocity: 0.32 },
+        { pitch: NOTES.E5, duration: 2, startTime: 2, velocity: 0.34 },
+        { pitch: NOTES.A5, duration: 3, startTime: 4, velocity: 0.37 },
+        { pitch: NOTES.C5 + 12, duration: 4, startTime: 7, velocity: 0.38 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Epic Horizon",
+      notes: [
+        { pitch: NOTES.G5, duration: 3, startTime: 0, velocity: 0.34 },
+        { pitch: NOTES.E5, duration: 2, startTime: 3, velocity: 0.32 },
+        { pitch: NOTES.G5, duration: 2, startTime: 5, velocity: 0.35 },
+        { pitch: NOTES.C5 + 12, duration: 5, startTime: 7, velocity: 0.37 },
       ],
       repeat: 1,
     },
@@ -423,6 +642,41 @@ export const MONOTONOUS_STYLE: MusicStyle = {
         { root: NOTES.C4, type: "sus2", duration: 14 },
       ],
     },
+    // I (Pure drone - single chord)
+    {
+      name: "Pure Drone",
+      tempo: 38,
+      chords: [
+        { root: NOTES.C4, type: "sus2", duration: 20 },
+      ],
+    },
+    // I-vi (Minimal shift)
+    {
+      name: "Minimal Shift",
+      tempo: 44,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 16 },
+        { root: NOTES.A3, type: "minor", duration: 16 },
+      ],
+    },
+    // vi-i (Dark minimal)
+    {
+      name: "Dark Minimal",
+      tempo: 39,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 18 },
+        { root: NOTES.E3, type: "minor", duration: 18 },
+      ],
+    },
+    // I-II (Whole tone minimal)
+    {
+      name: "Whole Tone Minimal",
+      tempo: 42,
+      chords: [
+        { root: NOTES.C4, type: "sus2", duration: 15 },
+        { root: NOTES.D4, type: "sus2", duration: 15 },
+      ],
+    },
   ],
   melodyPatterns: [
     {
@@ -461,6 +715,44 @@ export const MONOTONOUS_STYLE: MusicStyle = {
       name: "Long Breath",
       notes: [
         { pitch: NOTES.E5, duration: 16, startTime: 0, velocity: 0.18 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Slow Drift",
+      notes: [
+        { pitch: NOTES.C5, duration: 18, startTime: 0, velocity: 0.17 },
+        { pitch: NOTES.D5, duration: 18, startTime: 18, velocity: 0.17 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Endless Tone",
+      notes: [
+        { pitch: NOTES.G4, duration: 20, startTime: 0, velocity: 0.16 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Minimal Pulse",
+      notes: [
+        { pitch: NOTES.A4, duration: 12, startTime: 0, velocity: 0.19 },
+        { pitch: NOTES.E5, duration: 12, startTime: 12, velocity: 0.18 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Frozen Time",
+      notes: [
+        { pitch: NOTES.D5, duration: 22, startTime: 0, velocity: 0.16 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Silent Pause",
+      notes: [
+        { pitch: NOTES.F5, duration: 15, startTime: 0, velocity: 0.17 },
+        { pitch: NOTES.C5, duration: 15, startTime: 15, velocity: 0.17 },
       ],
       repeat: 1,
     },
@@ -569,6 +861,44 @@ export const BRIGHT_STYLE: MusicStyle = {
         { root: NOTES.G3, type: "major", duration: 3 },
       ],
     },
+    // I-II-IV-V (Secondary dominant approach)
+    {
+      name: "Happy Ascent",
+      tempo: 73,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 3 },
+        { root: NOTES.D4, type: "major", duration: 3 },
+        { root: NOTES.F3, type: "major", duration: 3 },
+        { root: NOTES.G3, type: "major", duration: 3 },
+      ],
+    },
+    // I-iii-vi-IV-I-V (Extended joy)
+    {
+      name: "Extended Joy",
+      tempo: 71,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 2 },
+        { root: NOTES.E3, type: "minor", duration: 2 },
+        { root: NOTES.A3, type: "minor", duration: 2 },
+        { root: NOTES.F3, type: "major", duration: 2 },
+        { root: NOTES.C4, type: "major", duration: 2 },
+        { root: NOTES.G3, type: "major", duration: 2 },
+      ],
+    },
+    // IV-V-iii-vi-ii-V-I (Sunny circle)
+    {
+      name: "Sunny Circle",
+      tempo: 74,
+      chords: [
+        { root: NOTES.F3, type: "major", duration: 2 },
+        { root: NOTES.G3, type: "major", duration: 2 },
+        { root: NOTES.E3, type: "minor", duration: 2 },
+        { root: NOTES.A3, type: "minor", duration: 2 },
+        { root: NOTES.D4, type: "minor", duration: 2 },
+        { root: NOTES.G3, type: "major", duration: 2 },
+        { root: NOTES.C4, type: "major", duration: 2 },
+      ],
+    },
   ],
   melodyPatterns: [
     {
@@ -633,6 +963,59 @@ export const BRIGHT_STYLE: MusicStyle = {
         { pitch: NOTES.E5, duration: 0.8, startTime: 1.6, velocity: 0.39 },
         { pitch: NOTES.G5, duration: 1.2, startTime: 2.4, velocity: 0.42 },
         { pitch: NOTES.E5, duration: 1.6, startTime: 3.6, velocity: 0.38 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Bright Spark",
+      notes: [
+        { pitch: NOTES.D5, duration: 0.9, startTime: 0, velocity: 0.38 },
+        { pitch: NOTES.E5, duration: 0.9, startTime: 0.9, velocity: 0.4 },
+        { pitch: NOTES.G5, duration: 1.2, startTime: 1.8, velocity: 0.42 },
+        { pitch: NOTES.A5, duration: 1.5, startTime: 3, velocity: 0.43 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Energetic Hop",
+      notes: [
+        { pitch: NOTES.C5, duration: 0.7, startTime: 0, velocity: 0.39 },
+        { pitch: NOTES.D5, duration: 0.7, startTime: 0.7, velocity: 0.4 },
+        { pitch: NOTES.E5, duration: 0.7, startTime: 1.4, velocity: 0.41 },
+        { pitch: NOTES.G5, duration: 1, startTime: 2.1, velocity: 0.43 },
+        { pitch: NOTES.E5, duration: 1.5, startTime: 3.1, velocity: 0.4 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Shining Melody",
+      notes: [
+        { pitch: NOTES.G5, duration: 1.2, startTime: 0, velocity: 0.42 },
+        { pitch: NOTES.E5, duration: 1, startTime: 1.2, velocity: 0.4 },
+        { pitch: NOTES.D5, duration: 0.8, startTime: 2.2, velocity: 0.38 },
+        { pitch: NOTES.C5, duration: 1.5, startTime: 3, velocity: 0.37 },
+        { pitch: NOTES.G5, duration: 2, startTime: 4.5, velocity: 0.41 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Happy Whistle",
+      notes: [
+        { pitch: NOTES.E5, duration: 1, startTime: 0, velocity: 0.4 },
+        { pitch: NOTES.E5, duration: 0.5, startTime: 1, velocity: 0.39 },
+        { pitch: NOTES.G5, duration: 1.5, startTime: 1.5, velocity: 0.42 },
+        { pitch: NOTES.C5, duration: 2, startTime: 3, velocity: 0.38 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Peppy Step",
+      notes: [
+        { pitch: NOTES.C5, duration: 0.8, startTime: 0, velocity: 0.38 },
+        { pitch: NOTES.E5, duration: 0.8, startTime: 0.8, velocity: 0.4 },
+        { pitch: NOTES.D5, duration: 0.8, startTime: 1.6, velocity: 0.39 },
+        { pitch: NOTES.G5, duration: 1.5, startTime: 2.4, velocity: 0.43 },
+        { pitch: NOTES.E5, duration: 1.5, startTime: 3.9, velocity: 0.4 },
       ],
       repeat: 2,
     },
@@ -737,6 +1120,50 @@ export const DARK_STYLE: MusicStyle = {
         { root: NOTES.C4, type: "major", duration: 4 },
       ],
     },
+    // i-bVI-bIII-bVII (Phrygian dominant)
+    {
+      name: "Phrygian Dominant",
+      tempo: 50,
+      chords: [
+        { root: NOTES.E3, type: "minor", duration: 5 },
+        { root: NOTES.C4, type: "major", duration: 5 },
+        { root: NOTES.G3, type: "major", duration: 5 },
+        { root: NOTES.D3, type: "major", duration: 5 },
+      ],
+    },
+    // i-VII-VI-V (Descending minor)
+    {
+      name: "Descending Minor",
+      tempo: 48,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.G3, type: "major", duration: 4 },
+        { root: NOTES.F3, type: "major", duration: 4 },
+        { root: NOTES.E3, type: "major", duration: 4 },
+      ],
+    },
+    // i-iv-i-v (Pure minor progression)
+    {
+      name: "Pure Minor",
+      tempo: 51,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 5 },
+        { root: NOTES.D3, type: "minor", duration: 5 },
+        { root: NOTES.A3, type: "minor", duration: 5 },
+        { root: NOTES.E3, type: "minor", duration: 5 },
+      ],
+    },
+    // vi-iv-i-V (Dark suspension)
+    {
+      name: "Dark Suspension",
+      tempo: 49,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 5 },
+        { root: NOTES.D3, type: "minor", duration: 5 },
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.E3, type: "dom7", duration: 6 },
+      ],
+    },
   ],
   melodyPatterns: [
     {
@@ -795,6 +1222,64 @@ export const DARK_STYLE: MusicStyle = {
         { pitch: NOTES.C5, duration: 5, startTime: 0, velocity: 0.27 },
         { pitch: NOTES.A4, duration: 4, startTime: 5, velocity: 0.26 },
         { pitch: NOTES.G4, duration: 5, startTime: 9, velocity: 0.25 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Dark Ritual",
+      notes: [
+        { pitch: NOTES.E5, duration: 3, startTime: 0, velocity: 0.3 },
+        { pitch: NOTES.C5, duration: 3, startTime: 3, velocity: 0.28 },
+        { pitch: NOTES.A4, duration: 3, startTime: 6, velocity: 0.27 },
+        { pitch: NOTES.E4, duration: 5, startTime: 9, velocity: 0.25 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Foreboding",
+      notes: [
+        { pitch: NOTES.D5, duration: 4, startTime: 0, velocity: 0.29 },
+        { pitch: NOTES.A4, duration: 4, startTime: 4, velocity: 0.27 },
+        { pitch: NOTES.F4, duration: 5, startTime: 8, velocity: 0.26 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Sinister Pulse",
+      notes: [
+        { pitch: NOTES.G4, duration: 3, startTime: 0, velocity: 0.28 },
+        { pitch: NOTES.A4, duration: 3, startTime: 3, velocity: 0.29 },
+        { pitch: NOTES.C5, duration: 3, startTime: 6, velocity: 0.3 },
+        { pitch: NOTES.A4, duration: 4, startTime: 9, velocity: 0.27 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Mournful Cry",
+      notes: [
+        { pitch: NOTES.A4, duration: 5, startTime: 0, velocity: 0.29 },
+        { pitch: NOTES.G4, duration: 4, startTime: 5, velocity: 0.27 },
+        { pitch: NOTES.E4, duration: 6, startTime: 9, velocity: 0.25 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Creeping Dread",
+      notes: [
+        { pitch: NOTES.C5, duration: 3, startTime: 0, velocity: 0.28 },
+        { pitch: NOTES.A4, duration: 2, startTime: 3, velocity: 0.27 },
+        { pitch: NOTES.G4, duration: 3, startTime: 5, velocity: 0.26 },
+        { pitch: NOTES.F4, duration: 3, startTime: 8, velocity: 0.25 },
+        { pitch: NOTES.E4, duration: 4, startTime: 11, velocity: 0.24 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Nocturnal Hunt",
+      notes: [
+        { pitch: NOTES.E5, duration: 4, startTime: 0, velocity: 0.3 },
+        { pitch: NOTES.D5, duration: 3, startTime: 4, velocity: 0.29 },
+        { pitch: NOTES.A4, duration: 5, startTime: 7, velocity: 0.27 },
       ],
       repeat: 1,
     },
@@ -897,6 +1382,37 @@ export const AMBIENT_STYLE: MusicStyle = {
         { root: NOTES.E3, type: "maj7", duration: 10 },
       ],
     },
+    // Meditative flow
+    {
+      name: "Meditative Flow",
+      tempo: 37,
+      chords: [
+        { root: NOTES.D3, type: "sus2", duration: 14 },
+        { root: NOTES.A3, type: "maj7", duration: 14 },
+        { root: NOTES.G3, type: "sus4", duration: 14 },
+      ],
+    },
+    // Infinite space
+    {
+      name: "Infinite Space",
+      tempo: 39,
+      chords: [
+        { root: NOTES.E3, type: "maj7", duration: 13 },
+        { root: NOTES.F3, type: "maj7", duration: 13 },
+        { root: NOTES.G3, type: "maj7", duration: 13 },
+        { root: NOTES.A3, type: "sus2", duration: 13 },
+      ],
+    },
+    // Nebula drift
+    {
+      name: "Nebula Drift",
+      tempo: 36,
+      chords: [
+        { root: NOTES.C4, type: "sus2", duration: 16 },
+        { root: NOTES.D4, type: "sus2", duration: 16 },
+        { root: NOTES.E4, type: "maj7", duration: 16 },
+      ],
+    },
   ],
   melodyPatterns: [
     {
@@ -938,6 +1454,47 @@ export const AMBIENT_STYLE: MusicStyle = {
       notes: [
         { pitch: NOTES.D5, duration: 18, startTime: 0, velocity: 0.22 },
         { pitch: NOTES.A4, duration: 18, startTime: 18, velocity: 0.21 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Distant Echo",
+      notes: [
+        { pitch: NOTES.E5, duration: 12, startTime: 0, velocity: 0.24 },
+        { pitch: NOTES.C5, duration: 12, startTime: 12, velocity: 0.23 },
+        { pitch: NOTES.A4, duration: 12, startTime: 24, velocity: 0.22 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Stellar Drift",
+      notes: [
+        { pitch: NOTES.G5, duration: 16, startTime: 0, velocity: 0.25 },
+        { pitch: NOTES.D5, duration: 16, startTime: 16, velocity: 0.23 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Peaceful Float",
+      notes: [
+        { pitch: NOTES.F5, duration: 14, startTime: 0, velocity: 0.24 },
+        { pitch: NOTES.E5, duration: 14, startTime: 14, velocity: 0.23 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Tranquil Waves",
+      notes: [
+        { pitch: NOTES.A5, duration: 10, startTime: 0, velocity: 0.26 },
+        { pitch: NOTES.E5, duration: 10, startTime: 10, velocity: 0.24 },
+        { pitch: NOTES.C5, duration: 10, startTime: 20, velocity: 0.22 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Void Whisper",
+      notes: [
+        { pitch: NOTES.C5, duration: 20, startTime: 0, velocity: 0.23 },
       ],
       repeat: 1,
     },
@@ -1030,6 +1587,56 @@ export const JAZZY_STYLE: MusicStyle = {
         { root: NOTES.C4, type: "maj7", duration: 3 },
       ],
     },
+    // I-vi-ii-V-iii-vi-ii-V (Extended turnaround)
+    {
+      name: "Extended Turnaround",
+      tempo: 90,
+      chords: [
+        { root: NOTES.C4, type: "maj7", duration: 1.5 },
+        { root: NOTES.A3, type: "min7", duration: 1.5 },
+        { root: NOTES.D4, type: "min7", duration: 1.5 },
+        { root: NOTES.G3, type: "dom7", duration: 1.5 },
+        { root: NOTES.E3, type: "min7", duration: 1.5 },
+        { root: NOTES.A3, type: "dom7", duration: 1.5 },
+        { root: NOTES.D4, type: "min7", duration: 1.5 },
+        { root: NOTES.G3, type: "dom7", duration: 1.5 },
+      ],
+    },
+    // I-III7-vi-II7-ii-V (Coltrane changes inspired)
+    {
+      name: "Coltrane Inspired",
+      tempo: 93,
+      chords: [
+        { root: NOTES.C4, type: "maj7", duration: 3 },
+        { root: NOTES.E3, type: "dom7", duration: 3 },
+        { root: NOTES.A3, type: "min7", duration: 3 },
+        { root: NOTES.D4, type: "dom7", duration: 3 },
+        { root: NOTES.D4, type: "min7", duration: 2 },
+        { root: NOTES.G3, type: "dom7", duration: 2 },
+      ],
+    },
+    // vi-V-IV-III (Descending jazz)
+    {
+      name: "Descending Jazz",
+      tempo: 86,
+      chords: [
+        { root: NOTES.A3, type: "min7", duration: 3 },
+        { root: NOTES.G3, type: "dom7", duration: 3 },
+        { root: NOTES.F3, type: "maj7", duration: 3 },
+        { root: NOTES.E3, type: "min7", duration: 3 },
+      ],
+    },
+    // I-IV-bVII-IV (Bluesy jazz)
+    {
+      name: "Bluesy Jazz",
+      tempo: 84,
+      chords: [
+        { root: NOTES.C4, type: "dom7", duration: 4 },
+        { root: NOTES.F3, type: "dom7", duration: 4 },
+        { root: NOTES.A3 + 10, type: "dom7", duration: 4 }, // Bb7
+        { root: NOTES.F3, type: "dom7", duration: 4 },
+      ],
+    },
   ],
   melodyPatterns: [
     {
@@ -1095,6 +1702,58 @@ export const JAZZY_STYLE: MusicStyle = {
         { pitch: NOTES.G5, duration: 1.5, startTime: 2.5, velocity: 0.39 },
         { pitch: NOTES.A5, duration: 1.5, startTime: 4, velocity: 0.38 },
         { pitch: NOTES.G5, duration: 2, startTime: 5.5, velocity: 0.36 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Scat Melody",
+      notes: [
+        { pitch: NOTES.C5, duration: 0.9, startTime: 0, velocity: 0.37 },
+        { pitch: NOTES.D5, duration: 0.9, startTime: 0.9, velocity: 0.38 },
+        { pitch: NOTES.F5, duration: 1.2, startTime: 1.8, velocity: 0.39 },
+        { pitch: NOTES.E5, duration: 1, startTime: 3, velocity: 0.38 },
+        { pitch: NOTES.C5, duration: 1.5, startTime: 4, velocity: 0.36 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Chromatic Walk",
+      notes: [
+        { pitch: NOTES.E5, duration: 1, startTime: 0, velocity: 0.37 },
+        { pitch: NOTES.D5 + 1, duration: 0.8, startTime: 1, velocity: 0.36 },
+        { pitch: NOTES.D5, duration: 1, startTime: 1.8, velocity: 0.37 },
+        { pitch: NOTES.C5 + 1, duration: 0.8, startTime: 2.8, velocity: 0.36 },
+        { pitch: NOTES.C5, duration: 2, startTime: 3.6, velocity: 0.38 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Laid Back Groove",
+      notes: [
+        { pitch: NOTES.G5, duration: 1.8, startTime: 0, velocity: 0.38 },
+        { pitch: NOTES.E5, duration: 1.2, startTime: 1.8, velocity: 0.36 },
+        { pitch: NOTES.D5, duration: 1, startTime: 3, velocity: 0.35 },
+        { pitch: NOTES.C5, duration: 2, startTime: 4, velocity: 0.37 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Jazz Ornament",
+      notes: [
+        { pitch: NOTES.A5, duration: 1, startTime: 0, velocity: 0.38 },
+        { pitch: NOTES.G5, duration: 1.3, startTime: 1, velocity: 0.37 },
+        { pitch: NOTES.F5, duration: 1, startTime: 2.3, velocity: 0.36 },
+        { pitch: NOTES.E5, duration: 1.5, startTime: 3.3, velocity: 0.37 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Sophisticated Line",
+      notes: [
+        { pitch: NOTES.D5, duration: 1.2, startTime: 0, velocity: 0.36 },
+        { pitch: NOTES.F5, duration: 1.2, startTime: 1.2, velocity: 0.38 },
+        { pitch: NOTES.A5, duration: 1.5, startTime: 2.4, velocity: 0.39 },
+        { pitch: NOTES.G5, duration: 1.8, startTime: 3.9, velocity: 0.37 },
       ],
       repeat: 1,
     },
@@ -1188,6 +1847,50 @@ export const RETRO_STYLE: MusicStyle = {
         { root: NOTES.F3, type: "major", duration: 2 },
       ],
     },
+    // I-bVII-bVI-V (80s movie soundtrack)
+    {
+      name: "80s Soundtrack",
+      tempo: 79,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 3 },
+        { root: NOTES.A3 + 10, type: "major", duration: 3 }, // Bb
+        { root: NOTES.G3 + 8, type: "major", duration: 3 }, // Ab
+        { root: NOTES.G3, type: "major", duration: 3 },
+      ],
+    },
+    // vi-bVII-I-bIII (Synthwave dark)
+    {
+      name: "Dark Synthwave",
+      tempo: 83,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 3 },
+        { root: NOTES.A3 + 10, type: "major", duration: 3 }, // Bb
+        { root: NOTES.C4, type: "major", duration: 3 },
+        { root: NOTES.D3 + 8, type: "major", duration: 3 }, // Eb
+      ],
+    },
+    // I-II-IV-V (Borrowed second)
+    {
+      name: "Borrowed Second",
+      tempo: 81,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 3 },
+        { root: NOTES.D4, type: "major", duration: 3 },
+        { root: NOTES.F3, type: "major", duration: 3 },
+        { root: NOTES.G3, type: "sus4", duration: 3 },
+      ],
+    },
+    // I-vi-bVII-IV (Retro melancholic)
+    {
+      name: "Retro Melancholic",
+      tempo: 77,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 3 },
+        { root: NOTES.A3, type: "minor", duration: 3 },
+        { root: NOTES.A3 + 10, type: "major", duration: 3 }, // Bb
+        { root: NOTES.F3, type: "major", duration: 3 },
+      ],
+    },
   ],
   melodyPatterns: [
     {
@@ -1251,6 +1954,58 @@ export const RETRO_STYLE: MusicStyle = {
         { pitch: NOTES.D5, duration: 1, startTime: 2, velocity: 0.42 },
         { pitch: NOTES.C5, duration: 1.5, startTime: 3, velocity: 0.41 },
         { pitch: NOTES.E5, duration: 2, startTime: 4.5, velocity: 0.43 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Vintage Pulse",
+      notes: [
+        { pitch: NOTES.C5, duration: 1.2, startTime: 0, velocity: 0.43 },
+        { pitch: NOTES.G5, duration: 1.2, startTime: 1.2, velocity: 0.46 },
+        { pitch: NOTES.E5, duration: 1.5, startTime: 2.4, velocity: 0.44 },
+        { pitch: NOTES.C5, duration: 2, startTime: 3.9, velocity: 0.42 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Memory Lane",
+      notes: [
+        { pitch: NOTES.E5, duration: 1.5, startTime: 0, velocity: 0.44 },
+        { pitch: NOTES.D5, duration: 1, startTime: 1.5, velocity: 0.42 },
+        { pitch: NOTES.C5, duration: 1, startTime: 2.5, velocity: 0.41 },
+        { pitch: NOTES.G4, duration: 1.5, startTime: 3.5, velocity: 0.4 },
+        { pitch: NOTES.C5, duration: 2, startTime: 5, velocity: 0.43 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Arcade Dream",
+      notes: [
+        { pitch: NOTES.G5, duration: 1, startTime: 0, velocity: 0.45 },
+        { pitch: NOTES.A5, duration: 1, startTime: 1, velocity: 0.46 },
+        { pitch: NOTES.C5 + 12, duration: 1.5, startTime: 2, velocity: 0.47 },
+        { pitch: NOTES.G5, duration: 2, startTime: 3.5, velocity: 0.44 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "VHS Nostalgia",
+      notes: [
+        { pitch: NOTES.D5, duration: 1.3, startTime: 0, velocity: 0.42 },
+        { pitch: NOTES.E5, duration: 1.3, startTime: 1.3, velocity: 0.44 },
+        { pitch: NOTES.G5, duration: 1, startTime: 2.6, velocity: 0.45 },
+        { pitch: NOTES.A5, duration: 1.5, startTime: 3.6, velocity: 0.46 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Cassette Rewind",
+      notes: [
+        { pitch: NOTES.A5, duration: 1, startTime: 0, velocity: 0.46 },
+        { pitch: NOTES.E5, duration: 1, startTime: 1, velocity: 0.44 },
+        { pitch: NOTES.C5, duration: 1, startTime: 2, velocity: 0.42 },
+        { pitch: NOTES.E5, duration: 1.5, startTime: 3, velocity: 0.43 },
+        { pitch: NOTES.G5, duration: 2, startTime: 4.5, velocity: 0.45 },
       ],
       repeat: 1,
     },
@@ -1344,6 +2099,50 @@ export const ELECTRONIC_STYLE: MusicStyle = {
         { root: NOTES.F3, type: "major", duration: 3.5 },
       ],
     },
+    // I-bVII-bVI-bVII (EDM epic)
+    {
+      name: "EDM Epic",
+      tempo: 102,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 3 },
+        { root: NOTES.A3 + 10, type: "major", duration: 3 }, // Bb
+        { root: NOTES.G3 + 8, type: "major", duration: 3 }, // Ab
+        { root: NOTES.A3 + 10, type: "major", duration: 3 }, // Bb
+      ],
+    },
+    // i-bIII-bVII-IV (Melodic dubstep)
+    {
+      name: "Melodic Dubstep",
+      tempo: 70,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.C4, type: "major", duration: 4 },
+        { root: NOTES.G3, type: "major", duration: 4 },
+        { root: NOTES.F3, type: "maj7", duration: 4 },
+      ],
+    },
+    // I-iii-IV-vi (Uplifting trance)
+    {
+      name: "Uplifting Trance",
+      tempo: 108,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 2.5 },
+        { root: NOTES.E3, type: "minor", duration: 2.5 },
+        { root: NOTES.F3, type: "major", duration: 2.5 },
+        { root: NOTES.A3, type: "minor", duration: 2.5 },
+      ],
+    },
+    // vi-IV-I-III (Festival anthem)
+    {
+      name: "Festival Anthem",
+      tempo: 104,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 3 },
+        { root: NOTES.F3, type: "major", duration: 3 },
+        { root: NOTES.C4, type: "major", duration: 3 },
+        { root: NOTES.E3, type: "major", duration: 3 },
+      ],
+    },
   ],
   melodyPatterns: [
     {
@@ -1410,6 +2209,59 @@ export const ELECTRONIC_STYLE: MusicStyle = {
         { pitch: NOTES.E5, duration: 1.5, startTime: 3.4, velocity: 0.46 },
       ],
       repeat: 1,
+    },
+    {
+      name: "Cyber Wave",
+      notes: [
+        { pitch: NOTES.E5, duration: 0.9, startTime: 0, velocity: 0.46 },
+        { pitch: NOTES.G5, duration: 0.9, startTime: 0.9, velocity: 0.48 },
+        { pitch: NOTES.C5 + 12, duration: 1.2, startTime: 1.8, velocity: 0.49 },
+        { pitch: NOTES.A5, duration: 1.5, startTime: 3, velocity: 0.47 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Techno Climb",
+      notes: [
+        { pitch: NOTES.C5, duration: 0.7, startTime: 0, velocity: 0.45 },
+        { pitch: NOTES.E5, duration: 0.7, startTime: 0.7, velocity: 0.47 },
+        { pitch: NOTES.G5, duration: 0.7, startTime: 1.4, velocity: 0.48 },
+        { pitch: NOTES.C5 + 12, duration: 1, startTime: 2.1, velocity: 0.49 },
+        { pitch: NOTES.G5, duration: 1.5, startTime: 3.1, velocity: 0.46 },
+      ],
+      repeat: 1,
+    },
+    {
+      name: "Bass Drop Lead",
+      notes: [
+        { pitch: NOTES.G5, duration: 1, startTime: 0, velocity: 0.48 },
+        { pitch: NOTES.C5 + 12, duration: 1.5, startTime: 1, velocity: 0.49 },
+        { pitch: NOTES.A5, duration: 1, startTime: 2.5, velocity: 0.47 },
+        { pitch: NOTES.E5, duration: 2, startTime: 3.5, velocity: 0.45 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Trance Arpeggio",
+      notes: [
+        { pitch: NOTES.C5, duration: 0.8, startTime: 0, velocity: 0.45 },
+        { pitch: NOTES.G5, duration: 0.8, startTime: 0.8, velocity: 0.48 },
+        { pitch: NOTES.E5, duration: 0.8, startTime: 1.6, velocity: 0.46 },
+        { pitch: NOTES.A5, duration: 1, startTime: 2.4, velocity: 0.49 },
+        { pitch: NOTES.G5, duration: 1.5, startTime: 3.4, velocity: 0.47 },
+      ],
+      repeat: 2,
+    },
+    {
+      name: "Glitch Melody",
+      notes: [
+        { pitch: NOTES.E5, duration: 0.6, startTime: 0, velocity: 0.46 },
+        { pitch: NOTES.D5, duration: 0.6, startTime: 0.6, velocity: 0.45 },
+        { pitch: NOTES.E5, duration: 0.6, startTime: 1.2, velocity: 0.47 },
+        { pitch: NOTES.G5, duration: 1, startTime: 1.8, velocity: 0.48 },
+        { pitch: NOTES.A5, duration: 1.2, startTime: 2.8, velocity: 0.49 },
+      ],
+      repeat: 2,
     },
   ],
   bassPatterns: BASS_PATTERNS.filter(p => ["Walking Bass", "Octave Jump", "Deep Pulse", "Driving Eighth", "Syncopated Funk"].includes(p.name)),
