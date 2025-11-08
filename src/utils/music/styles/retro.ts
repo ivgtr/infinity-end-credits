@@ -131,6 +131,17 @@ export const RETRO_STYLE: MusicStyle = {
         { root: NOTES.F3, type: "major", duration: 3 },
       ],
     },
+    // I-IV-V7#9-IV (ヘンドリックスロック)
+    {
+      name: "Hendrix Rock",
+      tempo: 84,
+      chords: [
+        { root: NOTES.E3, type: "major", duration: 3 },
+        { root: NOTES.A3, type: "major", duration: 3 },
+        { root: NOTES.B3, type: "dom7#9", duration: 3 },
+        { root: NOTES.A3, type: "major", duration: 3 },
+      ],
+    },
   ],
   melodyPatterns: [
     {

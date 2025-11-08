@@ -3,6 +3,7 @@ import { NOTES } from "../core/constants";
 import { BASS_PATTERNS } from "../patterns/base/bass";
 import { ARPEGGIO_PATTERNS } from "../patterns/base/arpeggio";
 import { DRUM_PATTERNS } from "../patterns/base/drums";
+import { STRING_PATTERNS } from "../patterns/base/strings";
 
 /**
  * 5. アンビエント（Ambient）: 浮遊感のある空間
@@ -127,6 +128,27 @@ export const AMBIENT_STYLE: MusicStyle = {
         { root: NOTES.E4, type: "maj7", duration: 16 },
       ],
     },
+    // maj9-maj9-sus2 (9thテンション)
+    {
+      name: "Ninth Dimension",
+      tempo: 38,
+      chords: [
+        { root: NOTES.C4, type: "maj9", duration: 14 },
+        { root: NOTES.G3, type: "maj9", duration: 14 },
+        { root: NOTES.F3, type: "sus2", duration: 14 },
+      ],
+    },
+    // add9-add11-maj7 (アッパーストラクチャー)
+    {
+      name: "Upper Structure",
+      tempo: 40,
+      chords: [
+        { root: NOTES.A3, type: "add9", duration: 12 },
+        { root: NOTES.D4, type: "add11", duration: 12 },
+        { root: NOTES.E3, type: "maj7", duration: 12 },
+        { root: NOTES.A3, type: "maj9", duration: 12 },
+      ],
+    },
   ],
   melodyPatterns: [
     {
@@ -248,6 +270,14 @@ export const AMBIENT_STYLE: MusicStyle = {
     "Half-Time",
     "Pop Ballad",
     "Waltz 3/4"
+  ].includes(p.name)),
+  stringsPatterns: STRING_PATTERNS.filter(p => [
+    "Ethereal Pad",
+    "Floating Atmosphere",
+    "Cosmic Wash",
+    "Dreamy Haze",
+    "Sparse Accent",
+    "Sustained Harmony"
   ].includes(p.name)),
   durationRange: [55, 90],
   scales: ["major", "minor", "dorian", "wholeTone"],

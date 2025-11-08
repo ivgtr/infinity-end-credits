@@ -19,7 +19,9 @@ export interface Chord {
   /** ルート音（MIDIノート番号） */
   root: number;
   /** コードタイプ（major, minor, sus4など） */
-  type: 'major' | 'minor' | 'sus4' | 'sus2' | 'maj7' | 'min7' | 'dom7';
+  type: 'major' | 'minor' | 'sus4' | 'sus2' | 'maj7' | 'min7' | 'dom7' |
+        'maj9' | 'min9' | 'min11' | 'add9' | 'add11' | '6' | 'dim7' | 'aug' |
+        'dom7#9' | 'dom7b9';
   /** 持続時間（秒） */
   duration: number;
 }
@@ -93,6 +95,20 @@ export interface DrumPattern {
 }
 
 /**
+ * ストリングス（弦楽器）パターン
+ */
+export interface StringPattern {
+  /** パターン名 */
+  name: string;
+  /** 音符の配列 */
+  notes: Note[];
+  /** 繰り返し回数 */
+  repeat?: number;
+  /** ボイシングタイプ（密集/開離） */
+  voicing?: 'close' | 'open' | 'wide';
+}
+
+/**
  * 音楽セクション
  */
 export interface MusicSection {
@@ -106,6 +122,8 @@ export interface MusicSection {
   arpeggio?: ArpeggioPattern;
   /** ドラムパターン（オプション） */
   drums?: DrumPattern;
+  /** ストリングスパターン（オプション） */
+  strings?: StringPattern;
   /** 持続時間（秒） */
   duration: number;
   /** スタイル */
@@ -159,6 +177,8 @@ export interface MusicStyle {
   arpeggioPatterns: ArpeggioPattern[];
   /** ドラムパターン */
   drumPatterns: DrumPattern[];
+  /** ストリングスパターン（オプション） */
+  stringsPatterns?: StringPattern[];
   /** スタイルの持続時間範囲（秒） */
   durationRange: [number, number];
   /** 推奨スケール/モード（スケールベースのメロディー生成に使用） */

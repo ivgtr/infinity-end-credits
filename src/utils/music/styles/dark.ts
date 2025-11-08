@@ -3,6 +3,7 @@ import { NOTES } from "../core/constants";
 import { BASS_PATTERNS } from "../patterns/base/bass";
 import { ARPEGGIO_PATTERNS } from "../patterns/base/arpeggio";
 import { DRUM_PATTERNS } from "../patterns/base/drums";
+import { STRING_PATTERNS } from "../patterns/base/strings";
 
 /**
  * 4. ダーク（Dark）: 重厚で神秘的
@@ -142,6 +143,50 @@ export const DARK_STYLE: MusicStyle = {
         { root: NOTES.E3, type: "dom7", duration: 6 },
       ],
     },
+    // i-dim7-i-bVI (減和音使用)
+    {
+      name: "Diminished Tension",
+      tempo: 50,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.B3, type: "dim7", duration: 4 },
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.F3, type: "major", duration: 4 },
+      ],
+    },
+    // i-iv7-VII-III (拡張マイナー)
+    {
+      name: "Extended Minor",
+      tempo: 52,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.D3, type: "min7", duration: 4 },
+        { root: NOTES.G3, type: "major", duration: 4 },
+        { root: NOTES.C4, type: "major", duration: 4 },
+      ],
+    },
+    // i-V7#9-i-bVI (オルタードダーク)
+    {
+      name: "Altered Dark",
+      tempo: 50,
+      chords: [
+        { root: NOTES.E3, type: "minor", duration: 5 },
+        { root: NOTES.B3, type: "dom7#9", duration: 5 },
+        { root: NOTES.E3, type: "minor", duration: 5 },
+        { root: NOTES.C4, type: "major", duration: 5 },
+      ],
+    },
+    // i-bVII7b9-bVI-V7#9 (ブラックアダーダーク)
+    {
+      name: "Blackadder Dark",
+      tempo: 48,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.G3, type: "dom7b9", duration: 4 },
+        { root: NOTES.F3, type: "major", duration: 4 },
+        { root: NOTES.E3, type: "dom7#9", duration: 4 },
+      ],
+    },
   ],
   melodyPatterns: [
     {
@@ -265,6 +310,7 @@ export const DARK_STYLE: MusicStyle = {
   bassPatterns: BASS_PATTERNS.filter(p => ["Minimal", "Root-Fifth", "Rock Steady", "Deep Pulse", "Octave Jump", "Rhythmic Groove", "Driving Eighth"].includes(p.name)),
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Down", "Random", "Slow Wave", "Broken Chord", "Reverse Cascade", "Octave Down", "Stutter", "Complex Weave"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Heavy Rock", "Basic 4/4", "Energetic", "Half-Time", "Breakbeat", "Double-Time"].includes(p.name)),
+  stringsPatterns: STRING_PATTERNS.filter(p => ["Ominous Descent", "Sinister Tremolo", "Gothic Melancholy", "Brooding Tension", "Simple Triad", "Sustained Harmony"].includes(p.name)),
   durationRange: [40, 60],
   scales: ["minor", "phrygian", "locrian", "harmonicMinor"],
 };

@@ -3,6 +3,7 @@ import { NOTES } from "../core/constants";
 import { BASS_PATTERNS } from "../patterns/base/bass";
 import { ARPEGGIO_PATTERNS } from "../patterns/base/arpeggio";
 import { DRUM_PATTERNS } from "../patterns/base/drums";
+import { STRING_PATTERNS } from "../patterns/base/strings";
 
 /**
  * 9. オーケストラ（Orchestral）: クラシカルな弦楽器風
@@ -132,6 +133,28 @@ export const ORCHESTRAL_STYLE: MusicStyle = {
         { root: NOTES.C4, type: "maj7", duration: 2 },
       ],
     },
+    // Imaj9-IVmaj7-ii-V (モダンクラシカル)
+    {
+      name: "Modern Classical",
+      tempo: 56,
+      chords: [
+        { root: NOTES.C4, type: "maj9", duration: 4 },
+        { root: NOTES.F3, type: "maj7", duration: 4 },
+        { root: NOTES.D4, type: "min7", duration: 3 },
+        { root: NOTES.G3, type: "dom7", duration: 3 },
+      ],
+    },
+    // I-aug-IV-I (増和音使用)
+    {
+      name: "Augmented Drama",
+      tempo: 54,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 4 },
+        { root: NOTES.C4, type: "aug", duration: 4 },
+        { root: NOTES.F3, type: "major", duration: 4 },
+        { root: NOTES.C4, type: "maj7", duration: 4 },
+      ],
+    },
   ],
   melodyPatterns: [
     {
@@ -238,6 +261,7 @@ export const ORCHESTRAL_STYLE: MusicStyle = {
   bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Walking Bass", "Classic Arpeggio Bass", "Octave Jump", "Minimal", "Rhythmic Groove"].includes(p.name)),
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Broken Chord", "Slow Wave", "Triplet", "Up-Down", "Melodic Pattern", "Sweep Up", "Octave Up"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Waltz 3/4", "Minimal Beat", "Epic Slow", "Pop Ballad", "Half-Time", "Basic 4/4"].includes(p.name)),
+  stringsPatterns: STRING_PATTERNS.filter(p => ["Soaring Strings", "Epic Swell", "Triumphant Rise", "Celestial Harmony", "Majestic Chord", "Simple Triad", "Open Voicing", "Gentle Swell", "Warm Embrace", "Sustained Harmony"].includes(p.name)),
   durationRange: [40, 65],
   scales: ["major", "minor", "harmonicMinor", "melodicMinor"],
   famousPatterns: ["createMozartRocket", "createAlbertiBass", "createBaroqueSequence", "createFateMotif"],
