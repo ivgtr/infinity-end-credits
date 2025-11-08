@@ -142,6 +142,28 @@ export const DARK_STYLE: MusicStyle = {
         { root: NOTES.E3, type: "dom7", duration: 6 },
       ],
     },
+    // i-dim7-i-bVI (減和音使用)
+    {
+      name: "Diminished Tension",
+      tempo: 50,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.B3, type: "dim7", duration: 4 },
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.F3, type: "major", duration: 4 },
+      ],
+    },
+    // i-iv7-VII-III (拡張マイナー)
+    {
+      name: "Extended Minor",
+      tempo: 52,
+      chords: [
+        { root: NOTES.A3, type: "minor", duration: 4 },
+        { root: NOTES.D3, type: "min7", duration: 4 },
+        { root: NOTES.G3, type: "major", duration: 4 },
+        { root: NOTES.C4, type: "major", duration: 4 },
+      ],
+    },
   ],
   melodyPatterns: [
     {

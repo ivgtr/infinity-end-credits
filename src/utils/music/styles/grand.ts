@@ -146,6 +146,28 @@ export const GRAND_STYLE: MusicStyle = {
         { root: NOTES.A3 + 10, type: "major", duration: 4 }, // Bb
       ],
     },
+    // Imaj9-vi-IVmaj7-V (壮大テンション)
+    {
+      name: "Grand Tension",
+      tempo: 61,
+      chords: [
+        { root: NOTES.C4, type: "maj9", duration: 4 },
+        { root: NOTES.A3, type: "min7", duration: 4 },
+        { root: NOTES.F3, type: "maj7", duration: 4 },
+        { root: NOTES.G3, type: "dom7", duration: 4 },
+      ],
+    },
+    // I-add9-V-vi (テンション使用)
+    {
+      name: "Epic Add9",
+      tempo: 59,
+      chords: [
+        { root: NOTES.C4, type: "add9", duration: 4 },
+        { root: NOTES.G3, type: "add11", duration: 4 },
+        { root: NOTES.A3, type: "min9", duration: 4 },
+        { root: NOTES.F3, type: "6", duration: 4 },
+      ],
+    },
   ],
   melodyPatterns: [
     {

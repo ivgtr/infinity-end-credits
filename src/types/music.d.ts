@@ -19,7 +19,8 @@ export interface Chord {
   /** ルート音（MIDIノート番号） */
   root: number;
   /** コードタイプ（major, minor, sus4など） */
-  type: 'major' | 'minor' | 'sus4' | 'sus2' | 'maj7' | 'min7' | 'dom7';
+  type: 'major' | 'minor' | 'sus4' | 'sus2' | 'maj7' | 'min7' | 'dom7' |
+        'maj9' | 'min9' | 'min11' | 'add9' | 'add11' | '6' | 'dim7' | 'aug';
   /** 持続時間（秒） */
   duration: number;
 }

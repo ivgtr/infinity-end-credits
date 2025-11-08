@@ -132,6 +132,28 @@ export const ORCHESTRAL_STYLE: MusicStyle = {
         { root: NOTES.C4, type: "maj7", duration: 2 },
       ],
     },
+    // Imaj9-IVmaj7-ii-V (モダンクラシカル)
+    {
+      name: "Modern Classical",
+      tempo: 56,
+      chords: [
+        { root: NOTES.C4, type: "maj9", duration: 4 },
+        { root: NOTES.F3, type: "maj7", duration: 4 },
+        { root: NOTES.D4, type: "min7", duration: 3 },
+        { root: NOTES.G3, type: "dom7", duration: 3 },
+      ],
+    },
+    // I-aug-IV-I (増和音使用)
+    {
+      name: "Augmented Drama",
+      tempo: 54,
+      chords: [
+        { root: NOTES.C4, type: "major", duration: 4 },
+        { root: NOTES.C4, type: "aug", duration: 4 },
+        { root: NOTES.F3, type: "major", duration: 4 },
+        { root: NOTES.C4, type: "maj7", duration: 4 },
+      ],
+    },
   ],
   melodyPatterns: [
     {

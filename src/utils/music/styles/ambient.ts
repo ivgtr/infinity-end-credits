@@ -127,6 +127,27 @@ export const AMBIENT_STYLE: MusicStyle = {
         { root: NOTES.E4, type: "maj7", duration: 16 },
       ],
     },
+    // maj9-maj9-sus2 (9thテンション)
+    {
+      name: "Ninth Dimension",
+      tempo: 38,
+      chords: [
+        { root: NOTES.C4, type: "maj9", duration: 14 },
+        { root: NOTES.G3, type: "maj9", duration: 14 },
+        { root: NOTES.F3, type: "sus2", duration: 14 },
+      ],
+    },
+    // add9-add11-maj7 (アッパーストラクチャー)
+    {
+      name: "Upper Structure",
+      tempo: 40,
+      chords: [
+        { root: NOTES.A3, type: "add9", duration: 12 },
+        { root: NOTES.D4, type: "add11", duration: 12 },
+        { root: NOTES.E3, type: "maj7", duration: 12 },
+        { root: NOTES.A3, type: "maj9", duration: 12 },
+      ],
+    },
   ],
   melodyPatterns: [
     {
