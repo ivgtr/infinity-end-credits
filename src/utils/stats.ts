@@ -128,7 +128,7 @@ export const generateFunMessages = (stats: ViewingStats): string[] => {
   // 作品数
   if (stats.totalWorks >= 100) {
     messages.push(
-      `${stats.totalWorks}作品分のエンドロールを鑑賞！映画館での鑑賞時間に換算すると${Math.floor(stats.totalWorks * 5)}分以上です！`
+      `${stats.totalWorks}作品分のエンドクレジットを鑑賞！映画館での鑑賞時間に換算すると${Math.floor(stats.totalWorks * 5)}分以上です！`
     );
   }
 
@@ -136,10 +136,10 @@ export const generateFunMessages = (stats: ViewingStats): string[] => {
   const hours = stats.totalViewingTime / (1000 * 60 * 60);
   if (hours >= 24) {
     messages.push(
-      `${(hours / 24).toFixed(1)}日間もエンドロールを眺め続けました！`
+      `${(hours / 24).toFixed(1)}日間もエンドクレジットを眺め続けました！`
     );
   } else if (hours >= 1) {
-    messages.push(`${hours.toFixed(1)}時間もエンドロールを眺め続けました！`);
+    messages.push(`${hours.toFixed(1)}時間もエンドクレジットを眺め続けました！`);
   }
 
   return messages;

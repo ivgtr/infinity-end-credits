@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>無限エンドロール・手動</title>
+        <title>無限エンドクレジット・手動</title>
       </Head>
 
       {!started && <StartScreen onStart={handleStart} />}

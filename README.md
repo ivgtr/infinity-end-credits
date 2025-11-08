@@ -1,4 +1,4 @@
-# 無限エンドロール (Infinity End Credits)
+# 無限エンドクレジット (Infinity End Credits)
 
 🎬 無限にエンドクレジットを生成します
 https://infinity-end-credits.vercel.app/

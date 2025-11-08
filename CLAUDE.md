@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is an "Infinite End Credits" (無限エンドロール) web application that generates endless scrolling movie credits inspired by Evangelion. The application creates fake Japanese names using faker-js and displays them in a traditional end credits format with various production roles.
+This is an "Infinite End Credits" (無限エンドクレジット) web application that generates endless scrolling movie credits inspired by Evangelion. The application creates fake Japanese names using faker-js and displays them in a traditional end credits format with various production roles.
 
 ## Development Commands
 
