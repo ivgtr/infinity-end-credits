@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { CreditsList } from "./CreditsList";
 import { useCredits } from "@/hooks/useCredits";
+import { useViewingStats } from "@/hooks/useViewingStats";
 import { SpeedControl } from "./SpeedControl";
 import { BackgroundMusicPlayer } from "./BackgroundMusicPlayer";
 
@@ -10,6 +11,7 @@ interface CreditsCanvasProps {
 
 export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => {
   const { titles, credits, addRandomWork } = useCredits();
+  const { trackScroll } = useViewingStats(titles, credits);
   const [speed, setSpeed] = useState(1);
   const [showUI, setShowUI] = useState(true);
 
@@ -44,7 +46,15 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
 
   return (
     <div className="min-h-screen h-full w-full overflow-hidden">
-      {titles.length > 0 && <CreditsList titles={titles} credits={credits} addWork={addWork} speed={speed} />}
+      {titles.length > 0 && (
+        <CreditsList
+          titles={titles}
+          credits={credits}
+          addWork={addWork}
+          speed={speed}
+          onScrollDistanceChange={trackScroll}
+        />
+      )}
 
       {/* 右下のコントロールUIを縦並びに配置（音楽は常に再生） */}
       <div className="fixed bottom-6 right-6 z-50">
@@ -73,6 +83,13 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
           >
             👁
           </button>
+          <a
+            href="/d"
+            className="px-3 py-2 bg-purple-600/70 rounded-full shadow-lg text-white hover:bg-purple-700/80 transition-colors flex items-center justify-center text-sm font-semibold"
+            title="統計ダッシュボード"
+          >
+            📊 統計
+          </a>
           <div className="text-xs text-white/60 text-center">
             Space/長押し: 倍速切替 / M: ミュート / H: UI非表示
           </div>

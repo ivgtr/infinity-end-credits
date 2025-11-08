@@ -8,6 +8,7 @@ export const ManualCreditsList = ({
   titles,
   credits,
   addWork,
+  onScrollDistanceChange,
 }: {
   titles: string[];
   credits: {
@@ -17,8 +18,10 @@ export const ManualCreditsList = ({
     }[];
   };
   addWork: () => void;
+  onScrollDistanceChange?: (distance: number) => void;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const lastScrollPositionRef = useRef<number>(0);
 
   return (
     <div
@@ -27,6 +30,14 @@ export const ManualCreditsList = ({
         if (container) {
           const height = container.clientHeight;
           const scrollAmount = e.currentTarget.scrollTop;
+
+          // スクロール距離を追跡
+          const scrollDelta = scrollAmount - lastScrollPositionRef.current;
+          if (scrollDelta > 0 && onScrollDistanceChange) {
+            onScrollDistanceChange(scrollDelta);
+          }
+          lastScrollPositionRef.current = scrollAmount;
+
           // 末端から1000px手前までスクロールしたら追加
           if (scrollAmount > height - 1000) {
             addWork();

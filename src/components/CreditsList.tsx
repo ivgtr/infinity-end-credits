@@ -6,6 +6,7 @@ export const CreditsList = ({
   credits,
   addWork,
   speed,
+  onScrollDistanceChange,
 }: {
   titles: string[];
   credits: {
@@ -16,6 +17,7 @@ export const CreditsList = ({
   };
   addWork: () => void;
   speed: number;
+  onScrollDistanceChange?: (distance: number) => void;
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -23,6 +25,7 @@ export const CreditsList = ({
   const requestAnimationFrameRef = useRef<number>(0);
   const prevTitlesLengthRef = useRef<number>(0);
   const addWorkRef = useRef(addWork);
+  const lastScrollPositionRef = useRef<number>(0);
 
   // addWorkの参照を常に最新に保つ
   useEffect(() => {
@@ -60,6 +63,15 @@ export const CreditsList = ({
           return;
         }
         scroll.style.transform = `translateY(${movingRef.current}px)`;
+
+        // スクロール距離を追跡（絶対値で計算）
+        const currentPosition = Math.abs(movingRef.current);
+        const scrollDelta = currentPosition - lastScrollPositionRef.current;
+        if (scrollDelta > 0 && onScrollDistanceChange) {
+          onScrollDistanceChange(scrollDelta);
+        }
+        lastScrollPositionRef.current = currentPosition;
+
         movingRef.current -= speed;
         requestAnimationFrameRef.current = requestAnimationFrame(loop);
       };
@@ -69,7 +81,7 @@ export const CreditsList = ({
         cancelAnimationFrame(requestAnimationFrameRef.current);
       };
     }
-  }, [speed]);
+  }, [speed, onScrollDistanceChange]);
 
   return (
     <div ref={scrollRef} className="flex flex-col items-center justify-center" style={{ willChange: 'transform' }}>
