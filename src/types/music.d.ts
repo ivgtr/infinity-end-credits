@@ -161,4 +161,6 @@ export interface MusicStyle {
   drumPatterns: DrumPattern[];
   /** スタイルの持続時間範囲（秒） */
   durationRange: [number, number];
+  /** 推奨スケール/モード（スケールベースのメロディー生成に使用） */
+  scales: string[];
 }

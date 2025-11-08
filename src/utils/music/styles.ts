@@ -597,6 +597,7 @@ export const GRAND_STYLE: MusicStyle = {
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Up-Down", "Slow Wave", "Broken Chord"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Epic Slow", "Minimal Beat"].includes(p.name)),
   durationRange: [35, 55],
+  scales: ["major", "minor", "harmonicMinor"],
 };
 
 /**
@@ -789,6 +790,7 @@ export const MONOTONOUS_STYLE: MusicStyle = {
   arpeggioPatterns: [],
   drumPatterns: [], // 退屈な雰囲気を保つためドラムなし
   durationRange: [50, 80],
+  scales: ["major", "minor"],
 };
 
 /**
@@ -1052,6 +1054,7 @@ export const BRIGHT_STYLE: MusicStyle = {
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => !["Slow Wave"].includes(p.name)), // ゆったり以外全て
   drumPatterns: DRUM_PATTERNS.filter(p => ["Energetic", "Basic 4/4"].includes(p.name)),
   durationRange: [30, 45],
+  scales: ["major", "lydian", "pentatonic"],
 };
 
 /**
@@ -1316,6 +1319,7 @@ export const DARK_STYLE: MusicStyle = {
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Down", "Random", "Slow Wave", "Broken Chord"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Heavy Rock", "Basic 4/4"].includes(p.name)),
   durationRange: [40, 60],
+  scales: ["minor", "phrygian", "locrian", "harmonicMinor"],
 };
 
 /**
@@ -1531,6 +1535,7 @@ export const AMBIENT_STYLE: MusicStyle = {
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Slow Wave", "Triplet"].includes(p.name)),
   drumPatterns: [], // 浮遊感を保つためドラムなし
   durationRange: [55, 90],
+  scales: ["major", "minor", "dorian", "wholeTone"],
 };
 
 /**
@@ -1790,6 +1795,7 @@ export const JAZZY_STYLE: MusicStyle = {
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Random", "Up-Down", "Syncopated", "Broken Chord"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Basic 4/4", "Energetic"].includes(p.name)),
   durationRange: [35, 50],
+  scales: ["dorian", "mixolydian", "blues", "melodicMinor"],
 };
 
 /**
@@ -2042,6 +2048,7 @@ export const RETRO_STYLE: MusicStyle = {
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up-Down", "Up", "Fast Cascade", "Bounce"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Basic 4/4", "Energetic"].includes(p.name)),
   durationRange: [32, 48],
+  scales: ["major", "minor", "pentatonic", "mixolydian"],
 };
 
 /**
@@ -2296,6 +2303,7 @@ export const ELECTRONIC_STYLE: MusicStyle = {
   arpeggioPatterns: ARPEGGIO_PATTERNS, // すべてのアルペジオパターンを使用（アルペジオ重視）
   drumPatterns: DRUM_PATTERNS.filter(p => ["Energetic", "Heavy Rock"].includes(p.name)),
   durationRange: [28, 42],
+  scales: ["minor", "phrygian", "wholeTone", "diminished"],
 };
 
 /**
@@ -2533,6 +2541,7 @@ export const ORCHESTRAL_STYLE: MusicStyle = {
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Broken Chord", "Slow Wave", "Triplet"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Waltz 3/4", "Minimal Beat", "Epic Slow"].includes(p.name)),
   durationRange: [40, 65],
+  scales: ["major", "minor", "harmonicMinor", "melodicMinor"],
 };
 
 /**
@@ -2760,6 +2769,7 @@ export const ETHNIC_STYLE: MusicStyle = {
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Down", "Slow Wave", "Triplet"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Complex 7/8", "Progressive 5/4", "Minimal Beat", "Folk 6/8"].includes(p.name)),
   durationRange: [35, 55],
+  scales: ["hirajoshi", "inSen", "phrygianDominant", "hungarianMinor", "pentatonic"],
 };
 
 /**
@@ -2982,6 +2992,7 @@ export const LOFI_STYLE: MusicStyle = {
   arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Slow Wave", "Up", "Triplet", "Melodic Pattern"].includes(p.name)),
   drumPatterns: DRUM_PATTERNS.filter(p => ["Half-Time", "Minimal Beat", "Pop Ballad"].includes(p.name)),
   durationRange: [45, 70],
+  scales: ["pentatonic", "minorPentatonic", "dorian", "minor"],
 };
 
 /**

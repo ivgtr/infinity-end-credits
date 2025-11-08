@@ -1,5 +1,6 @@
 import type { MusicSection, MusicStyle } from "@/types/music";
 import { getRandomStyle } from "./styles";
+import { generateMusicalMelody, SCALES } from "./patterns";
 
 /**
  * 音楽作曲アルゴリズム
@@ -75,16 +76,44 @@ export class MusicComposer {
     // レイヤーの選択（革新的アルゴリズム）
     const layers = this.selectLayers();
 
-    // メロディーパターンを選択
+    // メロディーパターンを選択（50%の確率でスケールベースの生成を使用）
     let melody = undefined;
     if (
       layers.includeMelody &&
       this.currentStyle.melodyPatterns.length > 0
     ) {
-      melody =
-        this.currentStyle.melodyPatterns[
-          Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
+      const useScaleBasedMelody = Math.random() < 0.5;
+
+      if (useScaleBasedMelody && this.currentStyle.scales.length > 0) {
+        // スケールベースのメロディーを生成
+        const randomScale = this.currentStyle.scales[
+          Math.floor(Math.random() * this.currentStyle.scales.length)
         ]!;
+
+        // コード進行の最初のコードのルート音を使用
+        const rootNote = progression.chords[0]!.root;
+
+        // スケールが存在するか確認
+        if (randomScale in SCALES) {
+          melody = generateMusicalMelody(
+            rootNote,
+            randomScale as keyof typeof SCALES,
+            chordDuration
+          );
+        } else {
+          // スケールが見つからない場合は既存パターンを使用
+          melody =
+            this.currentStyle.melodyPatterns[
+              Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
+            ]!;
+        }
+      } else {
+        // 既存のメロディーパターンを使用
+        melody =
+          this.currentStyle.melodyPatterns[
+            Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
+          ]!;
+      }
       this.lastHadMelody = true;
     } else {
       this.lastHadMelody = false;
@@ -276,6 +305,12 @@ export class MusicComposer {
         return 0.88; // レトロ: 80年代はメロディ重視
       case "electronic":
         return 0.75; // エレクトロニック: メロディも重要だがアルペジオがメイン
+      case "orchestral":
+        return 0.90; // オーケストラ: メロディー重視
+      case "ethnic":
+        return 0.85; // エスニック: メロディー多め
+      case "lofi":
+        return 0.75; // ローファイ: 適度
       default:
         return 0.7;
     }
@@ -302,6 +337,12 @@ export class MusicComposer {
         return 0.85; // レトロ: シンセベースが重要
       case "electronic":
         return 0.85; // エレクトロニック: ベースラインが重要
+      case "orchestral":
+        return 0.70; // オーケストラ: 適度
+      case "ethnic":
+        return 0.60; // エスニック: 適度
+      case "lofi":
+        return 0.75; // ローファイ: ベース重要
       default:
         return 0.65;
     }
@@ -328,6 +369,12 @@ export class MusicComposer {
         return 0.75; // レトロ: シンセアルペジオ
       case "electronic":
         return 0.90; // エレクトロニック: アルペジオが特徴的
+      case "orchestral":
+        return 0.50; // オーケストラ: 控えめ
+      case "ethnic":
+        return 0.55; // エスニック: 適度
+      case "lofi":
+        return 0.65; // ローファイ: 適度
       default:
         return 0.5;
     }
@@ -354,6 +401,12 @@ export class MusicComposer {
         return 0.80; // レトロ: 80年代ポップはドラム重要
       case "electronic":
         return 0.85; // エレクトロニック: リズム重視、ドラム多め
+      case "orchestral":
+        return 0.40; // オーケストラ: 控えめ
+      case "ethnic":
+        return 0.70; // エスニック: リズム重要
+      case "lofi":
+        return 0.75; // ローファイ: ビート重要
       default:
         return 0.5;
     }
