@@ -1,10 +1,12 @@
 import type { MusicSection, MusicStyle } from "@/types/music";
 import { getRandomStyle } from "./styles";
+import { SCALES } from "./core/constants";
 import {
   generateMusicalMelody,
   generateChordBasedMelody,
   generateSmoothChordMelody,
-  SCALES,
+} from "./patterns/melodies/generators";
+import {
   createMozartRocket,
   createFateMotif,
   createAlbertiBass,
