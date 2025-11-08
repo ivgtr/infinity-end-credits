@@ -12,7 +12,7 @@ interface CreditsCanvasProps {
 
 export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => {
   const { titles, credits, addRandomWork } = useCredits();
-  const { stats, trackScroll } = useViewingStats(titles, credits);
+  const { stats, trackScroll, trackCreditViewed, trackWorkCompleted } = useViewingStats();
   const [speed, setSpeed] = useState(1);
   const [showUI, setShowUI] = useState(true);
   const [showStatsModal, setShowStatsModal] = useState(false);
@@ -55,6 +55,8 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
           addWork={addWork}
           speed={speed}
           onScrollDistanceChange={trackScroll}
+          onCreditViewed={trackCreditViewed}
+          onWorkCompleted={trackWorkCompleted}
         />
       )}
 

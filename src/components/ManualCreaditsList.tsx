@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CreditsItem } from "./CreditsItem";
+import type { Credit } from "@/types/credits";
 
 // メモリリーク防止: useCreditsフックで最大30作品に制限されているため、
 // このコンポーネントではDOMノード数も自動的に制限される
@@ -9,16 +10,17 @@ export const ManualCreditsList = ({
   credits,
   addWork,
   onScrollDistanceChange,
+  onCreditViewed,
+  onWorkCompleted,
 }: {
   titles: string[];
   credits: {
-    [key: string]: {
-      role: string;
-      names: string[];
-    }[];
+    [key: string]: Credit[];
   };
   addWork: () => void;
   onScrollDistanceChange?: (distance: number) => void;
+  onCreditViewed: (credit: Credit) => void;
+  onWorkCompleted: (workTitle: string) => void;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const lastScrollPositionRef = useRef<number>(0);
@@ -49,7 +51,13 @@ export const ManualCreditsList = ({
       <div className="flex flex-col items-center justify-center">
         <div ref={containerRef} className="flex flex-col items-center justify-center">
           {titles.map((title) => (
-            <CreditsItem key={title} title={title} credits={credits} />
+            <CreditsItem
+              key={title}
+              title={title}
+              credits={credits}
+              onCreditViewed={onCreditViewed}
+              onWorkCompleted={onWorkCompleted}
+            />
           ))}
         </div>
         <div className="flex flex-col items-center justify-center w-full min-h-screen">

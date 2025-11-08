@@ -1,7 +1,7 @@
 export type ViewingStats = {
-  // 総作品数
+  // 総作品数（全てのクレジットを表示し終わった作品数）
   totalWorks: number;
-  // 延べスタッフ数（鑑賞したクレジットに登場した全スタッフの累積人数）
+  // 延べスタッフ数（画面に表示されたスタッフの累積人数）
   totalStaff: number;
   // 総スクロール距離（ピクセル単位で保存、表示時にkmに変換）
   totalScrollDistance: number;
@@ -11,6 +11,10 @@ export type ViewingStats = {
   roleCounts: {
     [role: string]: number;
   };
+  // カウント済みのクレジットID（重複カウントを防ぐ）
+  countedCreditIds: Set<number>;
+  // カウント済みの作品タイトル（作品数の重複カウントを防ぐ）
+  countedWorkTitles: Set<string>;
   // 最初の鑑賞開始時刻
   firstStartedAt: number;
   // 最後の更新時刻

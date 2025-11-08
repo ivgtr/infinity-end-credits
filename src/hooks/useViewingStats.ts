@@ -1,9 +1,15 @@
 import type { ViewingStats } from "@/types/stats";
-import type { Credits } from "@/types/credits";
+import type { Credit } from "@/types/credits";
 import { useEffect, useState, useRef, useCallback } from "react";
 
 const STORAGE_KEY = "infinity-end-credits-stats";
 const SAVE_INTERVAL = 5000; // 5秒ごとに保存
+
+// ローカルストレージ用の型（SetをArrayに変換）
+type StoredViewingStats = Omit<ViewingStats, "countedCreditIds" | "countedWorkTitles"> & {
+  countedCreditIds: number[];
+  countedWorkTitles: string[];
+};
 
 const getInitialStats = (): ViewingStats => {
   if (typeof window === "undefined") {
@@ -13,7 +19,13 @@ const getInitialStats = (): ViewingStats => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      return JSON.parse(stored);
+      const parsed: StoredViewingStats = JSON.parse(stored);
+      // 配列をSetに変換
+      return {
+        ...parsed,
+        countedCreditIds: new Set(parsed.countedCreditIds || []),
+        countedWorkTitles: new Set(parsed.countedWorkTitles || []),
+      };
     }
   } catch (error) {
     console.error("Failed to load stats from localStorage:", error);
@@ -28,57 +40,22 @@ const createEmptyStats = (): ViewingStats => ({
   totalScrollDistance: 0,
   totalViewingTime: 0,
   roleCounts: {},
+  countedCreditIds: new Set(),
+  countedWorkTitles: new Set(),
   firstStartedAt: Date.now(),
   lastUpdatedAt: Date.now(),
 });
 
-export const useViewingStats = (titles: string[], credits: Credits) => {
+// 統計をローカルストレージに保存可能な形式に変換
+const convertStatsForStorage = (stats: ViewingStats): StoredViewingStats => ({
+  ...stats,
+  countedCreditIds: Array.from(stats.countedCreditIds),
+  countedWorkTitles: Array.from(stats.countedWorkTitles),
+});
+
+export const useViewingStats = () => {
   const [stats, setStats] = useState<ViewingStats>(getInitialStats);
-  const sessionStartTimeRef = useRef<number>(Date.now());
   const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const processedTitlesRef = useRef<Set<string>>(new Set());
-
-  // 新しい作品が追加されたときに統計を更新
-  useEffect(() => {
-    if (titles.length === 0) return;
-
-    const newTitles = titles.filter(title => !processedTitlesRef.current.has(title));
-
-    if (newTitles.length === 0) return;
-
-    setStats(prev => {
-      let newTotalStaff = prev.totalStaff;
-      const newRoleCounts = { ...prev.roleCounts };
-
-      // 新しく追加された作品のスタッフ数と役職をカウント
-      newTitles.forEach(title => {
-        const workCredits = credits[title];
-        if (workCredits) {
-          workCredits.forEach(credit => {
-            const staffCount = credit.names.length;
-            newTotalStaff += staffCount;
-
-            // 役職ごとのカウントを更新
-            if (newRoleCounts[credit.role]) {
-              newRoleCounts[credit.role] += staffCount;
-            } else {
-              newRoleCounts[credit.role] = staffCount;
-            }
-          });
-        }
-
-        processedTitlesRef.current.add(title);
-      });
-
-      return {
-        ...prev,
-        totalWorks: prev.totalWorks + newTitles.length,
-        totalStaff: newTotalStaff,
-        roleCounts: newRoleCounts,
-        lastUpdatedAt: Date.now(),
-      };
-    });
-  }, [titles, credits]);
 
   // 鑑賞時間を1秒ごとに更新
   useEffect(() => {
@@ -91,6 +68,55 @@ export const useViewingStats = (titles: string[], credits: Credits) => {
     }, 1000);
 
     return () => clearInterval(timer);
+  }, []);
+
+  // クレジットが画面に表示されたときに呼び出す
+  const trackCreditViewed = useCallback((credit: Credit) => {
+    setStats(prev => {
+      // 既にカウント済みの場合はスキップ
+      if (prev.countedCreditIds.has(credit.id)) {
+        return prev;
+      }
+
+      const staffCount = credit.names.length;
+      const newCountedCreditIds = new Set(prev.countedCreditIds);
+      newCountedCreditIds.add(credit.id);
+
+      const newRoleCounts = { ...prev.roleCounts };
+      if (newRoleCounts[credit.role]) {
+        newRoleCounts[credit.role] += staffCount;
+      } else {
+        newRoleCounts[credit.role] = staffCount;
+      }
+
+      return {
+        ...prev,
+        totalStaff: prev.totalStaff + staffCount,
+        roleCounts: newRoleCounts,
+        countedCreditIds: newCountedCreditIds,
+        lastUpdatedAt: Date.now(),
+      };
+    });
+  }, []);
+
+  // 作品の全クレジットを表示し終わったときに呼び出す
+  const trackWorkCompleted = useCallback((workTitle: string) => {
+    setStats(prev => {
+      // 既にカウント済みの場合はスキップ
+      if (prev.countedWorkTitles.has(workTitle)) {
+        return prev;
+      }
+
+      const newCountedWorkTitles = new Set(prev.countedWorkTitles);
+      newCountedWorkTitles.add(workTitle);
+
+      return {
+        ...prev,
+        totalWorks: prev.totalWorks + 1,
+        countedWorkTitles: newCountedWorkTitles,
+        lastUpdatedAt: Date.now(),
+      };
+    });
   }, []);
 
   // スクロール距離を追跡する関数
@@ -110,7 +136,8 @@ export const useViewingStats = (titles: string[], credits: Credits) => {
 
     saveTimerRef.current = setInterval(() => {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
+        const storageData = convertStatsForStorage(stats);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(storageData));
       } catch (error) {
         console.error("Failed to save stats to localStorage:", error);
       }
@@ -127,7 +154,8 @@ export const useViewingStats = (titles: string[], credits: Credits) => {
   useEffect(() => {
     return () => {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
+        const storageData = convertStatsForStorage(stats);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(storageData));
       } catch (error) {
         console.error("Failed to save stats on unmount:", error);
       }
@@ -138,11 +166,10 @@ export const useViewingStats = (titles: string[], credits: Credits) => {
   const resetStats = useCallback(() => {
     const emptyStats = createEmptyStats();
     setStats(emptyStats);
-    processedTitlesRef.current.clear();
-    sessionStartTimeRef.current = Date.now();
 
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(emptyStats));
+      const storageData = convertStatsForStorage(emptyStats);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(storageData));
     } catch (error) {
       console.error("Failed to reset stats in localStorage:", error);
     }
@@ -151,6 +178,8 @@ export const useViewingStats = (titles: string[], credits: Credits) => {
   return {
     stats,
     trackScroll,
+    trackCreditViewed,
+    trackWorkCompleted,
     resetStats,
   };
 };

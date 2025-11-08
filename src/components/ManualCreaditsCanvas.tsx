@@ -6,7 +6,7 @@ import { StatsModal } from "./StatsModal";
 
 export const ManualCreditsCanvas = () => {
   const { titles, credits, addRandomWork } = useCredits();
-  const { stats, trackScroll } = useViewingStats(titles, credits);
+  const { stats, trackScroll, trackCreditViewed, trackWorkCompleted } = useViewingStats();
   const [showStatsModal, setShowStatsModal] = useState(false);
 
   const addWork = useCallback(() => {
@@ -25,6 +25,8 @@ export const ManualCreditsCanvas = () => {
           credits={credits}
           addWork={addWork}
           onScrollDistanceChange={trackScroll}
+          onCreditViewed={trackCreditViewed}
+          onWorkCompleted={trackWorkCompleted}
         />
       )}
 

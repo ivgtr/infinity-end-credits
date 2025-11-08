@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { CreditsItem } from "./CreditsItem";
+import type { Credit } from "@/types/credits";
 
 export const CreditsList = ({
   titles,
@@ -7,17 +8,18 @@ export const CreditsList = ({
   addWork,
   speed,
   onScrollDistanceChange,
+  onCreditViewed,
+  onWorkCompleted,
 }: {
   titles: string[];
   credits: {
-    [key: string]: {
-      role: string;
-      names: string[];
-    }[];
+    [key: string]: Credit[];
   };
   addWork: () => void;
   speed: number;
   onScrollDistanceChange?: (distance: number) => void;
+  onCreditViewed: (credit: Credit) => void;
+  onWorkCompleted: (workTitle: string) => void;
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -87,7 +89,13 @@ export const CreditsList = ({
     <div ref={scrollRef} className="flex flex-col items-center justify-center" style={{ willChange: 'transform' }}>
       <div ref={containerRef} className="flex flex-col items-center justify-center">
         {titles.map((title) => (
-          <CreditsItem key={title} title={title} credits={credits} />
+          <CreditsItem
+            key={title}
+            title={title}
+            credits={credits}
+            onCreditViewed={onCreditViewed}
+            onWorkCompleted={onWorkCompleted}
+          />
         ))}
       </div>
       <div className="flex flex-col items-center justify-center w-full min-h-screen h-full">
