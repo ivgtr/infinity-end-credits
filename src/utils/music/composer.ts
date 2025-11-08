@@ -1,6 +1,59 @@
 import type { MusicSection, MusicStyle } from "@/types/music";
 import { getRandomStyle } from "./styles";
-import { generateMusicalMelody, SCALES } from "./patterns";
+import {
+  generateMusicalMelody,
+  generateChordBasedMelody,
+  generateSmoothChordMelody,
+  SCALES,
+  createMozartRocket,
+  createFateMotif,
+  createAlbertiBass,
+  createBaroqueSequence,
+  createOctaveJump,
+  createPentatonicRock,
+  createSyncopated8Beat,
+  createBlueNoteDescend,
+  createBebopChromatic,
+  createIIVITurnaround,
+  createInsenDescend,
+  createCelticRoll,
+  createHijazMaqam,
+  createRagaOrnament,
+  createArpeggiatorSeq,
+  createDropBuild,
+  createSidechainRhythm,
+  createEnoAmbientPad,
+  createShimmerReverb,
+  createTexturalDrone,
+  createGranularCloud,
+  createModularSequence,
+} from "./patterns";
+
+// 定型パターン生成関数のマッピング
+const FAMOUS_PATTERN_FUNCTIONS: Record<string, (root: number, duration: number) => any> = {
+  createMozartRocket,
+  createFateMotif,
+  createAlbertiBass,
+  createBaroqueSequence,
+  createOctaveJump,
+  createPentatonicRock,
+  createSyncopated8Beat,
+  createBlueNoteDescend,
+  createBebopChromatic,
+  createIIVITurnaround,
+  createInsenDescend,
+  createCelticRoll,
+  createHijazMaqam,
+  createRagaOrnament,
+  createArpeggiatorSeq,
+  createDropBuild,
+  createSidechainRhythm,
+  createEnoAmbientPad,
+  createShimmerReverb,
+  createTexturalDrone,
+  createGranularCloud,
+  createModularSequence,
+};
 
 /**
  * 音楽作曲アルゴリズム
@@ -76,24 +129,22 @@ export class MusicComposer {
     // レイヤーの選択（革新的アルゴリズム）
     const layers = this.selectLayers();
 
-    // メロディーパターンを選択（50%の確率でスケールベースの生成を使用）
+    // メロディーパターンを選択（4つの方法から選択）
+    // 25%: スケールベース生成、25%: 定型パターン生成、25%: コード進行連動生成、25%: 既存パターン
     let melody = undefined;
     if (
       layers.includeMelody &&
       this.currentStyle.melodyPatterns.length > 0
     ) {
-      const useScaleBasedMelody = Math.random() < 0.5;
+      const rand = Math.random();
+      const rootNote = progression.chords[0]!.root;
 
-      if (useScaleBasedMelody && this.currentStyle.scales.length > 0) {
-        // スケールベースのメロディーを生成
+      if (rand < 0.25 && this.currentStyle.scales.length > 0) {
+        // 方法1: スケールベースのメロディーを生成
         const randomScale = this.currentStyle.scales[
           Math.floor(Math.random() * this.currentStyle.scales.length)
         ]!;
 
-        // コード進行の最初のコードのルート音を使用
-        const rootNote = progression.chords[0]!.root;
-
-        // スケールが存在するか確認
         if (randomScale in SCALES) {
           melody = generateMusicalMelody(
             rootNote,
@@ -101,14 +152,40 @@ export class MusicComposer {
             chordDuration
           );
         } else {
-          // スケールが見つからない場合は既存パターンを使用
+          // フォールバック: 既存パターン
           melody =
             this.currentStyle.melodyPatterns[
               Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
             ]!;
         }
+      } else if (
+        rand < 0.5 &&
+        this.currentStyle.famousPatterns &&
+        this.currentStyle.famousPatterns.length > 0
+      ) {
+        // 方法2: 定型パターン生成
+        const randomFamousPattern = this.currentStyle.famousPatterns[
+          Math.floor(Math.random() * this.currentStyle.famousPatterns.length)
+        ]!;
+
+        const patternFunction = FAMOUS_PATTERN_FUNCTIONS[randomFamousPattern];
+        if (patternFunction) {
+          melody = patternFunction(rootNote, chordDuration);
+        } else {
+          // フォールバック: 既存パターン
+          melody =
+            this.currentStyle.melodyPatterns[
+              Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
+            ]!;
+        }
+      } else if (rand < 0.75) {
+        // 方法3: コード進行連動メロディー生成
+        const useSmooth = Math.random() < 0.5;
+        melody = useSmooth
+          ? generateSmoothChordMelody(progression)
+          : generateChordBasedMelody(progression);
       } else {
-        // 既存のメロディーパターンを使用
+        // 方法4: 既存のメロディーパターンを使用
         melody =
           this.currentStyle.melodyPatterns[
             Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
@@ -298,7 +375,7 @@ export class MusicComposer {
       case "dark":
         return 0.65; // ダーク: 適度
       case "ambient":
-        return 0.45; // アンビエント: 適度
+        return 0.60; // アンビエント: 適度（浮遊感を保ちつつ動きを追加）
       case "jazzy":
         return 0.80; // ジャジー: ジャズはメロディ重要
       case "retro":
@@ -330,7 +407,7 @@ export class MusicComposer {
       case "dark":
         return 0.8; // ダーク: ベース多め
       case "ambient":
-        return 0.3; // アンビエント: ベース少なめ
+        return 0.45; // アンビエント: ベース控えめだが存在感あり
       case "jazzy":
         return 0.90; // ジャジー: ウォーキングベースが重要
       case "retro":
@@ -362,7 +439,7 @@ export class MusicComposer {
       case "dark":
         return 0.5; // ダーク: 適度
       case "ambient":
-        return 0.6; // アンビエント: 適度
+        return 0.70; // アンビエント: テクスチャを豊かに
       case "jazzy":
         return 0.70; // ジャジー: コンピング的なアルペジオ
       case "retro":
@@ -394,7 +471,7 @@ export class MusicComposer {
       case "dark":
         return 0.75; // ダーク: ドラム多め
       case "ambient":
-        return 0.0; // アンビエント: ドラムなし
+        return 0.15; // アンビエント: 非常に控えめなリズム要素
       case "jazzy":
         return 0.65; // ジャジー: スウィング感のためドラム適度
       case "retro":
