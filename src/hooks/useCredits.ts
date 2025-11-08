@@ -35,7 +35,7 @@ export const useCredits = () => {
     const newCredit: Credit[] = [];
 
     for (const staff of staffs) {
-      const { role, members } = staff;
+      const { role, members, easterEgg } = staff;
       const id = generateId();
 
       const credit: Credit = {
@@ -43,6 +43,7 @@ export const useCredits = () => {
         title,
         names: members,
         role,
+        ...(easterEgg && { easterEgg }),
       };
 
       newCredit.push(credit);

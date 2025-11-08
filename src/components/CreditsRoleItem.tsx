@@ -1,6 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CreditsRole } from "./CreditsRole";
-import type { Credit } from "@/types/credits";
+import type { Credit, EasterEggType } from "@/types/credits";
+import { playEasterEggSound } from "@/utils/sound";
 
 interface CreditsRoleItemProps {
   credit: Credit;
@@ -9,6 +10,22 @@ interface CreditsRoleItemProps {
   onViewed: (credit: Credit) => void;
   onWorkCompleted: (workTitle: string) => void;
 }
+
+// イースターエッグのスタイルを取得
+const getEasterEggStyle = (easterEgg?: EasterEggType) => {
+  if (!easterEgg) return "";
+
+  switch (easterEgg) {
+    case "famous_director":
+      return "text-yellow-400 font-bold animate-shimmer";
+    case "funny_role":
+      return "text-pink-400 animate-bounce-subtle";
+    case "same_name":
+      return "text-red-400 animate-glitch";
+    default:
+      return "";
+  }
+};
 
 // 協力会社セクションかどうかを判定
 const isCooperationRole = (roleName: string) => {
@@ -80,6 +97,11 @@ export const CreditsRoleItem = ({
             hasBeenViewedRef.current = true;
             onViewed(credit);
 
+            // イースターエッグの場合は効果音を再生
+            if (credit.easterEgg) {
+              playEasterEggSound(credit.easterEgg);
+            }
+
             // 最後のクレジットの場合、作品完了を通知
             if (isLast) {
               onWorkCompleted(workTitle);
@@ -99,9 +121,11 @@ export const CreditsRoleItem = ({
     };
   }, [credit, isLast, workTitle, onViewed, onWorkCompleted]);
 
+  const easterEggStyle = getEasterEggStyle(credit.easterEgg);
+
   return (
     <div ref={ref} className="flex flex-col items-center justify-center w-full">
-      <CreditsRole>{credit.role}</CreditsRole>
+      <CreditsRole className={credit.easterEgg ? easterEggStyle : ""}>{credit.role}</CreditsRole>
 
       {isCooperationRole(credit.role) ? (
         // 協力会社セクション：会社名とスタッフを縦1列で表示
@@ -112,7 +136,7 @@ export const CreditsRoleItem = ({
         // 超大規模スタッフ（40人以上）：2列表示でより縦長に
         <div className="grid grid-cols-2 gap-x-12 gap-y-2.5 text-center mt-6">
           {credit.names.map((name, nameIndex) => (
-            <p className="text-base" key={nameIndex}>
+            <p className={`text-base ${easterEggStyle}`} key={nameIndex}>
               {name}
             </p>
           ))}
@@ -121,7 +145,7 @@ export const CreditsRoleItem = ({
         // 大規模スタッフ（15-40人）：2列表示
         <div className="grid grid-cols-2 gap-x-12 gap-y-2.5 text-center mt-6">
           {credit.names.map((name, nameIndex) => (
-            <p className="text-base" key={nameIndex}>
+            <p className={`text-base ${easterEggStyle}`} key={nameIndex}>
               {name}
             </p>
           ))}
@@ -130,7 +154,7 @@ export const CreditsRoleItem = ({
         // 中規模スタッフ（6-15人）：1列表示
         <div className="flex flex-col items-center justify-center gap-2.5 mt-6">
           {credit.names.map((name, nameIndex) => (
-            <p className="text-base" key={nameIndex}>
+            <p className={`text-base ${easterEggStyle}`} key={nameIndex}>
               {name}
             </p>
           ))}
@@ -139,7 +163,7 @@ export const CreditsRoleItem = ({
         // 小規模スタッフ（5人以下）：1列表示
         <div className="flex flex-col items-center justify-center gap-3 mt-6">
           {credit.names.map((name, nameIndex) => (
-            <p className="text-base" key={nameIndex}>
+            <p className={`text-base ${easterEggStyle}`} key={nameIndex}>
               {name}
             </p>
           ))}
