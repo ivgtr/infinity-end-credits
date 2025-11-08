@@ -154,7 +154,7 @@ export const CreditsRoleItem = ({
     : "";
 
   const clickableStyle = credit.easterEgg && !isClicked
-    ? "cursor-pointer hover:scale-105 transition-transform duration-200"
+    ? "cursor-pointer"
     : "";
 
   return (
