@@ -4,7 +4,6 @@ import { useViewingStats } from "@/hooks/useViewingStats";
 import { useEasterEggStats } from "@/hooks/useEasterEggStats";
 import { ManualCreditsList } from "./ManualCreaditsList";
 import { StatsModal } from "./StatsModal";
-import { EasterEggStats } from "./EasterEggStats";
 import { FilmEffects } from "./FilmEffects";
 import { Letterbox } from "./Letterbox";
 import type { EasterEggType } from "@/types/credits";
@@ -69,10 +68,9 @@ export const ManualCreditsCanvas = () => {
         isOpen={showStatsModal}
         onClose={() => setShowStatsModal(false)}
         stats={stats}
+        easterEggStats={easterEggStats}
+        onResetEasterEggs={resetStats}
       />
-
-      {/* イースターエッグ統計 */}
-      <EasterEggStats stats={easterEggStats} onReset={resetStats} />
     </div>
   );
 };

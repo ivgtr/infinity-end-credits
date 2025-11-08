@@ -6,7 +6,6 @@ import { useEasterEggStats } from "@/hooks/useEasterEggStats";
 import { SpeedControl } from "./SpeedControl";
 import { BackgroundMusicPlayer } from "./BackgroundMusicPlayer";
 import { StatsModal } from "./StatsModal";
-import { EasterEggStats } from "./EasterEggStats";
 import { FilmEffects } from "./FilmEffects";
 import { Letterbox } from "./Letterbox";
 import type { EasterEggType } from "@/types/credits";
@@ -128,10 +127,9 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
         isOpen={showStatsModal}
         onClose={() => setShowStatsModal(false)}
         stats={stats}
+        easterEggStats={easterEggStats}
+        onResetEasterEggs={resetStats}
       />
-
-      {/* イースターエッグ統計 */}
-      <EasterEggStats stats={easterEggStats} onReset={resetStats} />
     </div>
   );
 };
