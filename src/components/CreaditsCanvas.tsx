@@ -5,7 +5,6 @@ import { useViewingStats } from "@/hooks/useViewingStats";
 import { SpeedControl } from "./SpeedControl";
 import { BackgroundMusicPlayer } from "./BackgroundMusicPlayer";
 import { StatsModal } from "./StatsModal";
-import { StarfieldBackground } from "./StarfieldBackground";
 import { FilmEffects } from "./FilmEffects";
 import { Letterbox } from "./Letterbox";
 
@@ -52,7 +51,6 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
   return (
     <div className="min-h-screen h-full w-full overflow-hidden">
       {/* 背景演出レイヤー */}
-      <StarfieldBackground speed={speed} />
       <FilmEffects />
       <Letterbox />
 

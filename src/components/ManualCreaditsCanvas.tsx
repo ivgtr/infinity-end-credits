@@ -3,7 +3,6 @@ import { useCredits } from "@/hooks/useCredits";
 import { useViewingStats } from "@/hooks/useViewingStats";
 import { ManualCreditsList } from "./ManualCreaditsList";
 import { StatsModal } from "./StatsModal";
-import { StarfieldBackground } from "./StarfieldBackground";
 import { FilmEffects } from "./FilmEffects";
 import { Letterbox } from "./Letterbox";
 
@@ -23,7 +22,6 @@ export const ManualCreditsCanvas = () => {
   return (
     <div className="min-h-screen h-full w-full">
       {/* 背景演出レイヤー */}
-      <StarfieldBackground speed={1} />
       <FilmEffects />
       <Letterbox />
 
