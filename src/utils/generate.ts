@@ -111,8 +111,8 @@ const generateParodyTitle = () => {
 
   // 「××の動く○○」パターン
   const ugokuPattern = () => {
-    const owners = ['ハウル', 'ソフィー', '王様', '魔女', '博士'];
-    const objects = ['家具', '城', '要塞', '工房', '研究所'];
+    const owners = ['王様', '魔女', '博士', '魔法使い', '錬金術師', '発明家'];
+    const objects = ['家具', '城', '要塞', '工房', '研究所', '塔'];
     return `${fakerJA.helpers.arrayElement(owners)}の動く${fakerJA.helpers.arrayElement(objects)}`;
   };
 
@@ -154,27 +154,66 @@ const generateParodyTitle = () => {
   return pattern();
 };
 
-// 2. 超長いラノベ風タイトル
+// 2. 超長いラノベ風タイトル（構造のみ、固有作品を連想させない）
 const generateLightNovelTitle = () => {
   const templates = [
-    // 異世界転生系
-    () => `異世界に転生したら${fakerJA.helpers.arrayElement(['エンドロールスタッフ', '背景画', '効果音', 'モブキャラ', '村人A'])}だった件について`,
-    () => `転生したらスライム${fakerJA.helpers.arrayElement(['スタッフ', '監督', '演出家', 'プロデューサー'])}だった`,
-    () => `異世界${fakerJA.helpers.arrayElement(['アニメーション', '映画', 'ドラマ', '舞台'])}制作で無双する`,
+    // 異世界転生系（一般的な構造）
+    () => {
+      const roles = ['エンドロールスタッフ', '背景画', '効果音', 'モブキャラ', '村人A', '通行人B', '看板娘'];
+      const endings = ['だった件について', 'になった話', 'として生きる', 'の日々'];
+      return `異世界に転生したら${fakerJA.helpers.arrayElement(roles)}${fakerJA.helpers.arrayElement(endings)}`;
+    },
+    () => {
+      const creatures = ['ドラゴン', 'スライム', 'ゴブリン', 'フェアリー', 'エルフ'];
+      const jobs = ['王様', '勇者', '魔王', '商人', '鍛冶屋'];
+      return `転生したら${fakerJA.helpers.arrayElement(creatures)}の${fakerJA.helpers.arrayElement(jobs)}だった`;
+    },
+    () => {
+      const places = ['異世界', '魔界', '天界', '精霊界'];
+      const activities = ['冒険', '生活', '商売', 'ものづくり', '料理'];
+      return `${fakerJA.helpers.arrayElement(places)}で${fakerJA.helpers.arrayElement(activities)}して最強になりました`;
+    },
 
-    // ○○がこんなに〜系
-    () => `俺の${fakerJA.helpers.arrayElement(['作画監督', '総監督', '脚本家', 'プロデューサー', '声優'])}がこんなに${fakerJA.helpers.arrayElement(['多い', '可愛い', 'イケメン', '優秀な', '個性的な'])}わけがない`,
-    () => `妹さえいれば${fakerJA.helpers.arrayElement(['エンドロール', 'クレジット', '制作陣', 'スタッフロール'])}。`,
+    // ○○がこんなに〜系（一般的な構造）
+    () => {
+      const subjects = ['仲間', '部下', '友達', '家族', 'パーティー'];
+      const attributes = ['多い', '強い', '優秀', '個性的', '面白い'];
+      return `こんなに${fakerJA.helpers.arrayElement(subjects)}が${fakerJA.helpers.arrayElement(attributes)}わけがない`;
+    },
+    () => {
+      const relations = ['相棒', '仲間', 'ライバル', 'パートナー'];
+      const conditions = ['いれば無敵', 'がいれば最強', 'と一緒なら怖くない'];
+      return `${fakerJA.helpers.arrayElement(relations)}さえ${fakerJA.helpers.arrayElement(conditions)}`;
+    },
 
-    // やれやれ系主人公
-    () => `やれやれ、また${fakerJA.helpers.arrayElement(['締め切り', '修正依頼', 'リテイク', '作画崩壊', '予算削減'])}ですか`,
+    // やれやれ系（一般的な構造）
+    () => {
+      const troubles = ['トラブル', 'ピンチ', '問題', '事件', '騒動'];
+      const reactions = ['ですか', 'かよ', 'なのか', 'とは'];
+      return `やれやれ、また${fakerJA.helpers.arrayElement(troubles)}${fakerJA.helpers.arrayElement(reactions)}`;
+    },
 
-    // 〜したら〜だった系
-    () => `${fakerJA.helpers.arrayElement(['スタジオ', '制作会社', 'アニメ業界', '映画業界'])}で働いたら${fakerJA.helpers.arrayElement(['チート能力', '最強スキル', '無双', '神作画', '伝説'])}を手に入れた`,
+    // 〜したら〜だった系（一般的な構造）
+    () => {
+      const actions = ['頑張ったら', '努力したら', '修行したら', '挑戦したら'];
+      const results = ['チート能力', '最強スキル', '伝説の力', '神の加護', '無敵の技'];
+      return `${fakerJA.helpers.arrayElement(actions)}${fakerJA.helpers.arrayElement(results)}を手に入れた`;
+    },
 
-    // 複雑長文系
-    () => `ようこそ実力至上主義の${fakerJA.helpers.arrayElement(['アニメスタジオ', '映画制作現場', 'CG制作室'])}へ`,
-    () => `この${fakerJA.helpers.arrayElement(['素晴らしい', 'すばらしい', 'クソッタレな', '過酷な'])}${fakerJA.helpers.arrayElement(['制作環境', 'スタジオ', '業界', '現場'])}に祝福を！`,
+    // ようこそ〜系（一般的な構造）
+    () => {
+      const types = ['実力主義', '弱肉強食', '平和主義', '自由主義'];
+      const places = ['学園', '世界', '国', '組織', 'ギルド'];
+      return `ようこそ${fakerJA.helpers.arrayElement(types)}の${fakerJA.helpers.arrayElement(places)}へ`;
+    },
+
+    // この〜に××を！系（一般的な構造）
+    () => {
+      const adjectives = ['素晴らしい', '過酷な', '厳しい', '優しい', '不思議な'];
+      const places = ['世界', '異世界', '学園', '街', '冒険'];
+      const wishes = ['祝福', '幸運', '平和', '勝利', '栄光'];
+      return `この${fakerJA.helpers.arrayElement(adjectives)}${fakerJA.helpers.arrayElement(places)}に${fakerJA.helpers.arrayElement(wishes)}を！`;
+    },
   ];
 
   const template = fakerJA.helpers.arrayElement(templates);
@@ -210,14 +249,15 @@ const generateRetroStyleTitle = () => {
 
     // 2000年代スタイル
     () => {
-      const familyNames = ['涼宮', '長門', '朝比奈', '古泉', '鶴屋'];
-      const givenNames = ['ハルカ', 'ミク', 'ユウ', 'アヤ', 'レイ'];
-      const suffixes = ['の憂鬱', 'の消失', 'の溜息', 'の陰謀', 'の秘密'];
+      const familyNames = ['桜井', '高橋', '田中', '佐藤', '鈴木', '山本'];
+      const givenNames = ['ハルカ', 'ミク', 'ユウ', 'アヤ', 'レイ', 'カナ', 'リン'];
+      const suffixes = ['の憂鬱', 'の消失', 'の溜息', 'の陰謀', 'の秘密', 'の決意'];
       return `${fakerJA.helpers.arrayElement(familyNames)}${fakerJA.helpers.arrayElement(givenNames)}${fakerJA.helpers.arrayElement(suffixes)}`;
     },
     () => {
-      const titles = ['けいおん！', 'らきすた！', 'ひだまり☆', 'ゆるゆり♪'];
-      return fakerJA.helpers.arrayElement(titles);
+      const prefixes = ['ゆる', 'ほの', 'ふわ', 'きら', 'ぴか'];
+      const suffixes = ['おん！', 'すた！', 'まり☆', 'ゆり♪', 'ぴか★'];
+      return `${fakerJA.helpers.arrayElement(prefixes)}${fakerJA.helpers.arrayElement(suffixes)}`;
     },
 
     // 2010年代スタイル
