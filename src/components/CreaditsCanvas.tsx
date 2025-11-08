@@ -5,6 +5,7 @@ import { useViewingStats } from "@/hooks/useViewingStats";
 import { SpeedControl } from "./SpeedControl";
 import { BackgroundMusicPlayer } from "./BackgroundMusicPlayer";
 import { StatsModal } from "./StatsModal";
+import { TitleScreen } from "./TitleScreen";
 
 interface CreditsCanvasProps {
   autoPlayMusic?: boolean;
@@ -16,14 +17,24 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
   const [speed, setSpeed] = useState(1);
   const [showUI, setShowUI] = useState(true);
   const [showStatsModal, setShowStatsModal] = useState(false);
+  const [showTitleScreen, setShowTitleScreen] = useState(true);
+  const [firstTitle, setFirstTitle] = useState<string>("");
 
   const addWork = useCallback(() => {
     addRandomWork();
   }, []);
 
+  // 最初のタイトルを生成してタイトル画面を表示
   useEffect(() => {
     addWork();
   }, []);
+
+  // タイトルが生成されたら記録
+  useEffect(() => {
+    if (titles.length > 0 && !firstTitle) {
+      setFirstTitle(titles[0]);
+    }
+  }, [titles, firstTitle]);
 
   const handleSpeedChange = useCallback((newSpeed: number) => {
     setSpeed(newSpeed);
@@ -48,7 +59,17 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
 
   return (
     <div className="min-h-screen h-full w-full overflow-hidden">
-      {titles.length > 0 && (
+      {/* タイトル画面 */}
+      {showTitleScreen && firstTitle && (
+        <TitleScreen
+          title={firstTitle}
+          onComplete={() => setShowTitleScreen(false)}
+          duration={3000}
+        />
+      )}
+
+      {/* クレジットリスト（タイトル画面完了後に表示） */}
+      {!showTitleScreen && titles.length > 0 && (
         <CreditsList
           titles={titles}
           credits={credits}

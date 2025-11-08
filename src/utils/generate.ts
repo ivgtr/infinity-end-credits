@@ -37,7 +37,248 @@ export const generateCharacterName = () => {
 };
 
 export const generateTitle = () => {
-  // 日本語の単語リスト
+  // 全てのタイトル生成関数を配列に
+  const generators = [
+    generateParodyTitle,
+    generateLightNovelTitle,
+    generateRetroStyleTitle,
+    generateVersionedTitle,
+    generateSymbolicTitle,
+    generateGenreTitle,
+    generateSeriesTitle,
+    generateBasicTitle, // 従来型も残す
+  ];
+
+  // ランダムに生成関数を選択
+  const generator = fakerJA.helpers.arrayElement(generators);
+  return generator();
+};
+
+// 1. パロディタイトル（実在作品のパロディ）
+const generateParodyTitle = () => {
+  const parodies = [
+    // 新海誠作品パロディ
+    "君の猫は。",
+    "君の犬は。",
+    "君の隣人は。",
+    "天気の子犬",
+    "天気の娘",
+    "天気のおじさん",
+    "言の葉の園",
+    "秒速5メートルくらい",
+
+    // ジブリ作品パロディ
+    "千と千尋の神隠れんぼ",
+    "千と千尋の鬼ごっこ",
+    "となりのトトロール",
+    "もののけ姫君",
+    "崖の上のポチョ",
+    "崖の下のポニョ",
+    "魔女の宅急便屋",
+    "耳をすませば〜",
+    "猫の恩返しができない",
+    "ハウルの動く家具",
+
+    // エヴァパロディ
+    "新世紀エヴァンゲリコン",
+    "シン・エヴァンゲリオン劇場版：│",
+    "ヱヴァンゲリヲン新劇場版：Q&A",
+
+    // その他人気作品
+    "鬼滅の刃物",
+    "呪術廻戦記",
+    "進撃の巨人族",
+    "ワンピース・オブ・ケーキ",
+    "SLAM DUNK!!",
+    "ドラゴンボール型",
+    "名探偵コナン君",
+    "僕のヒーローアカデミー賞",
+  ];
+
+  return fakerJA.helpers.arrayElement(parodies);
+};
+
+// 2. 超長いラノベ風タイトル
+const generateLightNovelTitle = () => {
+  const templates = [
+    // 異世界転生系
+    () => `異世界に転生したら${fakerJA.helpers.arrayElement(['エンドロールスタッフ', '背景画', '効果音', 'モブキャラ', '村人A'])}だった件について`,
+    () => `転生したらスライム${fakerJA.helpers.arrayElement(['スタッフ', '監督', '演出家', 'プロデューサー'])}だった`,
+    () => `異世界${fakerJA.helpers.arrayElement(['アニメーション', '映画', 'ドラマ', '舞台'])}制作で無双する`,
+
+    // ○○がこんなに〜系
+    () => `俺の${fakerJA.helpers.arrayElement(['作画監督', '総監督', '脚本家', 'プロデューサー', '声優'])}がこんなに${fakerJA.helpers.arrayElement(['多い', '可愛い', 'イケメン', '優秀な', '個性的な'])}わけがない`,
+    () => `妹さえいれば${fakerJA.helpers.arrayElement(['エンドロール', 'クレジット', '制作陣', 'スタッフロール'])}。`,
+
+    // やれやれ系主人公
+    () => `やれやれ、また${fakerJA.helpers.arrayElement(['締め切り', '修正依頼', 'リテイク', '作画崩壊', '予算削減'])}ですか`,
+
+    // 〜したら〜だった系
+    () => `${fakerJA.helpers.arrayElement(['スタジオ', '制作会社', 'アニメ業界', '映画業界'])}で働いたら${fakerJA.helpers.arrayElement(['チート能力', '最強スキル', '無双', '神作画', '伝説'])}を手に入れた`,
+
+    // 複雑長文系
+    () => `ようこそ実力至上主義の${fakerJA.helpers.arrayElement(['アニメスタジオ', '映画制作現場', 'CG制作室'])}へ`,
+    () => `この${fakerJA.helpers.arrayElement(['素晴らしい', 'すばらしい', 'クソッタレな', '過酷な'])}${fakerJA.helpers.arrayElement(['制作環境', 'スタジオ', '業界', '現場'])}に祝福を！`,
+  ];
+
+  const template = fakerJA.helpers.arrayElement(templates);
+  return template();
+};
+
+// 3. 年代別スタイル
+const generateRetroStyleTitle = () => {
+  const eras = [
+    // 70-80年代
+    () => {
+      const prefixes = ['宇宙戦艦', '銀河', '超時空', '無敵', '勇者', '魔神'];
+      const names = ['ヤマト', 'ガンダム', 'マクロス', 'ライディーン', 'ダイモス', 'ボルテス'];
+      return `${fakerJA.helpers.arrayElement(prefixes)}${fakerJA.helpers.arrayElement(names)}`;
+    },
+    () => {
+      const words = ['999', '777', '伝説', '帝国', '要塞', '戦記'];
+      return `銀河${fakerJA.helpers.arrayElement(words)}`;
+    },
+
+    // 90年代
+    () => {
+      const words = ['新世紀', '少女革命', '魔法騎士'];
+      const nouns = ['エヴァンゲリオン', 'ウテナ', 'レイアース', 'セーラームーン', 'カードキャプター'];
+      return `${fakerJA.helpers.arrayElement(words)}${fakerJA.helpers.arrayElement(nouns)}`;
+    },
+    () => `機動${fakerJA.helpers.arrayElement(['戦士', '武闘伝', '新世紀'])}G${fakerJA.helpers.arrayElement(['ガンダム', 'ファイター', 'ウイング'])}`,
+
+    // 2000年代
+    () => {
+      const names = ['ハルヒ', 'みくる', 'ユキ', 'ツルヤ'];
+      const suffixes = ['の憂鬱', 'の消失', 'の溜息', 'の陰謀'];
+      return `涼宮${fakerJA.helpers.arrayElement(names)}${fakerJA.helpers.arrayElement(suffixes)}`;
+    },
+    () => `${fakerJA.helpers.arrayElement(['けいおん！', 'らき☆すた', 'ひだまりスケッチ', 'みなみけ'])}`,
+
+    // 2010年代
+    () => {
+      const subjects = ['会長', '先輩', '後輩', '委員長', '部長'];
+      return `${fakerJA.helpers.arrayElement(subjects)}は告らせたい〜天才たちの恋愛頭脳戦〜`;
+    },
+    () => {
+      const prefixes = ['鬼滅', '呪術', '約束'];
+      const suffixes = ['の刃', '廻戦', 'のネバーランド'];
+      return `${fakerJA.helpers.arrayElement(prefixes)}${fakerJA.helpers.arrayElement(suffixes)}`;
+    },
+  ];
+
+  const era = fakerJA.helpers.arrayElement(eras);
+  return era();
+};
+
+// 4. バージョン番号付き
+const generateVersionedTitle = () => {
+  const baseWords = ['エヴァンゲリオン', '攻殻機動隊', 'ガンダム', 'マクロス', 'シン・仮面ライダー'];
+  const base = fakerJA.helpers.arrayElement(baseWords);
+
+  const versions = [
+    `${base} 3.0+1.0`,
+    `${base} 2.0+1.01`,
+    `${base} 1.11`,
+    `${base} 2nd SEASON`,
+    `${base} 3rd SEASON`,
+    `${base} FINAL SEASON`,
+    `${base} -終章-`,
+    `${base} THE FINAL`,
+    `${base} 完結編`,
+    `${base} 第1章`,
+    `${base} 第二部`,
+    `${base} Re:`,
+  ];
+
+  return fakerJA.helpers.arrayElement(versions);
+};
+
+// 5. 記号・英語混じり
+const generateSymbolicTitle = () => {
+  const templates = [
+    () => `Re:${fakerJA.helpers.arrayElement(['ゼロ', 'ワン', 'ライフ'])}から始める${fakerJA.helpers.arrayElement(['異世界生活', '制作生活', '監督業'])}`,
+    () => `.hack//${fakerJA.helpers.arrayElement(['Sign', 'Roots', 'G.U.', 'Quantum'])}`,
+    () => `STEINS;${fakerJA.helpers.arrayElement(['GATE', 'GATE 0', 'ELITE'])}`,
+    () => `${fakerJA.helpers.arrayElement(['ソードアート', 'ガンゲイル', 'アクセル・ワールド'])} -THE ANIMATION-`,
+    () => `Fate/${fakerJA.helpers.arrayElement(['stay night', 'Zero', 'Apocrypha', 'Grand Order'])}`,
+    () => `${fakerJA.helpers.arrayElement(['Angel', 'Devil', 'God', 'Chaos'])} Beats!`,
+    () => `Charlotte -シャーロット-`,
+  ];
+
+  const template = fakerJA.helpers.arrayElement(templates);
+  return template();
+};
+
+// 6. ジャンル特化型
+const generateGenreTitle = () => {
+  const genres = [
+    // SF系
+    () => {
+      const words = ['量子', '時空', '次元', '超光速', '反物質', '特異点'];
+      const nouns = ['の扉', 'を超えて', 'の旅人', 'の彼方', 'エンジン', 'コントローラー'];
+      return `${fakerJA.helpers.arrayElement(words)}${fakerJA.helpers.arrayElement(nouns)}`;
+    },
+
+    // ホラー系
+    () => {
+      const prefixes = ['呪われた', '闇に潜む', '悪夢の', '恐怖の', '死を呼ぶ'];
+      const nouns = ['エンドロール', 'スタジオ', '制作現場', '編集室', 'スクリーン'];
+      return `${fakerJA.helpers.arrayElement(prefixes)}${fakerJA.helpers.arrayElement(nouns)}`;
+    },
+
+    // 恋愛系
+    () => {
+      const words = ['初恋', '運命の', '永遠の', '切ない', '甘い'];
+      const nouns = ['シナリオ', 'エンドロール', 'ラブストーリー', '物語', 'メモリー'];
+      return `${fakerJA.helpers.arrayElement(words)}${fakerJA.helpers.arrayElement(nouns)}`;
+    },
+    () => `君と僕の${fakerJA.helpers.arrayElement(['距離', '時間', '約束', '秘密', '物語'])}`,
+
+    // バトル系
+    () => {
+      const words = ['絶対無敵', '最強の', '伝説の', '究極の', '破壊神'];
+      const nouns = ['バトル', 'ファイター', 'ウォリアー', '戦士', '勇者'];
+      return `${fakerJA.helpers.arrayElement(words)}${fakerJA.helpers.arrayElement(nouns)}`;
+    },
+
+    // 日常系
+    () => {
+      const words = ['のんびり', 'ゆるふわ', 'まったり', 'ほのぼの'];
+      const nouns = ['日和', 'ライフ', 'デイズ', '時間', 'タイム'];
+      return `${fakerJA.helpers.arrayElement(words)}${fakerJA.helpers.arrayElement(nouns)}`;
+    },
+  ];
+
+  const genre = fakerJA.helpers.arrayElement(genres);
+  return genre();
+};
+
+// 7. シリーズもの風
+const generateSeriesTitle = () => {
+  const baseNouns = ['運命', '希望', '絆', '奇跡', '伝説', '戦記', '物語'];
+  const base = fakerJA.helpers.arrayElement(baseNouns);
+
+  const seriesFormats = [
+    `${base} 第1章`,
+    `${base} 第二部`,
+    `${base} 完結編`,
+    `劇場版 ${base}`,
+    `${base} EXTRA`,
+    `${base} 序`,
+    `${base} 破`,
+    `${base} Q`,
+    `総集編 ${base}`,
+    `新劇場版 ${base}`,
+    `${base} -Beginning-`,
+    `${base} -THE MOVIE-`,
+  ];
+
+  return fakerJA.helpers.arrayElement(seriesFormats);
+};
+
+// 従来の基本的なタイトル生成（元のロジック）
+const generateBasicTitle = () => {
   const adjectives = [
     "青い", "赤い", "白い", "黒い", "美しい", "小さな", "大きな",
     "遠い", "近い", "新しい", "古い", "優しい", "悲しい", "楽しい",
