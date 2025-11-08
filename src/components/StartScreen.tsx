@@ -3,7 +3,7 @@ interface StartScreenProps {
 }
 
 /**
- * エンドロール開始前の選択画面
+ * エンドクレジット開始前の選択画面
  * BGMありまたはミュートでの開始を選択
  */
 export function StartScreen({ onStart }: StartScreenProps) {
@@ -11,7 +11,7 @@ export function StartScreen({ onStart }: StartScreenProps) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
       {/* タイトル - 左上に目立たずに配置 */}
       <div className="absolute top-6 left-6 text-white/40 text-sm">
-        無限エンドロール
+        無限エンドクレジット
       </div>
 
       {/* 中央のアイコンボタン */}

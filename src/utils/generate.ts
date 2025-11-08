@@ -159,7 +159,7 @@ const generateLightNovelTitle = () => {
   const templates = [
     // 異世界転生系（一般的な構造）
     () => {
-      const roles = ['エンドロールスタッフ', '背景画', '効果音', 'モブキャラ', '村人A', '通行人B', '看板娘'];
+      const roles = ['エンドクレジットスタッフ', '背景画', '効果音', 'モブキャラ', '村人A', '通行人B', '看板娘'];
       const endings = ['だった件について', 'になった話', 'として生きる', 'の日々'];
       return `異世界に転生したら${fakerJA.helpers.arrayElement(roles)}${fakerJA.helpers.arrayElement(endings)}`;
     },
@@ -350,14 +350,14 @@ const generateGenreTitle = () => {
     // ホラー系
     () => {
       const prefixes = ['呪われた', '闇に潜む', '悪夢の', '恐怖の', '死を呼ぶ'];
-      const nouns = ['エンドロール', 'スタジオ', '制作現場', '編集室', 'スクリーン'];
+      const nouns = ['エンドクレジット', 'スタジオ', '制作現場', '編集室', 'スクリーン'];
       return `${fakerJA.helpers.arrayElement(prefixes)}${fakerJA.helpers.arrayElement(nouns)}`;
     },
 
     // 恋愛系
     () => {
       const words = ['初恋', '運命の', '永遠の', '切ない', '甘い'];
-      const nouns = ['シナリオ', 'エンドロール', 'ラブストーリー', '物語', 'メモリー'];
+      const nouns = ['シナリオ', 'エンドクレジット', 'ラブストーリー', '物語', 'メモリー'];
       return `${fakerJA.helpers.arrayElement(words)}${fakerJA.helpers.arrayElement(nouns)}`;
     },
     () => `君と僕の${fakerJA.helpers.arrayElement(['距離', '時間', '約束', '秘密', '物語'])}`,

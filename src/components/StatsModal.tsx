@@ -52,7 +52,7 @@ export const StatsModal = ({ isOpen, onClose, stats }: StatsModalProps) => {
               まだ統計データがありません
             </h2>
             <p className="text-gray-400 mb-6 text-sm">
-              エンドロールを鑑賞すると、ここに統計が表示されます
+              エンドクレジットを鑑賞すると、ここに統計が表示されます
             </p>
             <button
               onClick={onClose}
@@ -91,7 +91,7 @@ export const StatsModal = ({ isOpen, onClose, stats }: StatsModalProps) => {
           <h1 className="text-2xl font-bold text-white mb-1">
             鑑賞統計
           </h1>
-          <p className="text-gray-400 text-sm">あなたのエンドロール鑑賞記録</p>
+          <p className="text-gray-400 text-sm">あなたのエンドクレジット鑑賞記録</p>
         </div>
 
         <div className="p-6 pt-2">
