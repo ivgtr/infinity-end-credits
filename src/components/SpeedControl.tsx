@@ -127,59 +127,49 @@ export function SpeedControl({ onSpeedChange }: SpeedControlProps) {
       setIsDoublespeed(false);
       onSpeedChange(speed);
     } else {
-      // 倍速にする
+      // 2倍速にする（等速に対して2倍、固定）
       setIsDoublespeed(true);
-      onSpeedChange(speed * 2);
+      onSpeedChange(2);
     }
   };
 
-  const currentDisplaySpeed = isDoublespeed ? speed * 2 : speed;
+  const currentDisplaySpeed = isDoublespeed ? 2 : speed;
 
   return (
     <div className="speed-control-ui" ref={menuRef}>
       <div className="flex flex-col items-end gap-2">
         {/* 速度選択メニュー */}
         {isMenuOpen && (
-          <div className="mb-2 bg-black/90 rounded-lg shadow-xl overflow-hidden">
-            <div className="py-2">
-              {SPEED_OPTIONS.map((option) => (
-                <button
-                  key={option}
-                  onClick={() => handleSpeedSelect(option)}
-                  className={`w-full px-6 py-2 text-left text-white hover:bg-white/20 transition-colors ${
-                    option === speed && !isDoublespeed ? "bg-white/10" : ""
-                  }`}
-                >
-                  {option === 1 ? "通常" : `${option}x`}
-                  {option === speed && !isDoublespeed && (
-                    <span className="ml-2 text-sm">✓</span>
-                  )}
-                </button>
-              ))}
-            </div>
+          <div className="mb-1 bg-black/90 rounded-lg shadow-xl overflow-hidden min-w-[120px]">
+            {SPEED_OPTIONS.map((option) => (
+              <button
+                key={option}
+                onClick={() => handleSpeedSelect(option)}
+                className={`w-full px-4 py-2 text-sm text-white hover:bg-white/20 transition-colors flex items-center justify-between ${
+                  option === speed && !isDoublespeed ? "bg-white/10" : ""
+                }`}
+              >
+                <span>{option === 1 ? "標準" : `${option}`}</span>
+                {option === speed && !isDoublespeed && (
+                  <span className="text-sm">✓</span>
+                )}
+              </button>
+            ))}
           </div>
         )}
 
         {/* 速度表示UI */}
-        <div className="flex items-center gap-3 px-4 py-3 bg-black/70 rounded-full shadow-lg">
-          {/* 速度アイコン */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-white hover:text-gray-300 transition-colors"
-            aria-label="速度選択"
-          >
-            <SpeedIcon />
-          </button>
-
-          {/* 速度表示 */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-white hover:text-gray-300 transition-colors min-w-[60px] text-center font-medium"
-          >
-            {currentDisplaySpeed === 1 ? "通常" : `${currentDisplaySpeed}x`}
-            {isDoublespeed && <span className="ml-1 text-xs">⚡</span>}
-          </button>
-        </div>
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="flex items-center gap-2 px-3 py-2 bg-black/70 rounded-full shadow-lg text-white hover:bg-black/80 transition-colors"
+          aria-label="速度選択"
+        >
+          <SpeedIcon />
+          <span className="text-sm font-medium">
+            {currentDisplaySpeed === 1 ? "標準" : `${currentDisplaySpeed}x`}
+            {isDoublespeed && <span className="ml-1">⚡</span>}
+          </span>
+        </button>
       </div>
     </div>
   );
@@ -191,7 +181,7 @@ export function SpeedControl({ onSpeedChange }: SpeedControlProps) {
 function SpeedIcon() {
   return (
     <svg
-      className="w-5 h-5"
+      className="w-4 h-4"
       fill="currentColor"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"

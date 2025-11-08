@@ -105,7 +105,7 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
     <div>
       <div className="flex flex-col items-end gap-2">
         {/* 音量調整UI */}
-        <div className="flex items-center gap-3 px-4 py-3 bg-black/70 rounded-full shadow-lg">
+        <div className="flex items-center gap-3 px-3 py-2 bg-black/70 rounded-full shadow-lg">
           {/* ミュート/ミュート解除ボタン */}
           <button
             onClick={handleMuteToggle}
@@ -182,7 +182,7 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
 function VolumeOffIcon() {
   return (
     <svg
-      className="w-5 h-5"
+      className="w-4 h-4"
       fill="currentColor"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
@@ -198,7 +198,7 @@ function VolumeOffIcon() {
 function VolumeLowIcon() {
   return (
     <svg
-      className="w-5 h-5"
+      className="w-4 h-4"
       fill="currentColor"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
@@ -214,7 +214,7 @@ function VolumeLowIcon() {
 function VolumeMediumIcon() {
   return (
     <svg
-      className="w-5 h-5"
+      className="w-4 h-4"
       fill="currentColor"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
@@ -230,7 +230,7 @@ function VolumeMediumIcon() {
 function VolumeHighIcon() {
   return (
     <svg
-      className="w-5 h-5"
+      className="w-4 h-4"
       fill="currentColor"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
