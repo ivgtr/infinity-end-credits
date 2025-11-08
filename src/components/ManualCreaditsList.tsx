@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CreditsItem } from "./CreditsItem";
-import type { Credit } from "@/types/credits";
+import type { Credit, EasterEggType } from "@/types/credits";
 
 // メモリリーク防止: useCreditsフックで最大30作品に制限されているため、
 // このコンポーネントではDOMノード数も自動的に制限される
@@ -12,6 +12,7 @@ export const ManualCreditsList = ({
   onScrollDistanceChange,
   onCreditViewed,
   onWorkCompleted,
+  onEasterEggClick,
 }: {
   titles: string[];
   credits: {
@@ -21,6 +22,7 @@ export const ManualCreditsList = ({
   onScrollDistanceChange?: (distance: number) => void;
   onCreditViewed: (credit: Credit) => void;
   onWorkCompleted: (workTitle: string) => void;
+  onEasterEggClick?: (type: EasterEggType, creditId: number) => void;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const lastScrollPositionRef = useRef<number>(0);
@@ -57,6 +59,7 @@ export const ManualCreditsList = ({
               credits={credits}
               onCreditViewed={onCreditViewed}
               onWorkCompleted={onWorkCompleted}
+              onEasterEggClick={onEasterEggClick}
             />
           ))}
         </div>

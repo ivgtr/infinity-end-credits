@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { CreditsTitle } from "./CreaditsTitle";
 import { CreditsRoleItem } from "./CreditsRoleItem";
-import type { Credit } from "@/types/credits";
+import type { Credit, EasterEggType } from "@/types/credits";
 
 // React.memoで最適化: titleとcredits[title]が変わらない限り再レンダリングしない
 export const CreditsItem = memo(({
@@ -9,6 +9,7 @@ export const CreditsItem = memo(({
   credits,
   onCreditViewed,
   onWorkCompleted,
+  onEasterEggClick,
 }: {
   title: string;
   credits: {
@@ -16,6 +17,7 @@ export const CreditsItem = memo(({
   };
   onCreditViewed: (credit: Credit) => void;
   onWorkCompleted: (workTitle: string) => void;
+  onEasterEggClick?: (type: EasterEggType, creditId: number) => void;
 }) => {
   const workCredits = credits[title];
   const lastIndex = workCredits.length - 1;
@@ -32,6 +34,7 @@ export const CreditsItem = memo(({
             workTitle={title}
             onViewed={onCreditViewed}
             onWorkCompleted={onWorkCompleted}
+            onEasterEggClick={onEasterEggClick}
           />
         ))}
       </div>

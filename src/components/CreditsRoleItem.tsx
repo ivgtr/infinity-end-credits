@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { CreditsRole } from "./CreditsRole";
 import type { Credit, EasterEggType } from "@/types/credits";
 import { playEasterEggSound } from "@/utils/sound";
@@ -9,6 +9,7 @@ interface CreditsRoleItemProps {
   workTitle: string;
   onViewed: (credit: Credit) => void;
   onWorkCompleted: (workTitle: string) => void;
+  onEasterEggClick?: (type: EasterEggType, creditId: number) => void;
 }
 
 // イースターエッグのスタイルを取得
@@ -85,9 +86,12 @@ export const CreditsRoleItem = ({
   workTitle,
   onViewed,
   onWorkCompleted,
+  onEasterEggClick,
 }: CreditsRoleItemProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const hasBeenViewedRef = useRef(false);
+  const [isClicked, setIsClicked] = useState(false);
+  const [showClickEffect, setShowClickEffect] = useState(false);
 
   useEffect(() => {
     const element = ref.current;
@@ -101,11 +105,6 @@ export const CreditsRoleItem = ({
           if (entry.isIntersecting && !hasBeenViewedRef.current) {
             hasBeenViewedRef.current = true;
             onViewed(credit);
-
-            // イースターエッグの場合は効果音を再生
-            if (credit.easterEgg) {
-              playEasterEggSound(credit.easterEgg);
-            }
 
             // 最後のクレジットの場合、作品完了を通知
             if (isLast) {
@@ -126,11 +125,52 @@ export const CreditsRoleItem = ({
     };
   }, [credit, isLast, workTitle, onViewed, onWorkCompleted]);
 
+  // イースターエッグのクリックハンドラー
+  const handleEasterEggClick = useCallback(() => {
+    if (!credit.easterEgg || isClicked) return;
+
+    setIsClicked(true);
+    setShowClickEffect(true);
+
+    // 効果音を再生
+    playEasterEggSound(credit.easterEgg);
+
+    // コールバックを実行
+    if (onEasterEggClick) {
+      onEasterEggClick(credit.easterEgg, credit.id);
+    }
+
+    // クリックエフェクトを800ms後に非表示
+    setTimeout(() => {
+      setShowClickEffect(false);
+    }, 800);
+  }, [credit.easterEgg, credit.id, isClicked, onEasterEggClick]);
+
   const easterEggStyle = getEasterEggStyle(credit.easterEgg);
+
+  // イースターエッグのラッパースタイル
+  const wrapperClassName = credit.easterEgg
+    ? `relative ${isClicked ? "opacity-60" : ""} ${showClickEffect ? "animate-click-pulse" : ""}`
+    : "";
+
+  const clickableStyle = credit.easterEgg && !isClicked
+    ? "cursor-pointer hover:scale-105 transition-transform duration-200"
+    : "";
 
   return (
     <div ref={ref} className="flex flex-col items-center justify-center w-full">
-      <CreditsRole className={credit.easterEgg ? easterEggStyle : ""}>{credit.role}</CreditsRole>
+      {/* クリックエフェクト（スパークル） */}
+      {showClickEffect && credit.easterEgg && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+          <div className="w-20 h-20 rounded-full bg-white opacity-30 animate-sparkle" />
+        </div>
+      )}
+
+      <div
+        className={`${wrapperClassName} ${clickableStyle}`}
+        onClick={credit.easterEgg && !isClicked ? handleEasterEggClick : undefined}
+      >
+        <CreditsRole className={credit.easterEgg ? easterEggStyle : ""}>{credit.role}</CreditsRole>
 
       {isCooperationRole(credit.role) ? (
         // 協力会社セクション：会社名とスタッフを縦1列で表示
@@ -174,6 +214,7 @@ export const CreditsRoleItem = ({
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 };
