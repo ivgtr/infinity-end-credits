@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { CreditsItem } from "./CreditsItem";
-import { SwipeActionObserver } from "./SwipeActionObserver";
-import { MouseActionObserver } from "./MouseActionObserver";
 
 export const CreditsList = ({
   titles,
   credits,
   addWork,
+  speed,
 }: {
   titles: string[];
   credits: {
@@ -16,10 +15,10 @@ export const CreditsList = ({
     }[];
   };
   addWork: () => void;
+  speed: number;
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [speed, setSpeed] = useState(1);
   const movingRef = useRef<number>(0);
   const requestAnimationFrameRef = useRef<number>(0);
   const prevTitlesLengthRef = useRef<number>(0);
@@ -72,28 +71,16 @@ export const CreditsList = ({
     }
   }, [speed]);
 
-  const handleSpeedUp = useCallback(() => {
-    setSpeed((prev) => prev + 0.3);
-  }, []);
-
-  const handleSpeedDown = useCallback(() => {
-    setSpeed((prev) => Math.max(0.1, prev - 0.3));
-  }, []);
-
   return (
-    <>
-      <div ref={scrollRef} className="flex flex-col items-center justify-center" style={{ willChange: 'transform' }}>
-        <div ref={containerRef} className="flex flex-col items-center justify-center">
-          {titles.map((title) => (
-            <CreditsItem key={title} title={title} credits={credits} />
-          ))}
-        </div>
-        <div className="flex flex-col items-center justify-center w-full min-h-screen h-full">
-          <h2 className="text-6xl font-bold">Thank you for watching!</h2>
-        </div>
+    <div ref={scrollRef} className="flex flex-col items-center justify-center" style={{ willChange: 'transform' }}>
+      <div ref={containerRef} className="flex flex-col items-center justify-center">
+        {titles.map((title) => (
+          <CreditsItem key={title} title={title} credits={credits} />
+        ))}
       </div>
-      <SwipeActionObserver onSwipedUp={handleSpeedUp} onSwipedDown={handleSpeedDown} />
-      <MouseActionObserver onWheelUp={handleSpeedUp} onWheelDown={handleSpeedDown} />
-    </>
+      <div className="flex flex-col items-center justify-center w-full min-h-screen h-full">
+        <h2 className="text-6xl font-bold">Thank you for watching!</h2>
+      </div>
+    </div>
   );
 };

@@ -91,12 +91,6 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
       // 入力フィールドなどでキーを押した場合は無視
       if (e.target !== document.body) return;
 
-      // スペースキー: ミュート/ミュート解除
-      if (e.code === "Space") {
-        e.preventDefault();
-        handleMuteToggle();
-      }
-
       // Hキー: UI表示/非表示
       if (e.code === "KeyH") {
         e.preventDefault();
@@ -106,7 +100,7 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [volume]);
+  }, []);
 
   // UI非表示時は何も表示しない
   if (!showUI) {
@@ -164,7 +158,7 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
 
         {/* ヒントテキスト */}
         <div className="text-xs text-white/60 text-center">
-          Space: ミュート切替 / H: UI非表示
+          H: UI非表示
         </div>
       </div>
 
