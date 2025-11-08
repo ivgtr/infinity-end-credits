@@ -24,6 +24,17 @@ export const StarfieldBackground = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
   const animationFrameRef = useRef<number>(0);
+  const speedRef = useRef<number>(speed);
+  const colorThemeRef = useRef(colorTheme);
+
+  // speedとcolorThemeの最新値をrefに保存（再レンダリングを防ぐ）
+  useEffect(() => {
+    speedRef.current = speed;
+  }, [speed]);
+
+  useEffect(() => {
+    colorThemeRef.current = colorTheme;
+  }, [colorTheme]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -65,19 +76,19 @@ export const StarfieldBackground = ({
     const animate = () => {
       if (!ctx || !canvas) return;
 
-      // グラデーション背景を描画
+      // グラデーション背景を描画（最新のcolorThemeを使用）
       const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, colorTheme.primary);
+      gradient.addColorStop(0, colorThemeRef.current.primary);
       gradient.addColorStop(0.5, "#000000");
-      gradient.addColorStop(1, colorTheme.secondary);
+      gradient.addColorStop(1, colorThemeRef.current.secondary);
 
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 星を描画
+      // 星を描画（最新のspeedを使用）
       starsRef.current.forEach((star) => {
         // 星の位置を更新（上に移動）
-        star.y -= star.speed * speed;
+        star.y -= star.speed * speedRef.current;
 
         // 画面外に出たら下に戻す
         if (star.y < -10) {
@@ -116,7 +127,7 @@ export const StarfieldBackground = ({
       window.removeEventListener("resize", resizeCanvas);
       cancelAnimationFrame(animationFrameRef.current);
     };
-  }, [speed, colorTheme]);
+  }, []); // 依存配列を空にして初回のみ実行
 
   // 流れ星を描画
   const drawShootingStar = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
