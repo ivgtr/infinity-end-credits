@@ -46,18 +46,16 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
     <div className="min-h-screen h-full w-full overflow-hidden">
       {titles.length > 0 && <CreditsList titles={titles} credits={credits} addWork={addWork} speed={speed} />}
 
-      {/* 右下のコントロールUIを縦並びに配置 */}
-      {showUI && (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 controls-ui">
-          <SpeedControl onSpeedChange={handleSpeedChange} />
-          <BackgroundMusicPlayer autoPlay={autoPlayMusic} />
-
-          {/* ヒントテキスト */}
+      {/* 右下のコントロールUIを縦並びに配置（音楽は常に再生） */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 controls-ui">
+        {showUI && <SpeedControl onSpeedChange={handleSpeedChange} />}
+        <BackgroundMusicPlayer autoPlay={autoPlayMusic} showUI={showUI} />
+        {showUI && (
           <div className="text-xs text-white/60 text-center">
             Space/長押し: 倍速切替 / M: ミュート / H: UI非表示
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
