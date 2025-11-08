@@ -68,17 +68,19 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
         />
       )}
 
-      {/* クレジットリスト（タイトル画面完了後に表示） */}
-      {!showTitleScreen && titles.length > 0 && (
-        <CreditsList
-          titles={titles}
-          credits={credits}
-          addWork={addWork}
-          speed={speed}
-          onScrollDistanceChange={trackScroll}
-          onCreditViewed={trackCreditViewed}
-          onWorkCompleted={trackWorkCompleted}
-        />
+      {/* クレジットリスト（タイトル画面表示中も常にレンダリングするが、非表示） */}
+      {titles.length > 0 && (
+        <div className={showTitleScreen ? "invisible" : "visible"}>
+          <CreditsList
+            titles={titles}
+            credits={credits}
+            addWork={addWork}
+            speed={speed}
+            onScrollDistanceChange={trackScroll}
+            onCreditViewed={trackCreditViewed}
+            onWorkCompleted={trackWorkCompleted}
+          />
+        </div>
       )}
 
       {/* 右下のコントロールUIを縦並びに配置（音楽は常に再生） */}

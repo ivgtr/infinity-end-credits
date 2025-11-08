@@ -39,16 +39,18 @@ export const ManualCreditsCanvas = () => {
         />
       )}
 
-      {/* クレジットリスト（タイトル画面完了後に表示） */}
-      {!showTitleScreen && titles.length > 0 && (
-        <ManualCreditsList
-          titles={titles}
-          credits={credits}
-          addWork={addWork}
-          onScrollDistanceChange={trackScroll}
-          onCreditViewed={trackCreditViewed}
-          onWorkCompleted={trackWorkCompleted}
-        />
+      {/* クレジットリスト（タイトル画面表示中も常にレンダリングするが、非表示） */}
+      {titles.length > 0 && (
+        <div className={showTitleScreen ? "invisible" : "visible"}>
+          <ManualCreditsList
+            titles={titles}
+            credits={credits}
+            addWork={addWork}
+            onScrollDistanceChange={trackScroll}
+            onCreditViewed={trackCreditViewed}
+            onWorkCompleted={trackWorkCompleted}
+          />
+        </div>
       )}
 
       {/* 統計ボタン */}
