@@ -27,6 +27,11 @@ const getEasterEggStyle = (easterEgg?: EasterEggType) => {
   }
 };
 
+// テキストグローのスタイル定義
+const textGlowStyle = {
+  textShadow: "0 0 10px rgba(255, 255, 255, 0.3), 0 0 20px rgba(255, 255, 255, 0.2)"
+};
+
 // 協力会社セクションかどうかを判定
 const isCooperationRole = (roleName: string) => {
   return roleName.includes("協力") || roleName === "製作" || roleName === "制作協力";
@@ -60,10 +65,10 @@ const renderCooperationSection = (names: string[]) => {
     <div className="flex flex-col items-center justify-center gap-8 w-full">
       {groups.map((group, groupIndex) => (
         <div key={groupIndex} className="flex flex-col items-center justify-center gap-3">
-          <p className="text-lg font-semibold">{group.company}</p>
+          <p className="text-lg font-semibold" style={textGlowStyle}>{group.company}</p>
           <div className="flex flex-col items-center justify-center gap-1.5">
             {group.staff.map((staff, staffIndex) => (
-              <p className="text-sm" key={staffIndex}>
+              <p className="text-sm" key={staffIndex} style={textGlowStyle}>
                 {staff}
               </p>
             ))}
@@ -136,7 +141,7 @@ export const CreditsRoleItem = ({
         // 超大規模スタッフ（40人以上）：2列表示でより縦長に
         <div className="grid grid-cols-2 gap-x-12 gap-y-2.5 text-center mt-6">
           {credit.names.map((name, nameIndex) => (
-            <p className={`text-base ${easterEggStyle}`} key={nameIndex}>
+            <p className={`text-base ${easterEggStyle}`} key={nameIndex} style={textGlowStyle}>
               {name}
             </p>
           ))}
@@ -145,7 +150,7 @@ export const CreditsRoleItem = ({
         // 大規模スタッフ（15-40人）：2列表示
         <div className="grid grid-cols-2 gap-x-12 gap-y-2.5 text-center mt-6">
           {credit.names.map((name, nameIndex) => (
-            <p className={`text-base ${easterEggStyle}`} key={nameIndex}>
+            <p className={`text-base ${easterEggStyle}`} key={nameIndex} style={textGlowStyle}>
               {name}
             </p>
           ))}
@@ -154,7 +159,7 @@ export const CreditsRoleItem = ({
         // 中規模スタッフ（6-15人）：1列表示
         <div className="flex flex-col items-center justify-center gap-2.5 mt-6">
           {credit.names.map((name, nameIndex) => (
-            <p className={`text-base ${easterEggStyle}`} key={nameIndex}>
+            <p className={`text-base ${easterEggStyle}`} key={nameIndex} style={textGlowStyle}>
               {name}
             </p>
           ))}
@@ -163,7 +168,7 @@ export const CreditsRoleItem = ({
         // 小規模スタッフ（5人以下）：1列表示
         <div className="flex flex-col items-center justify-center gap-3 mt-6">
           {credit.names.map((name, nameIndex) => (
-            <p className={`text-base ${easterEggStyle}`} key={nameIndex}>
+            <p className={`text-base ${easterEggStyle}`} key={nameIndex} style={textGlowStyle}>
               {name}
             </p>
           ))}

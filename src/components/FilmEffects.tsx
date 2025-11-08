@@ -83,6 +83,24 @@ export const FilmEffects = () => {
           opacity: 0.3,
         }}
       />
+
+      {/* スキャンライン（走査線）効果 */}
+      <div
+        className="fixed inset-0 w-full h-full pointer-events-none"
+        style={{
+          zIndex: 13,
+          background: `
+            repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 2px,
+              rgba(0, 0, 0, 0.1) 2px,
+              rgba(0, 0, 0, 0.1) 4px
+            )
+          `,
+          opacity: 0.4,
+        }}
+      />
     </>
   );
 };

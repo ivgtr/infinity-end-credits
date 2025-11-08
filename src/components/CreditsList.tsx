@@ -99,7 +99,14 @@ export const CreditsList = ({
         ))}
       </div>
       <div className="flex flex-col items-center justify-center w-full min-h-screen h-full">
-        <h2 className="text-6xl font-bold">Thank you for watching!</h2>
+        <h2
+          className="text-6xl font-bold"
+          style={{
+            textShadow: "0 0 10px rgba(255, 255, 255, 0.3), 0 0 20px rgba(255, 255, 255, 0.2)"
+          }}
+        >
+          Thank you for watching!
+        </h2>
       </div>
     </div>
   );
