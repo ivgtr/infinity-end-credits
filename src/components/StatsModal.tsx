@@ -170,7 +170,7 @@ export const StatsModal = ({ isOpen, onClose, stats, easterEggStats, onResetEast
                 setShowEasterEggs(false);
                 setShowResetConfirm(false);
               }}
-              className="absolute top-4 left-4 text-white/60 hover:text-white transition-colors flex items-center gap-2"
+              className="absolute top-5 left-4 text-white/60 hover:text-white transition-colors flex items-center gap-2"
               aria-label="戻る"
             >
               <svg
@@ -197,12 +197,14 @@ export const StatsModal = ({ isOpen, onClose, stats, easterEggStats, onResetEast
             ×
           </button>
 
-          <h1 className="text-2xl font-bold text-white mb-1">
-            {showEasterEggs ? "イースターエッグ統計" : "鑑賞統計"}
-          </h1>
-          <p className="text-gray-400 text-sm">
-            {showEasterEggs ? "発見したイースターエッグの記録" : "あなたのエンドクレジット鑑賞記録"}
-          </p>
+          <div className={showEasterEggs ? "pl-8" : ""}>
+            <h1 className="text-2xl font-bold text-white mb-1">
+              {showEasterEggs ? "イースターエッグ統計" : "鑑賞統計"}
+            </h1>
+            <p className="text-gray-400 text-sm">
+              {showEasterEggs ? "発見したイースターエッグの記録" : "あなたのエンドクレジット鑑賞記録"}
+            </p>
+          </div>
         </div>
 
         <div className="p-6 pt-2">
@@ -314,16 +316,16 @@ export const StatsModal = ({ isOpen, onClose, stats, easterEggStats, onResetEast
 
           {/* イースターエッグ統計へのボタン */}
           {easterEggStats && (
-            <div className="mt-5">
+            <div className="mt-5 flex justify-center">
               <button
                 onClick={() => setShowEasterEggs(true)}
-                className="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg transition-colors flex items-center justify-center gap-2"
+                className="relative w-14 h-14 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-full transition-colors flex items-center justify-center"
+                aria-label="イースターエッグ統計を見る"
               >
-                <span className="text-xl">🥚</span>
-                <span className="text-sm">イースターエッグ統計を見る</span>
+                <span className="text-2xl">🥚</span>
                 {easterEggStats.totalClicks > 0 && (
-                  <span className="bg-white/90 text-black text-xs rounded-full px-2 py-0.5 font-bold ml-1">
-                    {easterEggStats.totalClicks}
+                  <span className="absolute -top-1 -right-1 bg-white/90 text-black text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold">
+                    {easterEggStats.totalClicks > 99 ? "99+" : easterEggStats.totalClicks}
                   </span>
                 )}
               </button>
