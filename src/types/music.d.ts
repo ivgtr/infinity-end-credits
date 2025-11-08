@@ -115,7 +115,7 @@ export interface MusicSection {
 /**
  * 音楽スタイル
  */
-export type MusicStyleType = 'grand' | 'monotonous' | 'bright' | 'dark' | 'ambient' | 'jazzy' | 'retro' | 'electronic';
+export type MusicStyleType = 'grand' | 'monotonous' | 'bright' | 'dark' | 'ambient' | 'jazzy' | 'retro' | 'electronic' | 'orchestral' | 'ethnic' | 'lofi';
 
 /**
  * 音色パラメータ
@@ -161,4 +161,6 @@ export interface MusicStyle {
   drumPatterns: DrumPattern[];
   /** スタイルの持続時間範囲（秒） */
   durationRange: [number, number];
+  /** 推奨スケール/モード（スケールベースのメロディー生成に使用） */
+  scales: string[];
 }
