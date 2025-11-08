@@ -25,9 +25,12 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
       const vol = parseFloat(savedVolume);
       setVolumeState(vol);
       setVolume(vol);
-      // ミュート以外の音量を記憶
+      // ミュート状態でも、デフォルト音量をpreviousVolumeに設定
       if (vol > 0) {
         setPreviousVolume(vol);
+      } else {
+        // 音量0の場合、previousVolumeにデフォルト値を設定
+        setPreviousVolume(DEFAULT_VOLUME);
       }
     } else {
       setVolume(DEFAULT_VOLUME);
@@ -45,9 +48,11 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
         const savedVolume = localStorage.getItem(VOLUME_STORAGE_KEY);
         const vol = savedVolume ? parseFloat(savedVolume) : DEFAULT_VOLUME;
         setVolume(vol);
-        // ミュート以外の音量を記憶
+        // previousVolumeの設定を改善
         if (vol > 0) {
           setPreviousVolume(vol);
+        } else {
+          setPreviousVolume(DEFAULT_VOLUME);
         }
       };
 

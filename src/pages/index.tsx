@@ -8,7 +8,12 @@ export default function Home() {
   const [autoPlayMusic, setAutoPlayMusic] = useState(false);
 
   const handleStart = (withMusic: boolean) => {
-    setAutoPlayMusic(withMusic);
+    if (!withMusic) {
+      // ミュート設定: 音量0をlocalStorageに保存
+      localStorage.setItem('bgm-volume', '0');
+    }
+    // 常にautoPlay=trueで音声を開始（音量は0または設定値）
+    setAutoPlayMusic(true);
     setStarted(true);
   };
 

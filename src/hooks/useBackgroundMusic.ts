@@ -58,6 +58,9 @@ export function useBackgroundMusic() {
       return;
     }
 
+    // フェードゲインを0にリセット（再生開始時は無音から開始）
+    engineRef.current.resetFade(0);
+
     engineRef.current.start();
     setIsPlaying(true);
 
