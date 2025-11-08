@@ -4,6 +4,7 @@ import { useCredits } from "@/hooks/useCredits";
 import { useViewingStats } from "@/hooks/useViewingStats";
 import { SpeedControl } from "./SpeedControl";
 import { BackgroundMusicPlayer } from "./BackgroundMusicPlayer";
+import { StatsModal } from "./StatsModal";
 
 interface CreditsCanvasProps {
   autoPlayMusic?: boolean;
@@ -11,9 +12,10 @@ interface CreditsCanvasProps {
 
 export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => {
   const { titles, credits, addRandomWork } = useCredits();
-  const { trackScroll } = useViewingStats(titles, credits);
+  const { stats, trackScroll } = useViewingStats(titles, credits);
   const [speed, setSpeed] = useState(1);
   const [showUI, setShowUI] = useState(true);
+  const [showStatsModal, setShowStatsModal] = useState(false);
 
   const addWork = useCallback(() => {
     addRandomWork();
@@ -83,18 +85,25 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
           >
             👁
           </button>
-          <a
-            href="/d"
+          <button
+            onClick={() => setShowStatsModal(true)}
             className="px-3 py-2 bg-purple-600/70 rounded-full shadow-lg text-white hover:bg-purple-700/80 transition-colors flex items-center justify-center text-sm font-semibold"
             title="統計ダッシュボード"
           >
             📊 統計
-          </a>
+          </button>
           <div className="text-xs text-white/60 text-center">
             Space/長押し: 倍速切替 / M: ミュート / H: UI非表示
           </div>
         </div>
       </div>
+
+      {/* 統計モーダル */}
+      <StatsModal
+        isOpen={showStatsModal}
+        onClose={() => setShowStatsModal(false)}
+        stats={stats}
+      />
     </div>
   );
 };

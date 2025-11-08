@@ -1,7 +1,7 @@
 export type ViewingStats = {
   // 総作品数
   totalWorks: number;
-  // 総スタッフ数（生成された架空の人数）
+  // 延べスタッフ数（鑑賞したクレジットに登場した全スタッフの累積人数）
   totalStaff: number;
   // 総スクロール距離（ピクセル単位で保存、表示時にkmに変換）
   totalScrollDistance: number;

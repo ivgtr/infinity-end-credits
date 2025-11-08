@@ -116,13 +116,13 @@ export const generateFunMessages = (stats: ViewingStats): string[] => {
     );
   }
 
-  // スタッフ数
+  // 延べスタッフ数
   if (stats.totalStaff >= 10000) {
     messages.push(
-      `${(stats.totalStaff / 10000).toFixed(1)}万人分の架空のスタッフを生み出しました！`
+      `延べ${(stats.totalStaff / 10000).toFixed(1)}万人分のスタッフ名を読みました！`
     );
   } else if (stats.totalStaff >= 1000) {
-    messages.push(`${stats.totalStaff.toLocaleString()}人分の架空のスタッフを生み出しました！`);
+    messages.push(`延べ${stats.totalStaff.toLocaleString()}人分のスタッフ名を読みました！`);
   }
 
   // 作品数
