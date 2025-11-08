@@ -114,7 +114,7 @@ export function BackgroundMusicPlayer({ autoPlay = false }: BackgroundMusicPlaye
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div>
       <div className="flex flex-col items-end gap-2">
         {/* 音量調整UI */}
         <div className="flex items-center gap-3 px-4 py-3 bg-black/70 rounded-full shadow-lg">

@@ -148,7 +148,7 @@ export function SpeedControl({ onSpeedChange }: SpeedControlProps) {
   const currentDisplaySpeed = isDoublespeed ? speed * 2 : speed;
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 speed-control-ui" ref={menuRef}>
+    <div className="speed-control-ui" ref={menuRef}>
       <div className="flex flex-col items-end gap-2">
         {/* 速度選択メニュー */}
         {isMenuOpen && (

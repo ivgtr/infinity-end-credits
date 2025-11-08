@@ -1,5 +1,4 @@
 import { CreditsCanvas } from "@/components/CreaditsCanvas";
-import { BackgroundMusicPlayer } from "@/components/BackgroundMusicPlayer";
 import { StartScreen } from "@/components/StartScreen";
 import Head from "next/head";
 import { useState } from "react";
@@ -22,10 +21,7 @@ export default function Home() {
       {!started && <StartScreen onStart={handleStart} />}
 
       {started && (
-        <>
-          <CreditsCanvas />
-          <BackgroundMusicPlayer autoPlay={autoPlayMusic} />
-        </>
+        <CreditsCanvas autoPlayMusic={autoPlayMusic} />
       )}
     </>
   );
