@@ -115,7 +115,7 @@ export interface MusicSection {
 /**
  * 音楽スタイル
  */
-export type MusicStyleType = 'grand' | 'monotonous' | 'bright' | 'dark' | 'ambient' | 'jazzy' | 'retro' | 'electronic';
+export type MusicStyleType = 'grand' | 'monotonous' | 'bright' | 'dark' | 'ambient' | 'jazzy' | 'retro' | 'electronic' | 'orchestral' | 'ethnic' | 'lofi';
 
 /**
  * 音色パラメータ
