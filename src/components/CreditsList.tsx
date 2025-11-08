@@ -1,21 +1,25 @@
 import { useEffect, useRef } from "react";
 import { CreditsItem } from "./CreditsItem";
+import type { Credit } from "@/types/credits";
 
 export const CreditsList = ({
   titles,
   credits,
   addWork,
   speed,
+  onScrollDistanceChange,
+  onCreditViewed,
+  onWorkCompleted,
 }: {
   titles: string[];
   credits: {
-    [key: string]: {
-      role: string;
-      names: string[];
-    }[];
+    [key: string]: Credit[];
   };
   addWork: () => void;
   speed: number;
+  onScrollDistanceChange?: (distance: number) => void;
+  onCreditViewed: (credit: Credit) => void;
+  onWorkCompleted: (workTitle: string) => void;
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -23,6 +27,7 @@ export const CreditsList = ({
   const requestAnimationFrameRef = useRef<number>(0);
   const prevTitlesLengthRef = useRef<number>(0);
   const addWorkRef = useRef(addWork);
+  const lastScrollPositionRef = useRef<number>(0);
 
   // addWorkの参照を常に最新に保つ
   useEffect(() => {
@@ -60,6 +65,15 @@ export const CreditsList = ({
           return;
         }
         scroll.style.transform = `translateY(${movingRef.current}px)`;
+
+        // スクロール距離を追跡（絶対値で計算）
+        const currentPosition = Math.abs(movingRef.current);
+        const scrollDelta = currentPosition - lastScrollPositionRef.current;
+        if (scrollDelta > 0 && onScrollDistanceChange) {
+          onScrollDistanceChange(scrollDelta);
+        }
+        lastScrollPositionRef.current = currentPosition;
+
         movingRef.current -= speed;
         requestAnimationFrameRef.current = requestAnimationFrame(loop);
       };
@@ -69,13 +83,19 @@ export const CreditsList = ({
         cancelAnimationFrame(requestAnimationFrameRef.current);
       };
     }
-  }, [speed]);
+  }, [speed, onScrollDistanceChange]);
 
   return (
     <div ref={scrollRef} className="flex flex-col items-center justify-center" style={{ willChange: 'transform' }}>
       <div ref={containerRef} className="flex flex-col items-center justify-center">
         {titles.map((title) => (
-          <CreditsItem key={title} title={title} credits={credits} />
+          <CreditsItem
+            key={title}
+            title={title}
+            credits={credits}
+            onCreditViewed={onCreditViewed}
+            onWorkCompleted={onWorkCompleted}
+          />
         ))}
       </div>
       <div className="flex flex-col items-center justify-center w-full min-h-screen h-full">

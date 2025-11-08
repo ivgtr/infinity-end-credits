@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { CreditsList } from "./CreditsList";
 import { useCredits } from "@/hooks/useCredits";
+import { useViewingStats } from "@/hooks/useViewingStats";
 import { SpeedControl } from "./SpeedControl";
 import { BackgroundMusicPlayer } from "./BackgroundMusicPlayer";
+import { StatsModal } from "./StatsModal";
 
 interface CreditsCanvasProps {
   autoPlayMusic?: boolean;
@@ -10,8 +12,10 @@ interface CreditsCanvasProps {
 
 export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => {
   const { titles, credits, addRandomWork } = useCredits();
+  const { stats, trackScroll, trackCreditViewed, trackWorkCompleted } = useViewingStats();
   const [speed, setSpeed] = useState(1);
   const [showUI, setShowUI] = useState(true);
+  const [showStatsModal, setShowStatsModal] = useState(false);
 
   const addWork = useCallback(() => {
     addRandomWork();
@@ -44,7 +48,17 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
 
   return (
     <div className="min-h-screen h-full w-full overflow-hidden">
-      {titles.length > 0 && <CreditsList titles={titles} credits={credits} addWork={addWork} speed={speed} />}
+      {titles.length > 0 && (
+        <CreditsList
+          titles={titles}
+          credits={credits}
+          addWork={addWork}
+          speed={speed}
+          onScrollDistanceChange={trackScroll}
+          onCreditViewed={trackCreditViewed}
+          onWorkCompleted={trackWorkCompleted}
+        />
+      )}
 
       {/* 右下のコントロールUIを縦並びに配置（音楽は常に再生） */}
       <div className="fixed bottom-6 right-6 z-50">
@@ -63,8 +77,6 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
             />
           )}
 
-          <SpeedControl onSpeedChange={handleSpeedChange} />
-          <BackgroundMusicPlayer autoPlay={autoPlayMusic} />
           <button
             onClick={() => setShowUI(false)}
             className="px-3 py-2 bg-black/70 rounded-full shadow-lg text-white hover:bg-black/80 transition-colors flex items-center justify-center"
@@ -73,11 +85,35 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
           >
             👁
           </button>
+          <SpeedControl onSpeedChange={handleSpeedChange} />
+          <BackgroundMusicPlayer autoPlay={autoPlayMusic} />
+          <button
+            onClick={() => setShowStatsModal(true)}
+            className="px-3 py-2 bg-black/70 rounded-full shadow-lg text-white hover:bg-black/80 transition-colors flex items-center gap-2"
+            title="統計"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M3 13h2v8H3v-8zm4-8h2v16H7V5zm4 3h2v13h-2V8zm4-2h2v15h-2V6zm4 4h2v11h-2V10z" />
+            </svg>
+            <span className="text-sm">統計</span>
+          </button>
           <div className="text-xs text-white/60 text-center">
             Space/長押し: 倍速切替 / M: ミュート / H: UI非表示
           </div>
         </div>
       </div>
+
+      {/* 統計モーダル */}
+      <StatsModal
+        isOpen={showStatsModal}
+        onClose={() => setShowStatsModal(false)}
+        stats={stats}
+      />
     </div>
   );
 };
