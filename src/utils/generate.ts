@@ -54,48 +54,104 @@ export const generateTitle = () => {
   return generator();
 };
 
-// 1. パロディタイトル（実在作品のパロディ）
+// 1. パロディタイトル（構造のみをパロディ、固有名詞は架空）
 const generateParodyTitle = () => {
-  const parodies = [
-    // 新海誠作品パロディ
-    "君の猫は。",
-    "君の犬は。",
-    "君の隣人は。",
-    "天気の子犬",
-    "天気の娘",
-    "天気のおじさん",
-    "言の葉の園",
-    "秒速5メートルくらい",
+  // 「君の○○は。」パターン
+  const kimiNoPattern = () => {
+    const nouns = ['猫', '犬', '隣人', '上司', '先生', '友達', '兄弟', '恋人'];
+    return `君の${fakerJA.helpers.arrayElement(nouns)}は。`;
+  };
 
-    // ジブリ作品パロディ
-    "千と千尋の神隠れんぼ",
-    "千と千尋の鬼ごっこ",
-    "となりのトトロール",
-    "もののけ姫君",
-    "崖の上のポチョ",
-    "崖の下のポニョ",
-    "魔女の宅急便屋",
-    "耳をすませば〜",
-    "猫の恩返しができない",
-    "ハウルの動く家具",
+  // 「天気の○○」パターン
+  const tenkiNoPattern = () => {
+    const nouns = ['子犬', '娘', 'おじさん', '少年', '姫', '王子'];
+    return `天気の${fakerJA.helpers.arrayElement(nouns)}`;
+  };
 
-    // エヴァパロディ
-    "新世紀エヴァンゲリコン",
-    "シン・エヴァンゲリオン劇場版：│",
-    "ヱヴァンゲリヲン新劇場版：Q&A",
+  // 「千と○○の××」パターン
+  const senToPattern = () => {
+    const names = ['百', '万', '億', '零', '無限'];
+    const actions = ['神隠れんぼ', '鬼ごっこ', 'かくれんぼ', '追いかけっこ'];
+    return `千と${fakerJA.helpers.arrayElement(names)}の${fakerJA.helpers.arrayElement(actions)}`;
+  };
 
-    // その他人気作品
-    "鬼滅の刃物",
-    "呪術廻戦記",
-    "進撃の巨人族",
-    "ワンピース・オブ・ケーキ",
-    "SLAM DUNK!!",
-    "ドラゴンボール型",
-    "名探偵コナン君",
-    "僕のヒーローアカデミー賞",
+  // 「となりの○○」パターン
+  const tonariNoPattern = () => {
+    const characters = ['トトロール', '山田さん', '佐藤くん', 'タロウ', 'ハナコ'];
+    return `となりの${fakerJA.helpers.arrayElement(characters)}`;
+  };
+
+  // 「○○の上/下の××」パターン
+  const gakePattern = () => {
+    const locations = ['崖', '山', '橋', '塔', '雲'];
+    const directions = ['上', '下'];
+    const names = ['ポチョ', 'ニャンコ', 'タマ', 'コロ', 'シロ'];
+    return `${fakerJA.helpers.arrayElement(locations)}の${fakerJA.helpers.arrayElement(directions)}の${fakerJA.helpers.arrayElement(names)}`;
+  };
+
+  // 「○○の××」パターン（職業＋場所）
+  const shokunouPattern = () => {
+    const jobs = ['魔女', '魔法使い', '勇者', '騎士', '忍者'];
+    const places = ['宅急便屋', '配達屋', '診療所', '工房', '道場'];
+    return `${fakerJA.helpers.arrayElement(jobs)}の${fakerJA.helpers.arrayElement(places)}`;
+  };
+
+  // 「××を/のすませば」パターン
+  const subasebaPattern = () => {
+    const objects = ['耳', '目', '心', '声', '手'];
+    return `${fakerJA.helpers.arrayElement(objects)}をすませば〜`;
+  };
+
+  // 「○○の恩返し××」パターン
+  const ongaeshiPattern = () => {
+    const animals = ['猫', '犬', '鳥', '亀', 'うさぎ'];
+    const actions = ['ができない', 'がしたい', 'をする', '大作戦'];
+    return `${fakerJA.helpers.arrayElement(animals)}の恩返し${fakerJA.helpers.arrayElement(actions)}`;
+  };
+
+  // 「××の動く○○」パターン
+  const ugokuPattern = () => {
+    const owners = ['ハウル', 'ソフィー', '王様', '魔女', '博士'];
+    const objects = ['家具', '城', '要塞', '工房', '研究所'];
+    return `${fakerJA.helpers.arrayElement(owners)}の動く${fakerJA.helpers.arrayElement(objects)}`;
+  };
+
+  // 「新世紀○○」パターン
+  const shinsekiPattern = () => {
+    const words = ['レボリューション', 'ジェネレーション', 'クリエイション', 'デスティネーション'];
+    return `新世紀${fakerJA.helpers.arrayElement(words)}`;
+  };
+
+  // 「シン・○○」パターン
+  const shinPattern = () => {
+    const words = ['レジェンド', 'ヒーロー', 'ファンタジー', 'アドベンチャー'];
+    return `シン・${fakerJA.helpers.arrayElement(words)}`;
+  };
+
+  // 「○○の刃/××」パターン
+  const yaibaPattern = () => {
+    const prefixes = ['鬼滅', '魔滅', '邪滅', '闇滅'];
+    const suffixes = ['の刃物', 'の剣', 'の槍', 'の盾'];
+    return `${fakerJA.helpers.arrayElement(prefixes)}${fakerJA.helpers.arrayElement(suffixes)}`;
+  };
+
+  const patterns = [
+    kimiNoPattern,
+    tenkiNoPattern,
+    senToPattern,
+    tonariNoPattern,
+    gakePattern,
+    shokunouPattern,
+    subasebaPattern,
+    ongaeshiPattern,
+    ugokuPattern,
+    shinsekiPattern,
+    shinPattern,
+    yaibaPattern,
   ];
 
-  return fakerJA.helpers.arrayElement(parodies);
+  const pattern = fakerJA.helpers.arrayElement(patterns);
+  return pattern();
 };
 
 // 2. 超長いラノベ風タイトル
@@ -125,44 +181,54 @@ const generateLightNovelTitle = () => {
   return template();
 };
 
-// 3. 年代別スタイル
+// 3. 年代別スタイル（構造のみ模倣、固有名詞は架空）
 const generateRetroStyleTitle = () => {
   const eras = [
-    // 70-80年代
+    // 70-80年代スタイル
     () => {
       const prefixes = ['宇宙戦艦', '銀河', '超時空', '無敵', '勇者', '魔神'];
-      const names = ['ヤマト', 'ガンダム', 'マクロス', 'ライディーン', 'ダイモス', 'ボルテス'];
+      const names = ['タイタン', 'オリオン', 'アトラス', 'ゼウス', 'アポロン', 'ネプチューン'];
       return `${fakerJA.helpers.arrayElement(prefixes)}${fakerJA.helpers.arrayElement(names)}`;
     },
     () => {
-      const words = ['999', '777', '伝説', '帝国', '要塞', '戦記'];
+      const words = ['999', '777', '555', '伝説', '帝国', '要塞', '戦記'];
       return `銀河${fakerJA.helpers.arrayElement(words)}`;
     },
 
-    // 90年代
+    // 90年代スタイル
     () => {
-      const words = ['新世紀', '少女革命', '魔法騎士'];
-      const nouns = ['エヴァンゲリオン', 'ウテナ', 'レイアース', 'セーラームーン', 'カードキャプター'];
+      const words = ['新世紀', '少女革命', '魔法騎士', '美少女戦士'];
+      const nouns = ['レボリューション', 'デスティニー', 'オデッセイ', 'クロニクル'];
       return `${fakerJA.helpers.arrayElement(words)}${fakerJA.helpers.arrayElement(nouns)}`;
     },
-    () => `機動${fakerJA.helpers.arrayElement(['戦士', '武闘伝', '新世紀'])}G${fakerJA.helpers.arrayElement(['ガンダム', 'ファイター', 'ウイング'])}`,
-
-    // 2000年代
     () => {
-      const names = ['ハルヒ', 'みくる', 'ユキ', 'ツルヤ'];
-      const suffixes = ['の憂鬱', 'の消失', 'の溜息', 'の陰謀'];
-      return `涼宮${fakerJA.helpers.arrayElement(names)}${fakerJA.helpers.arrayElement(suffixes)}`;
+      const types = ['戦士', '武闘伝', '新世紀'];
+      const letters = ['G', 'Z', 'X', 'V'];
+      const names = ['ファイター', 'ウォリアー', 'ナイト', 'ヒーロー'];
+      return `機動${fakerJA.helpers.arrayElement(types)}${fakerJA.helpers.arrayElement(letters)}${fakerJA.helpers.arrayElement(names)}`;
     },
-    () => `${fakerJA.helpers.arrayElement(['けいおん！', 'らき☆すた', 'ひだまりスケッチ', 'みなみけ'])}`,
 
-    // 2010年代
+    // 2000年代スタイル
     () => {
-      const subjects = ['会長', '先輩', '後輩', '委員長', '部長'];
-      return `${fakerJA.helpers.arrayElement(subjects)}は告らせたい〜天才たちの恋愛頭脳戦〜`;
+      const familyNames = ['涼宮', '長門', '朝比奈', '古泉', '鶴屋'];
+      const givenNames = ['ハルカ', 'ミク', 'ユウ', 'アヤ', 'レイ'];
+      const suffixes = ['の憂鬱', 'の消失', 'の溜息', 'の陰謀', 'の秘密'];
+      return `${fakerJA.helpers.arrayElement(familyNames)}${fakerJA.helpers.arrayElement(givenNames)}${fakerJA.helpers.arrayElement(suffixes)}`;
     },
     () => {
-      const prefixes = ['鬼滅', '呪術', '約束'];
-      const suffixes = ['の刃', '廻戦', 'のネバーランド'];
+      const titles = ['けいおん！', 'らきすた！', 'ひだまり☆', 'ゆるゆり♪'];
+      return fakerJA.helpers.arrayElement(titles);
+    },
+
+    // 2010年代スタイル
+    () => {
+      const subjects = ['会長', '先輩', '後輩', '委員長', '部長', '生徒会長'];
+      const actions = ['告らせたい', '恋したい', '好きになりたい', '振り向かせたい'];
+      return `${fakerJA.helpers.arrayElement(subjects)}は${fakerJA.helpers.arrayElement(actions)}〜天才たちの恋愛頭脳戦〜`;
+    },
+    () => {
+      const prefixes = ['鬼滅', '魔滅', '邪滅', '闇滅', '妖滅'];
+      const suffixes = ['の刃', 'の剣', '廻戦', '奇譚'];
       return `${fakerJA.helpers.arrayElement(prefixes)}${fakerJA.helpers.arrayElement(suffixes)}`;
     },
   ];
@@ -197,16 +263,34 @@ const generateVersionedTitle = () => {
   return fakerJA.helpers.arrayElement(versions);
 };
 
-// 5. 記号・英語混じり
+// 5. 記号・英語混じり（構造のみ模倣、固有名詞は架空）
 const generateSymbolicTitle = () => {
   const templates = [
-    () => `Re:${fakerJA.helpers.arrayElement(['ゼロ', 'ワン', 'ライフ'])}から始める${fakerJA.helpers.arrayElement(['異世界生活', '制作生活', '監督業'])}`,
-    () => `.hack//${fakerJA.helpers.arrayElement(['Sign', 'Roots', 'G.U.', 'Quantum'])}`,
-    () => `STEINS;${fakerJA.helpers.arrayElement(['GATE', 'GATE 0', 'ELITE'])}`,
-    () => `${fakerJA.helpers.arrayElement(['ソードアート', 'ガンゲイル', 'アクセル・ワールド'])} -THE ANIMATION-`,
-    () => `Fate/${fakerJA.helpers.arrayElement(['stay night', 'Zero', 'Apocrypha', 'Grand Order'])}`,
-    () => `${fakerJA.helpers.arrayElement(['Angel', 'Devil', 'God', 'Chaos'])} Beats!`,
-    () => `Charlotte -シャーロット-`,
+    // Re:パターン
+    () => `Re:${fakerJA.helpers.arrayElement(['ゼロ', 'ワン', 'ライフ', 'スタート', 'ビギン'])}から始める${fakerJA.helpers.arrayElement(['異世界生活', '制作生活', '監督業', '新生活', '冒険'])}`,
+
+    // .記号//パターン
+    () => `.${fakerJA.helpers.arrayElement(['link', 'code', 'net', 'cyber'])}//${fakerJA.helpers.arrayElement(['Sign', 'Roots', 'Link', 'Quantum', 'Matrix'])}`,
+
+    // 英単語;記号パターン
+    () => `${fakerJA.helpers.arrayElement(['DREAMS', 'STARS', 'HEARTS', 'MINDS'])};${fakerJA.helpers.arrayElement(['GATE', 'DOOR', 'WINDOW', 'PORTAL'])}`,
+
+    // ○○ -THE ANIMATION-パターン
+    () => `${fakerJA.helpers.arrayElement(['ソードアート', 'ガンアクション', 'マジックバトル', 'サイバーワールド'])} -THE ANIMATION-`,
+
+    // 英単語/サブタイトルパターン
+    () => `${fakerJA.helpers.arrayElement(['Destiny', 'Legend', 'Chronicle', 'Odyssey'])}/${fakerJA.helpers.arrayElement(['stay night', 'new dawn', 'last hope', 'first light'])}`,
+
+    // 英単語 Beats!パターン
+    () => `${fakerJA.helpers.arrayElement(['Angel', 'Devil', 'God', 'Chaos', 'Dragon', 'Phoenix'])} Beats!`,
+
+    // 英名 -カタカナ-パターン
+    () => {
+      const names = ['Charlotte', 'Victoria', 'Elizabeth', 'Sophia'];
+      const katakana = ['シャーロット', 'ヴィクトリア', 'エリザベス', 'ソフィア'];
+      const index = fakerJA.number.int({ min: 0, max: names.length - 1 });
+      return `${names[index]} -${katakana[index]}-`;
+    },
   ];
 
   const template = fakerJA.helpers.arrayElement(templates);
