@@ -6,6 +6,8 @@ import {
   generateChordBasedMelody,
   generateSmoothChordMelody,
 } from "./patterns/melodies/generators";
+import { addMicroVariations } from "./patterns/melodies/humanize";
+import { applyRandomVariation } from "./patterns/melodies/variations";
 import {
   createMozartRocket,
   createFateMotif,
@@ -165,16 +167,18 @@ export class MusicComposer {
       }
 
       // 選択された方法でメロディーを生成
-      if (selectedMethod === 'scaleBased' && this.currentStyle.scales.length > 0) {
-        // 方法1: スケールベースのメロディーを生成
-        const randomScale = this.currentStyle.scales[
-          Math.floor(Math.random() * this.currentStyle.scales.length)
-        ]!;
+      if (selectedMethod === 'scaleBased') {
+        // 方法1: スケールベースのメロディーを生成（動的スケール選択）
+        const availableScales = this.getAvailableScales();
 
-        if (randomScale in SCALES) {
+        if (availableScales.length > 0) {
+          const randomScale = availableScales[
+            Math.floor(Math.random() * availableScales.length)
+          ]!;
+
           melody = generateMusicalMelody(
             rootNote,
-            randomScale as keyof typeof SCALES,
+            randomScale,
             chordDuration
           );
           this.lastMelodyGenerationMethod = 'scaleBased';
@@ -221,8 +225,33 @@ export class MusicComposer {
           this.currentStyle.melodyPatterns[
             Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
           ]!;
+
+        // 既存パターンに30%の確率で変奏を適用
+        if (Math.random() < 0.3) {
+          melody = applyRandomVariation(melody);
+        }
+
         this.lastMelodyGenerationMethod = 'existingPattern';
       }
+
+      // マイクロバリエーションを適用（60%の確率）
+      if (melody && Math.random() < 0.6) {
+        const dynamicsOptions: Array<'crescendo' | 'decrescendo' | 'swell' | 'accent' | null> = [
+          'crescendo',
+          'decrescendo',
+          'swell',
+          'accent',
+          null,
+        ];
+        const dynamics = dynamicsOptions[Math.floor(Math.random() * dynamicsOptions.length)];
+
+        melody = addMicroVariations(melody, {
+          humanize: true,
+          humanizeIntensity: 0.4 + Math.random() * 0.3, // 0.4-0.7
+          dynamics,
+        });
+      }
+
       this.lastHadMelody = true;
     } else {
       this.lastHadMelody = false;
@@ -543,6 +572,38 @@ export class MusicComposer {
     } else {
       // 30分以上: 非常に豊か（160%）
       return 1.6;
+    }
+  }
+
+  /**
+   * 利用可能なスケールを取得
+   * 時間経過に応じて、推奨スケールから全スケールへと段階的に解禁
+   */
+  private getAvailableScales(): (keyof typeof SCALES)[] {
+    // スタイル推奨スケール
+    const recommendedScales = this.currentStyle.scales as (keyof typeof SCALES)[];
+
+    // 全スケール（16種類）
+    const allScales = Object.keys(SCALES) as (keyof typeof SCALES)[];
+
+    if (this.totalElapsedTime < 300) {
+      // 最初の5分: 推奨スケールのみ（80%）+ ランダム1つ（20%）
+      if (Math.random() < 0.8) {
+        return recommendedScales;
+      } else {
+        const randomScale = allScales[Math.floor(Math.random() * allScales.length)];
+        // 重複を避けて追加
+        if (!recommendedScales.includes(randomScale)) {
+          return [...recommendedScales, randomScale];
+        }
+        return recommendedScales;
+      }
+    } else if (this.totalElapsedTime < 900) {
+      // 5-15分: 推奨（60%）+ 全て（40%）
+      return Math.random() < 0.6 ? recommendedScales : allScales;
+    } else {
+      // 15分以上: 全スケールから選択可能
+      return allScales;
     }
   }
 
