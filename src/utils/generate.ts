@@ -173,8 +173,11 @@ const generateRetroStyleTitle = () => {
 
 // 4. バージョン番号付き
 const generateVersionedTitle = () => {
-  const baseWords = ['エヴァンゲリオン', '攻殻機動隊', 'ガンダム', 'マクロス', 'シン・仮面ライダー'];
-  const base = fakerJA.helpers.arrayElement(baseWords);
+  // より一般的な架空のタイトルベース
+  const adjectives = ['新世紀', '超時空', '銀河', '宇宙', '未来', '伝説', '魔法', '聖なる', '終末', '無限'];
+  const nouns = ['戦記', '物語', 'クロニクル', 'サーガ', '伝説', 'ファンタジー', 'アドベンチャー', 'オデッセイ'];
+
+  const base = `${fakerJA.helpers.arrayElement(adjectives)}${fakerJA.helpers.arrayElement(nouns)}`;
 
   const versions = [
     `${base} 3.0+1.0`,
