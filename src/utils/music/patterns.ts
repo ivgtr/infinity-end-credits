@@ -27,6 +27,37 @@ export const NOTES = {
 } as const;
 
 /**
+ * スケール/モード定義（ルートからの半音数）
+ */
+export const SCALES = {
+  // 基本スケール
+  major: [0, 2, 4, 5, 7, 9, 11], // メジャースケール (Ionian)
+  minor: [0, 2, 3, 5, 7, 8, 10], // ナチュラルマイナー (Aeolian)
+  harmonicMinor: [0, 2, 3, 5, 7, 8, 11], // ハーモニックマイナー
+  melodicMinor: [0, 2, 3, 5, 7, 9, 11], // メロディックマイナー
+
+  // モード
+  dorian: [0, 2, 3, 5, 7, 9, 10], // ドリアン（ジャズ的）
+  phrygian: [0, 1, 3, 5, 7, 8, 10], // フリジアン（スペイン風）
+  lydian: [0, 2, 4, 6, 7, 9, 11], // リディアン（浮遊感）
+  mixolydian: [0, 2, 4, 5, 7, 9, 10], // ミクソリディアン（ブルース風）
+  locrian: [0, 1, 3, 5, 6, 8, 10], // ロクリアン（不安定）
+
+  // エキゾチックスケール
+  pentatonic: [0, 2, 4, 7, 9], // ペンタトニック（5音音階）
+  minorPentatonic: [0, 3, 5, 7, 10], // マイナーペンタトニック
+  blues: [0, 3, 5, 6, 7, 10], // ブルーススケール
+  wholeTone: [0, 2, 4, 6, 8, 10], // ホールトーン（全音音階）
+  diminished: [0, 2, 3, 5, 6, 8, 9, 11], // ディミニッシュ
+
+  // ワールドミュージック
+  hirajoshi: [0, 2, 3, 7, 8], // 平調子（日本）
+  inSen: [0, 1, 5, 7, 10], // 陰旋（日本）
+  phrygianDominant: [0, 1, 4, 5, 7, 8, 10], // フリジアンドミナント（中東風）
+  hungarianMinor: [0, 2, 3, 6, 7, 8, 11], // ハンガリアンマイナー
+} as const;
+
+/**
  * コードインターバル定義
  */
 const CHORD_INTERVALS = {
@@ -45,6 +76,41 @@ const CHORD_INTERVALS = {
 export function getChordNotes(chord: Chord): number[] {
   const intervals = CHORD_INTERVALS[chord.type];
   return intervals.map(interval => chord.root + interval);
+}
+
+/**
+ * スケールから指定オクターブの音符配列を生成
+ */
+export function getScaleNotes(
+  root: number,
+  scaleName: keyof typeof SCALES,
+  octaves: number = 1
+): number[] {
+  const scale = SCALES[scaleName];
+  const notes: number[] = [];
+
+  for (let octave = 0; octave < octaves; octave++) {
+    for (const interval of scale) {
+      notes.push(root + interval + (octave * 12));
+    }
+  }
+
+  return notes;
+}
+
+/**
+ * スケールからランダムなメロディー音符を取得
+ */
+export function getRandomScaleNote(
+  root: number,
+  scaleName: keyof typeof SCALES,
+  minOctave: number = 0,
+  maxOctave: number = 2
+): number {
+  const scale = SCALES[scaleName];
+  const octave = Math.floor(Math.random() * (maxOctave - minOctave + 1)) + minOctave;
+  const scaleIndex = Math.floor(Math.random() * scale.length);
+  return root + scale[scaleIndex]! + (octave * 12);
 }
 
 /**

@@ -293,6 +293,34 @@ export const DRUM_PATTERNS: DrumPattern[] = [
     hihat: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5],
     duration: 4,
   },
+  {
+    name: "Waltz 3/4",
+    kick: [0],
+    snare: [2],
+    hihat: [0, 1, 2],
+    duration: 3,
+  },
+  {
+    name: "Progressive 5/4",
+    kick: [0, 3],
+    snare: [2, 4],
+    hihat: [0, 1, 2, 3, 4],
+    duration: 5,
+  },
+  {
+    name: "Complex 7/8",
+    kick: [0, 3],
+    snare: [2, 5],
+    hihat: [0, 0.875, 1.75, 2.625, 3.5, 4.375, 5.25, 6.125],
+    duration: 3.5,
+  },
+  {
+    name: "Folk 6/8",
+    kick: [0, 3],
+    snare: [2, 5],
+    hihat: [0, 1, 2, 3, 4, 5],
+    duration: 6,
+  },
 ];
 
 /**
