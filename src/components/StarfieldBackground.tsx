@@ -11,30 +11,20 @@ interface Star {
 
 interface StarfieldBackgroundProps {
   speed?: number;
-  colorTheme?: {
-    primary: string;
-    secondary: string;
-  };
 }
 
 export const StarfieldBackground = ({
   speed = 1,
-  colorTheme = { primary: "#1a0033", secondary: "#330066" }
 }: StarfieldBackgroundProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
   const animationFrameRef = useRef<number>(0);
   const speedRef = useRef<number>(speed);
-  const colorThemeRef = useRef(colorTheme);
 
-  // speedとcolorThemeの最新値をrefに保存（再レンダリングを防ぐ）
+  // speedの最新値をrefに保存（再レンダリングを防ぐ）
   useEffect(() => {
     speedRef.current = speed;
   }, [speed]);
-
-  useEffect(() => {
-    colorThemeRef.current = colorTheme;
-  }, [colorTheme]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -76,11 +66,11 @@ export const StarfieldBackground = ({
     const animate = () => {
       if (!ctx || !canvas) return;
 
-      // グラデーション背景を描画（最新のcolorThemeを使用）
+      // グラデーション背景を描画（エンドロールらしい固定色）
       const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, colorThemeRef.current.primary);
+      gradient.addColorStop(0, "#0a0015");
       gradient.addColorStop(0.5, "#000000");
-      gradient.addColorStop(1, colorThemeRef.current.secondary);
+      gradient.addColorStop(1, "#000000");
 
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);

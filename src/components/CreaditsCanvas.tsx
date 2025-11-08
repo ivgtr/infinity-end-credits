@@ -2,14 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { CreditsList } from "./CreditsList";
 import { useCredits } from "@/hooks/useCredits";
 import { useViewingStats } from "@/hooks/useViewingStats";
-import { useColorTheme } from "@/hooks/useColorTheme";
 import { SpeedControl } from "./SpeedControl";
 import { BackgroundMusicPlayer } from "./BackgroundMusicPlayer";
 import { StatsModal } from "./StatsModal";
 import { StarfieldBackground } from "./StarfieldBackground";
 import { FilmEffects } from "./FilmEffects";
 import { Letterbox } from "./Letterbox";
-import { EvaWarningText } from "./EvaWarningText";
 
 interface CreditsCanvasProps {
   autoPlayMusic?: boolean;
@@ -18,7 +16,6 @@ interface CreditsCanvasProps {
 export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => {
   const { titles, credits, addRandomWork } = useCredits();
   const { stats, trackScroll, trackCreditViewed, trackWorkCompleted } = useViewingStats();
-  const colorTheme = useColorTheme(titles.length);
   const [speed, setSpeed] = useState(1);
   const [showUI, setShowUI] = useState(true);
   const [showStatsModal, setShowStatsModal] = useState(false);
@@ -55,10 +52,9 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
   return (
     <div className="min-h-screen h-full w-full overflow-hidden">
       {/* 背景演出レイヤー */}
-      <StarfieldBackground speed={speed} colorTheme={colorTheme} />
+      <StarfieldBackground speed={speed} />
       <FilmEffects />
       <Letterbox />
-      <EvaWarningText />
 
       {titles.length > 0 && (
         <CreditsList
