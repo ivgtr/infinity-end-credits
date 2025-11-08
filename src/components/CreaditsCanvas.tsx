@@ -7,7 +7,6 @@ import { BackgroundMusicPlayer } from "./BackgroundMusicPlayer";
 import { StatsModal } from "./StatsModal";
 import { FilmEffects } from "./FilmEffects";
 import { Letterbox } from "./Letterbox";
-import { FPSMonitor } from "./FPSMonitor";
 
 interface CreditsCanvasProps {
   autoPlayMusic?: boolean;
@@ -19,8 +18,6 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
   const [speed, setSpeed] = useState(1);
   const [showUI, setShowUI] = useState(true);
   const [showStatsModal, setShowStatsModal] = useState(false);
-  const [enableFilmEffects, setEnableFilmEffects] = useState(true);
-  const [showFPSMonitor, setShowFPSMonitor] = useState(false);
 
   const addWork = useCallback(() => {
     addRandomWork();
@@ -34,7 +31,7 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
     setSpeed(newSpeed);
   }, []);
 
-  // キーボードショートカット
+  // Hキーでの UI表示/非表示切り替え
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       // 入力フィールドなどでキーを押した場合は無視
@@ -45,18 +42,6 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
         e.preventDefault();
         setShowUI(prev => !prev);
       }
-
-      // Fキー: FilmEffects ON/OFF
-      if (e.code === "KeyF") {
-        e.preventDefault();
-        setEnableFilmEffects(prev => !prev);
-      }
-
-      // Pキー: FPSモニター表示/非表示
-      if (e.code === "KeyP") {
-        e.preventDefault();
-        setShowFPSMonitor(prev => !prev);
-      }
     };
 
     window.addEventListener("keydown", handleKeyPress);
@@ -66,11 +51,8 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
   return (
     <div className="min-h-screen h-full w-full overflow-hidden">
       {/* 背景演出レイヤー */}
-      {enableFilmEffects && <FilmEffects />}
+      <FilmEffects />
       <Letterbox />
-
-      {/* FPSモニター */}
-      {showFPSMonitor && <FPSMonitor />}
 
       {titles.length > 0 && (
         <CreditsList
@@ -126,29 +108,8 @@ export const CreditsCanvas = ({ autoPlayMusic = false }: CreditsCanvasProps) => 
             </svg>
             <span className="text-sm">統計</span>
           </button>
-          <button
-            onClick={() => setEnableFilmEffects(prev => !prev)}
-            className={`px-3 py-2 rounded-full shadow-lg text-white transition-colors flex items-center gap-2 ${
-              enableFilmEffects ? "bg-blue-600/70 hover:bg-blue-600/80" : "bg-black/70 hover:bg-black/80"
-            }`}
-            title="フィルムエフェクト切り替え (F)"
-          >
-            <span className="text-sm">{enableFilmEffects ? "🎞️ ON" : "🎞️ OFF"}</span>
-          </button>
-          <button
-            onClick={() => setShowFPSMonitor(prev => !prev)}
-            className={`px-3 py-2 rounded-full shadow-lg text-white transition-colors flex items-center gap-2 ${
-              showFPSMonitor ? "bg-green-600/70 hover:bg-green-600/80" : "bg-black/70 hover:bg-black/80"
-            }`}
-            title="FPSモニター表示切り替え (P)"
-          >
-            <span className="text-sm">{showFPSMonitor ? "📊 ON" : "📊 OFF"}</span>
-          </button>
           <div className="text-xs text-white/60 text-center">
             Space/長押し: 倍速切替 / M: ミュート / H: UI非表示
-          </div>
-          <div className="text-xs text-white/60 text-center">
-            F: エフェクト切替 / P: FPS表示
           </div>
         </div>
       </div>
