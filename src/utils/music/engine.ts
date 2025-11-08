@@ -31,12 +31,12 @@ export class MusicEngine {
 
       // マスターゲイン（全体音量制御）
       this.masterGain = this.audioContext.createGain();
-      this.masterGain.gain.value = 0.15; // 全体的に控えめな音量
+      this.masterGain.gain.value = 0; // setVolume()で設定されるまで無音
       this.masterGain.connect(this.audioContext.destination);
 
       // フェードゲイン（クロスフェード用）
       this.fadeGain = this.audioContext.createGain();
-      this.fadeGain.gain.value = 1.0; // 初期状態はフル
+      this.fadeGain.gain.value = 0.0; // フェードイン用（初期状態は無音）
       this.fadeGain.connect(this.masterGain);
 
       // AudioContextを開始（ユーザーインタラクション後に必要）
@@ -294,7 +294,8 @@ export class MusicEngine {
 
     // 現在の値をキャンセル
     fadeGain.cancelScheduledValues(start);
-    fadeGain.setValueAtTime(fadeGain.value, start);
+    // 常に0から開始してフェードイン（タイミング問題を回避）
+    fadeGain.setValueAtTime(0, start);
 
     // フェードイン
     fadeGain.linearRampToValueAtTime(1.0, start + duration);
