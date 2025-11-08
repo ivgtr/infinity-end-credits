@@ -2,6 +2,10 @@ import { useEffect, useRef } from "react";
 import { CreditsItem } from "./CreditsItem";
 import type { Credit } from "@/types/credits";
 
+// スクロール速度の基準値（px/sec）
+// speed=1の時に60px/secでスクロールする
+const BASE_SCROLL_SPEED_PX_PER_SEC = 60;
+
 export const CreditsList = ({
   titles,
   credits,
@@ -16,7 +20,7 @@ export const CreditsList = ({
     [key: string]: Credit[];
   };
   addWork: () => void;
-  speed: number;
+  speed: number; // スクロール速度の倍率（1 = 標準速度60px/sec, 2 = 倍速120px/sec）
   onScrollDistanceChange?: (distance: number) => void;
   onCreditViewed: (credit: Credit) => void;
   onWorkCompleted: (workTitle: string) => void;
@@ -28,6 +32,7 @@ export const CreditsList = ({
   const prevTitlesLengthRef = useRef<number>(0);
   const addWorkRef = useRef(addWork);
   const lastScrollPositionRef = useRef<number>(0);
+  const lastFrameTimeRef = useRef<number>(performance.now());
 
   // addWorkの参照を常に最新に保つ
   useEffect(() => {
@@ -52,7 +57,10 @@ export const CreditsList = ({
     const scroll = scrollRef.current;
     const container = containerRef.current;
     if (scroll && container) {
-      const loop = () => {
+      // 時間ベースアニメーション用の初期化
+      lastFrameTimeRef.current = performance.now();
+
+      const loop = (currentTime: number) => {
         const height = container.clientHeight;
         // 末端から1000px手前までスクロールしたら追加
         if (movingRef.current < -height + 1000) {
@@ -74,7 +82,16 @@ export const CreditsList = ({
         }
         lastScrollPositionRef.current = currentPosition;
 
-        movingRef.current -= speed;
+        // 時間ベースのアニメーション: deltaTimeを計算してフレームレートに依存しないようにする
+        const deltaTime = currentTime - lastFrameTimeRef.current;
+        lastFrameTimeRef.current = currentTime;
+
+        // 速度をpx/secで計算（speed倍率 × 基準速度60px/sec）
+        // deltaTimeはミリ秒なので1000で割って秒に変換
+        const speedInPxPerSec = speed * BASE_SCROLL_SPEED_PX_PER_SEC;
+        const pixelsToMove = speedInPxPerSec * (deltaTime / 1000);
+        movingRef.current -= pixelsToMove;
+
         requestAnimationFrameRef.current = requestAnimationFrame(loop);
       };
       requestAnimationFrameRef.current = requestAnimationFrame(loop);

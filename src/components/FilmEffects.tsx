@@ -3,7 +3,11 @@ import { useEffect, useRef, useState } from "react";
 export const FilmEffects = () => {
   const grainCanvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number>(0);
+  const lastGrainUpdateRef = useRef<number>(0);
   const [flickerOpacity, setFlickerOpacity] = useState(0);
+
+  // フィルムグレインの更新フレームレート（パフォーマンス最適化）
+  const GRAIN_FPS = 30;
 
   // フリッカー（明滅）効果
   useEffect(() => {
@@ -27,17 +31,23 @@ export const FilmEffects = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Canvas サイズを設定
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
+    // Canvas サイズを固定（パフォーマンス最適化）
+    // 低解像度でノイズを生成し、CSSで拡大表示することで処理を軽量化
+    // ウィンドウサイズに依存せず、常に一定のピクセル数で処理
+    canvas.width = 400;
+    canvas.height = 300;
 
-    // フィルムグレインアニメーション
-    const animateGrain = () => {
+    // フィルムグレインアニメーション（フレームレート制限付き）
+    const animateGrain = (currentTime: number) => {
       if (!ctx || !canvas) return;
+
+      // フレームレート制限: 指定FPSで更新してパフォーマンスを改善
+      // グレインは高速更新不要なので30fpsで十分
+      if (currentTime - lastGrainUpdateRef.current < 1000 / GRAIN_FPS) {
+        animationFrameRef.current = requestAnimationFrame(animateGrain);
+        return;
+      }
+      lastGrainUpdateRef.current = currentTime;
 
       // ノイズを生成
       const imageData = ctx.createImageData(canvas.width, canvas.height);
@@ -56,10 +66,10 @@ export const FilmEffects = () => {
       animationFrameRef.current = requestAnimationFrame(animateGrain);
     };
 
-    animateGrain();
+    // 初回呼び出し（requestAnimationFrameで開始してcurrentTimeを取得）
+    animationFrameRef.current = requestAnimationFrame(animateGrain);
 
     return () => {
-      window.removeEventListener("resize", resizeCanvas);
       cancelAnimationFrame(animationFrameRef.current);
     };
   }, []);
@@ -69,8 +79,15 @@ export const FilmEffects = () => {
       {/* フィルムグレイン */}
       <canvas
         ref={grainCanvasRef}
-        className="fixed inset-0 w-full h-full pointer-events-none"
-        style={{ zIndex: 10, mixBlendMode: "overlay", opacity: 0.15 }}
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          zIndex: 10,
+          mixBlendMode: "overlay",
+          opacity: 0.15,
+          width: '100vw',
+          height: '100vh',
+          imageRendering: 'auto' // スムーズに拡大
+        }}
       />
 
       {/* ビネット効果 */}
