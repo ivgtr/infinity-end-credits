@@ -1,12 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { useCredits } from "@/hooks/useCredits";
 import { useViewingStats } from "@/hooks/useViewingStats";
+import { useColorTheme } from "@/hooks/useColorTheme";
 import { ManualCreditsList } from "./ManualCreaditsList";
 import { StatsModal } from "./StatsModal";
+import { StarfieldBackground } from "./StarfieldBackground";
+import { FilmEffects } from "./FilmEffects";
+import { Letterbox } from "./Letterbox";
+import { EvaWarningText } from "./EvaWarningText";
 
 export const ManualCreditsCanvas = () => {
   const { titles, credits, addRandomWork } = useCredits();
   const { stats, trackScroll, trackCreditViewed, trackWorkCompleted } = useViewingStats();
+  const colorTheme = useColorTheme(titles.length);
   const [showStatsModal, setShowStatsModal] = useState(false);
 
   const addWork = useCallback(() => {
@@ -19,6 +25,12 @@ export const ManualCreditsCanvas = () => {
 
   return (
     <div className="min-h-screen h-full w-full">
+      {/* 背景演出レイヤー */}
+      <StarfieldBackground speed={1} colorTheme={colorTheme} />
+      <FilmEffects />
+      <Letterbox />
+      <EvaWarningText />
+
       {titles.length > 0 && (
         <ManualCreditsList
           titles={titles}
