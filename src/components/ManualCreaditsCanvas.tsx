@@ -3,6 +3,8 @@ import { useCredits } from "@/hooks/useCredits";
 import { useViewingStats } from "@/hooks/useViewingStats";
 import { ManualCreditsList } from "./ManualCreaditsList";
 import { StatsModal } from "./StatsModal";
+import { FilmEffects } from "./FilmEffects";
+import { Letterbox } from "./Letterbox";
 
 export const ManualCreditsCanvas = () => {
   const { titles, credits, addRandomWork } = useCredits();
@@ -19,6 +21,10 @@ export const ManualCreditsCanvas = () => {
 
   return (
     <div className="min-h-screen h-full w-full">
+      {/* 背景演出レイヤー */}
+      <FilmEffects />
+      <Letterbox />
+
       {titles.length > 0 && (
         <ManualCreditsList
           titles={titles}
