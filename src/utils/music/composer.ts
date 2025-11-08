@@ -6,6 +6,8 @@ import {
   generateChordBasedMelody,
   generateSmoothChordMelody,
 } from "./patterns/melodies/generators";
+import { addMicroVariations } from "./patterns/melodies/humanize";
+import { applyRandomVariation } from "./patterns/melodies/variations";
 import {
   createMozartRocket,
   createFateMotif,
@@ -74,6 +76,7 @@ export class MusicComposer {
   private lastHadArpeggio = false;
   private lastHadDrums = false;
   private totalElapsedTime: number = 0; // 総再生時間（全スタイル通じて）
+  private lastMelodyGenerationMethod: 'scaleBased' | 'famousPattern' | 'chordBased' | 'existingPattern' | null = null;
 
   constructor() {
     // 初期スタイルをランダムに選択
@@ -131,37 +134,64 @@ export class MusicComposer {
     // レイヤーの選択（革新的アルゴリズム）
     const layers = this.selectLayers();
 
-    // メロディーパターンを選択（4つの方法から選択）
-    // 25%: スケールベース生成、25%: 定型パターン生成、25%: コード進行連動生成、25%: 既存パターン
+    // メロディーパターンを選択（重み付きランダム選択）
+    // 時間経過、前回の選択、スタイル特性に応じて確率を動的に調整
     let melody = undefined;
     if (
       layers.includeMelody &&
       this.currentStyle.melodyPatterns.length > 0
     ) {
+      const weights = this.getMelodyGenerationWeights();
       const rand = Math.random();
       const rootNote = progression.chords[0]!.root;
 
-      if (rand < 0.25 && this.currentStyle.scales.length > 0) {
-        // 方法1: スケールベースのメロディーを生成
-        const randomScale = this.currentStyle.scales[
-          Math.floor(Math.random() * this.currentStyle.scales.length)
-        ]!;
+      // 重み付き確率に基づいて生成方法を選択
+      let cumulativeWeight = 0;
+      let selectedMethod: 'scaleBased' | 'famousPattern' | 'chordBased' | 'existingPattern' = 'existingPattern';
 
-        if (randomScale in SCALES) {
+      cumulativeWeight += weights.scaleBasedWeight;
+      if (rand < cumulativeWeight) {
+        selectedMethod = 'scaleBased';
+      } else {
+        cumulativeWeight += weights.famousPatternWeight;
+        if (rand < cumulativeWeight) {
+          selectedMethod = 'famousPattern';
+        } else {
+          cumulativeWeight += weights.chordBasedWeight;
+          if (rand < cumulativeWeight) {
+            selectedMethod = 'chordBased';
+          } else {
+            selectedMethod = 'existingPattern';
+          }
+        }
+      }
+
+      // 選択された方法でメロディーを生成
+      if (selectedMethod === 'scaleBased') {
+        // 方法1: スケールベースのメロディーを生成（動的スケール選択）
+        const availableScales = this.getAvailableScales();
+
+        if (availableScales.length > 0) {
+          const randomScale = availableScales[
+            Math.floor(Math.random() * availableScales.length)
+          ]!;
+
           melody = generateMusicalMelody(
             rootNote,
-            randomScale as keyof typeof SCALES,
+            randomScale,
             chordDuration
           );
+          this.lastMelodyGenerationMethod = 'scaleBased';
         } else {
           // フォールバック: 既存パターン
           melody =
             this.currentStyle.melodyPatterns[
               Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
             ]!;
+          this.lastMelodyGenerationMethod = 'existingPattern';
         }
       } else if (
-        rand < 0.5 &&
+        selectedMethod === 'famousPattern' &&
         this.currentStyle.famousPatterns &&
         this.currentStyle.famousPatterns.length > 0
       ) {
@@ -173,26 +203,55 @@ export class MusicComposer {
         const patternFunction = FAMOUS_PATTERN_FUNCTIONS[randomFamousPattern];
         if (patternFunction) {
           melody = patternFunction(rootNote, chordDuration);
+          this.lastMelodyGenerationMethod = 'famousPattern';
         } else {
           // フォールバック: 既存パターン
           melody =
             this.currentStyle.melodyPatterns[
               Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
             ]!;
+          this.lastMelodyGenerationMethod = 'existingPattern';
         }
-      } else if (rand < 0.75) {
+      } else if (selectedMethod === 'chordBased') {
         // 方法3: コード進行連動メロディー生成
         const useSmooth = Math.random() < 0.5;
         melody = useSmooth
           ? generateSmoothChordMelody(progression)
           : generateChordBasedMelody(progression);
+        this.lastMelodyGenerationMethod = 'chordBased';
       } else {
         // 方法4: 既存のメロディーパターンを使用
         melody =
           this.currentStyle.melodyPatterns[
             Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
           ]!;
+
+        // 既存パターンに30%の確率で変奏を適用
+        if (Math.random() < 0.3) {
+          melody = applyRandomVariation(melody);
+        }
+
+        this.lastMelodyGenerationMethod = 'existingPattern';
       }
+
+      // マイクロバリエーションを適用（60%の確率）
+      if (melody && Math.random() < 0.6) {
+        const dynamicsOptions: Array<'crescendo' | 'decrescendo' | 'swell' | 'accent' | null> = [
+          'crescendo',
+          'decrescendo',
+          'swell',
+          'accent',
+          null,
+        ];
+        const dynamics = dynamicsOptions[Math.floor(Math.random() * dynamicsOptions.length)];
+
+        melody = addMicroVariations(melody, {
+          humanize: true,
+          humanizeIntensity: 0.4 + Math.random() * 0.3, // 0.4-0.7
+          dynamics,
+        });
+      }
+
       this.lastHadMelody = true;
     } else {
       this.lastHadMelody = false;
@@ -517,6 +576,118 @@ export class MusicComposer {
   }
 
   /**
+   * 利用可能なスケールを取得
+   * 時間経過に応じて、推奨スケールから全スケールへと段階的に解禁
+   */
+  private getAvailableScales(): (keyof typeof SCALES)[] {
+    // スタイル推奨スケール
+    const recommendedScales = this.currentStyle.scales as (keyof typeof SCALES)[];
+
+    // 全スケール（16種類）
+    const allScales = Object.keys(SCALES) as (keyof typeof SCALES)[];
+
+    if (this.totalElapsedTime < 300) {
+      // 最初の5分: 推奨スケールのみ（80%）+ ランダム1つ（20%）
+      if (Math.random() < 0.8) {
+        return recommendedScales;
+      } else {
+        const randomScale = allScales[Math.floor(Math.random() * allScales.length)];
+        // 重複を避けて追加
+        if (!recommendedScales.includes(randomScale)) {
+          return [...recommendedScales, randomScale];
+        }
+        return recommendedScales;
+      }
+    } else if (this.totalElapsedTime < 900) {
+      // 5-15分: 推奨（60%）+ 全て（40%）
+      return Math.random() < 0.6 ? recommendedScales : allScales;
+    } else {
+      // 15分以上: 全スケールから選択可能
+      return allScales;
+    }
+  }
+
+  /**
+   * メロディー生成方法の重み付き確率を計算
+   * 時間経過、文脈、スタイル特性に応じて動的に調整
+   */
+  private getMelodyGenerationWeights(): {
+    scaleBasedWeight: number;
+    famousPatternWeight: number;
+    chordBasedWeight: number;
+    existingPatternWeight: number;
+  } {
+    // 基本重み（各25%）
+    let weights = {
+      scaleBasedWeight: 0.25,
+      famousPatternWeight: 0.25,
+      chordBasedWeight: 0.25,
+      existingPatternWeight: 0.25,
+    };
+
+    // 1. 時間経過による変化
+    if (this.totalElapsedTime < 120) {
+      // 序盤（0-2分）: 定型パターンを多めに（親しみやすさ重視）
+      weights.famousPatternWeight = 0.4;
+      weights.scaleBasedWeight = 0.15;
+      weights.chordBasedWeight = 0.25;
+      weights.existingPatternWeight = 0.2;
+    } else if (this.totalElapsedTime < 600) {
+      // 中盤（2-10分）: バランス良く
+      // デフォルトのまま
+    } else {
+      // 終盤（10分以上）: スケールベースと既存パターンを増やす（新鮮さ重視）
+      weights.scaleBasedWeight = 0.35;
+      weights.existingPatternWeight = 0.3;
+      weights.chordBasedWeight = 0.2;
+      weights.famousPatternWeight = 0.15;
+    }
+
+    // 2. 前回の選択に応じた調整（同じ方法が連続しないように）
+    if (this.lastMelodyGenerationMethod) {
+      switch (this.lastMelodyGenerationMethod) {
+        case 'scaleBased':
+          weights.scaleBasedWeight *= 0.5;
+          break;
+        case 'famousPattern':
+          weights.famousPatternWeight *= 0.5;
+          break;
+        case 'chordBased':
+          weights.chordBasedWeight *= 0.5;
+          break;
+        case 'existingPattern':
+          weights.existingPatternWeight *= 0.5;
+          break;
+      }
+    }
+
+    // 3. スタイル特性による調整
+    const styleType = this.currentStyle.type;
+    if (styleType === 'grand' || styleType === 'orchestral') {
+      // クラシック系: 定型パターン多め
+      weights.famousPatternWeight *= 1.3;
+    } else if (styleType === 'ambient' || styleType === 'electronic') {
+      // アンビエント系: スケールベース多め
+      weights.scaleBasedWeight *= 1.4;
+    } else if (styleType === 'jazzy') {
+      // ジャズ系: コードベース多め
+      weights.chordBasedWeight *= 1.4;
+    } else if (styleType === 'ethnic') {
+      // エスニック系: 定型パターン多め（民族音階パターン）
+      weights.famousPatternWeight *= 1.2;
+    }
+
+    // 4. 正規化（合計を1.0にする）
+    const sum = Object.values(weights).reduce((a, b) => a + b, 0);
+    return {
+      scaleBasedWeight: weights.scaleBasedWeight / sum,
+      famousPatternWeight: weights.famousPatternWeight / sum,
+      chordBasedWeight: weights.chordBasedWeight / sum,
+      existingPatternWeight: weights.existingPatternWeight / sum,
+    };
+  }
+
+  /**
    * 履歴とスタイルをリセット
    */
   public reset(): void {
@@ -530,5 +701,6 @@ export class MusicComposer {
     this.lastHadArpeggio = false;
     this.lastHadDrums = false;
     this.totalElapsedTime = 0;
+    this.lastMelodyGenerationMethod = null;
   }
 }
