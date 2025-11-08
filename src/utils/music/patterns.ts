@@ -849,3 +849,203 @@ export function createSidechainRhythm(root: number, duration: number): MelodyPat
 
   return { name: "Sidechain Rhythm", notes, repeat: 1 };
 }
+
+/**
+ * ====================
+ * コード進行連動メロディ生成関数
+ * ====================
+ */
+
+/**
+ * コード進行に沿ったメロディーを生成
+ * 各コードのコードトーン（構成音）を使って、コード進行に沿ったメロディーを作る
+ * 
+ * @param progression コード進行
+ * @returns 生成されたメロディーパターン
+ */
+export function generateChordBasedMelody(progression: ChordProgression): MelodyPattern {
+  const notes: Note[] = [];
+  let currentTime = 0;
+
+  // 各コードに対してメロディーを生成
+  progression.chords.forEach((chord, chordIndex) => {
+    const chordNotes = getChordNotes(chord);
+    const chordDuration = chord.duration;
+    
+    // コードごとのメロディーパターンを選択
+    const patternType = Math.floor(Math.random() * 5);
+
+    switch (patternType) {
+      case 0: {
+        // パターン1: コードトーンの上昇
+        const notesPerChord = Math.min(chordNotes.length, 3);
+        const noteDuration = chordDuration / notesPerChord;
+
+        for (let i = 0; i < notesPerChord; i++) {
+          notes.push({
+            pitch: chordNotes[i]! + 12, // 1オクターブ上
+            duration: noteDuration * 0.9,
+            startTime: currentTime + (noteDuration * i),
+            velocity: 0.32 + (i * 0.03),
+          });
+        }
+        break;
+      }
+
+      case 1: {
+        // パターン2: コードトーンの下降
+        const notesPerChord = Math.min(chordNotes.length, 3);
+        const noteDuration = chordDuration / notesPerChord;
+
+        for (let i = 0; i < notesPerChord; i++) {
+          const noteIndex = chordNotes.length - 1 - i;
+          notes.push({
+            pitch: chordNotes[noteIndex]! + 12,
+            duration: noteDuration * 0.9,
+            startTime: currentTime + (noteDuration * i),
+            velocity: 0.34 - (i * 0.02),
+          });
+        }
+        break;
+      }
+
+      case 2: {
+        // パターン3: ロングトーン（コードの最高音）
+        const topNote = chordNotes[chordNotes.length - 1]!;
+        notes.push({
+          pitch: topNote + 12,
+          duration: chordDuration * 0.85,
+          startTime: currentTime,
+          velocity: 0.35,
+        });
+        break;
+      }
+
+      case 3: {
+        // パターン4: アルペジオ（上下）
+        const pattern = [0, 1, 2, 1]; // 低-中-高-中
+        const noteDuration = chordDuration / pattern.length;
+
+        pattern.forEach((index, i) => {
+          const noteIndex = Math.min(index, chordNotes.length - 1);
+          notes.push({
+            pitch: chordNotes[noteIndex]! + 12,
+            duration: noteDuration * 0.85,
+            startTime: currentTime + (noteDuration * i),
+            velocity: 0.3 + (Math.random() * 0.08),
+          });
+        });
+        break;
+      }
+
+      case 4: {
+        // パターン5: リズミカルな繰り返し（ルート音中心）
+        const rootNote = chordNotes[0]!;
+        const thirdNote = chordNotes[1] ?? rootNote;
+        const rhythmPattern = [
+          { note: rootNote, ratio: 0.3 },
+          { note: thirdNote, ratio: 0.2 },
+          { note: rootNote, ratio: 0.3 },
+          { note: thirdNote, ratio: 0.2 },
+        ];
+
+        let localTime = 0;
+        rhythmPattern.forEach(({ note, ratio }) => {
+          notes.push({
+            pitch: note + 12,
+            duration: chordDuration * ratio * 0.8,
+            startTime: currentTime + localTime,
+            velocity: 0.31,
+          });
+          localTime += chordDuration * ratio;
+        });
+        break;
+      }
+    }
+
+    currentTime += chordDuration;
+  });
+
+  return {
+    name: "Chord-Based Melody",
+    notes,
+    repeat: 1,
+  };
+}
+
+/**
+ * コード進行に沿ったスムーズなメロディーを生成
+ * 前のコードから次のコードへ滑らかに移行する
+ * 
+ * @param progression コード進行
+ * @returns 生成されたメロディーパターン
+ */
+export function generateSmoothChordMelody(progression: ChordProgression): MelodyPattern {
+  const notes: Note[] = [];
+  let currentTime = 0;
+  let previousNote = -1; // 前の音程
+
+  progression.chords.forEach((chord, chordIndex) => {
+    const chordNotes = getChordNotes(chord);
+    const chordDuration = chord.duration;
+
+    // コードの中から、前の音に近い音を選ぶ（スムーズな進行）
+    let targetNote: number;
+
+    if (previousNote === -1) {
+      // 最初のコード: ランダムに選択
+      targetNote = chordNotes[Math.floor(Math.random() * chordNotes.length)]!;
+    } else {
+      // 前の音に最も近いコードトーンを選択
+      let closestNote = chordNotes[0]!;
+      let minDistance = Math.abs(previousNote - closestNote);
+
+      chordNotes.forEach((note) => {
+        const distance = Math.abs(previousNote - note);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestNote = note;
+        }
+      });
+
+      targetNote = closestNote;
+    }
+
+    // メロディーを生成（2-3音のフレーズ）
+    const phraseLength = Math.floor(Math.random() * 2) + 2; // 2-3音
+    const noteDuration = chordDuration / phraseLength;
+
+    for (let i = 0; i < phraseLength; i++) {
+      let pitch: number;
+
+      if (i === 0) {
+        // 最初の音: 選択したコードトーン
+        pitch = targetNote + 12;
+      } else {
+        // その他の音: コード内で隣接音を選ぶ
+        const currentIndex = chordNotes.indexOf(targetNote);
+        const variation = Math.random() > 0.5 ? 1 : -1;
+        const newIndex = Math.max(0, Math.min(chordNotes.length - 1, currentIndex + variation));
+        pitch = chordNotes[newIndex]! + 12;
+        targetNote = chordNotes[newIndex]!;
+      }
+
+      notes.push({
+        pitch,
+        duration: noteDuration * 0.9,
+        startTime: currentTime + (noteDuration * i),
+        velocity: 0.32 + (Math.random() * 0.06),
+      });
+
+      previousNote = pitch - 12; // 次のコードのために保存
+    }
+
+    currentTime += chordDuration;
+  });
+
+  return {
+    name: "Smooth Chord Melody",
+    notes,
+    repeat: 1,
+  };
+}

@@ -2,6 +2,8 @@ import type { MusicSection, MusicStyle } from "@/types/music";
 import { getRandomStyle } from "./styles";
 import {
   generateMusicalMelody,
+  generateChordBasedMelody,
+  generateSmoothChordMelody,
   SCALES,
   createMozartRocket,
   createFateMotif,
@@ -117,8 +119,8 @@ export class MusicComposer {
     // レイヤーの選択（革新的アルゴリズム）
     const layers = this.selectLayers();
 
-    // メロディーパターンを選択（3つの方法から選択）
-    // 33%: スケールベース生成、33%: 定型パターン生成、33%: 既存パターン
+    // メロディーパターンを選択（4つの方法から選択）
+    // 25%: スケールベース生成、25%: 定型パターン生成、25%: コード進行連動生成、25%: 既存パターン
     let melody = undefined;
     if (
       layers.includeMelody &&
@@ -127,7 +129,7 @@ export class MusicComposer {
       const rand = Math.random();
       const rootNote = progression.chords[0]!.root;
 
-      if (rand < 0.33 && this.currentStyle.scales.length > 0) {
+      if (rand < 0.25 && this.currentStyle.scales.length > 0) {
         // 方法1: スケールベースのメロディーを生成
         const randomScale = this.currentStyle.scales[
           Math.floor(Math.random() * this.currentStyle.scales.length)
@@ -147,7 +149,7 @@ export class MusicComposer {
             ]!;
         }
       } else if (
-        rand < 0.66 &&
+        rand < 0.5 &&
         this.currentStyle.famousPatterns &&
         this.currentStyle.famousPatterns.length > 0
       ) {
@@ -166,8 +168,14 @@ export class MusicComposer {
               Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
             ]!;
         }
+      } else if (rand < 0.75) {
+        // 方法3: コード進行連動メロディー生成
+        const useSmooth = Math.random() < 0.5;
+        melody = useSmooth
+          ? generateSmoothChordMelody(progression)
+          : generateChordBasedMelody(progression);
       } else {
-        // 方法3: 既存のメロディーパターンを使用
+        // 方法4: 既存のメロディーパターンを使用
         melody =
           this.currentStyle.melodyPatterns[
             Math.floor(Math.random() * this.currentStyle.melodyPatterns.length)
