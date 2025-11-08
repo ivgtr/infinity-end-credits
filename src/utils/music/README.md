@@ -25,19 +25,13 @@ src/utils/music/
 ├── patterns/            # 音楽パターン定義
 │   ├── index.ts         # パターンモジュールの公開API
 │   ├── base/            # 基本パターン（ベース、アルペジオ、ドラム）
-│   ├── melodies/        # メロディパターン・生成関数
-│   │   ├── common.ts    # 基本メロディパターン
-│   │   ├── generators.ts # メロディ生成関数
-│   │   ├── humanize.ts  # マイクロバリエーション（ヒューマナイゼーション）
-│   │   └── variations.ts # メロディ変奏技法（転調、反行形など）
+│   ├── melodies/        # メロディパターン・生成・変奏
 │   ├── progressions/    # コード進行
 │   └── famous/          # 有名な音楽パターン（ジャンル別）
 │
 └── styles/              # 音楽スタイル定義
-    ├── index.ts         # スタイルモジュールの公開API（遷移マトリックス含む）
-    ├── grand.ts         # 各スタイルファイル（11種類）
-    ├── ambient.ts
-    └── ...
+    ├── index.ts         # スタイルモジュールの公開API
+    └── *.ts             # 各スタイルファイル
 ```
 
 ## アルゴリズムの多様性機能
@@ -115,106 +109,34 @@ export function getScaleNotes(root: number, scale: string): number[] { ... }
 
 **責務**: 再利用可能な音楽パターンの定義と生成
 
-- **base/**: 楽器ごとの基本パターン配列（`BASS_PATTERNS`, `ARPEGGIO_PATTERNS`, `DRUM_PATTERNS`）
-- **melodies/**: メロディパターン配列と動的生成関数
-  - `common.ts`: 基本メロディパターンの定義
-  - `generators.ts`: スケールベース、コードベースのメロディ生成関数
-  - `humanize.ts`: ヒューマナイゼーションとダイナミクス適用関数
-  - `variations.ts`: メロディ変奏技法（転調、反行形、逆行形など）
+- **base/**: 楽器ごとの基本パターン配列
+- **melodies/**: メロディの生成・変奏・ヒューマナイゼーション
 - **progressions/**: コード進行定義
-- **famous/**: 有名な音楽パターン（ジャンル別に分割）
-  - `classical.ts`: クラシック音楽パターン（モーツァルト・ロケット等）
-  - `popular.ts`: ポピュラー音楽パターン
-  - `jazz.ts`: ジャズパターン
-  - `ethnic.ts`: 民族音楽パターン
-  - `electronic.ts`: エレクトロニックパターン
-  - `ambient.ts`: アンビエントパターン
+- **famous/**: 有名な音楽パターン（ジャンル別）
 
-**Index Aggregation**:
-```typescript
-// patterns/index.ts
-export { CHORD_PROGRESSIONS } from "./progressions/common";
-export { generateMusicalMelody } from "./melodies/generators";
-export { addMicroVariations } from "./melodies/humanize";
-export { applyRandomVariation } from "./melodies/variations";
-export { createMozartRocket } from "./famous/classical";
-// ...すべての公開APIを集約
-```
+各ディレクトリの`index.ts`で公開APIを集約し、内部実装の詳細を隠蔽します。
 
 ### 3. Styles Module（スタイルレイヤー）
 
 **責務**: 音楽スタイルの特性定義（各スタイル1ファイル）
 
-各スタイルファイルの構造:
-```typescript
-import type { MusicStyle } from "@/types/music";
-import { NOTES } from "../core/constants";
-import { BASS_PATTERNS } from "../patterns/base/bass";
-// ...必要なパターンをインポート
+各スタイルファイルは`MusicStyle`オブジェクトを定義し、必要なパターンを`patterns/`からインポートして組み合わせます。
 
-export const AMBIENT_STYLE: MusicStyle = {
-  type: "ambient",
-  name: "Ambient",
-  progressions: [...],        // スタイル固有のコード進行
-  melodyPatterns: [...],      // スタイル固有のメロディパターン
-  bassPatterns: BASS_PATTERNS.filter(p => [...]), // 共通パターンから選択
-  // ...
-};
-```
-
-**Index Aggregation**:
-```typescript
-// styles/index.ts
-export { GRAND_STYLE } from "./grand";
-export { AMBIENT_STYLE } from "./ambient";
-// ...
-
-export const ALL_MUSIC_STYLES = [GRAND_STYLE, AMBIENT_STYLE, ...];
-
-// スタイル遷移マトリックス（110パターン）
-const STYLE_TRANSITION_MATRIX: Record<string, Record<string, number>> = {
-  grand: { orchestral: 3.0, bright: 2.0, ... },
-  ambient: { lofi: 2.5, dark: 2.0, ... },
-  // ...
-};
-
-// 重み付きランダム選択でスタイル遷移
-export function getRandomStyle(currentStyleType?: string): MusicStyle { ... }
-```
+`styles/index.ts`は全スタイルを集約し、スタイル間の遷移相性を定義した`STYLE_TRANSITION_MATRIX`により、音楽的に自然なスタイル遷移を実現します。
 
 ## 拡張ガイドライン
 
-### 新しいパターンを追加する場合
+### 新しいパターンを追加
 
-1. 該当する`patterns/`サブディレクトリのファイルに追加
-2. 必要に応じて`patterns/index.ts`でエクスポート
-3. スタイル定義から参照（`styles/`内のファイル）
+該当する`patterns/`サブディレクトリに追加し、`index.ts`でエクスポート。スタイル定義から参照します。
 
-### 新しいスタイルを追加する場合
+### 新しいスタイルを追加
 
-1. `styles/`に新しいファイルを作成（例: `styles/trap.ts`）
-2. 既存スタイルファイルを参考に`MusicStyle`オブジェクトを定義
-3. `styles/index.ts`にインポート・エクスポートを追加
-4. `ALL_MUSIC_STYLES`配列に追加
+`styles/`に新ファイルを作成し、`MusicStyle`オブジェクトを定義。`styles/index.ts`で集約し、`STYLE_TRANSITION_MATRIX`に遷移重みを定義します（相性値の目安: 3.0=非常に良い、2.0=良い、1.0=普通、0.5以下=避ける）。
 
-### 新しい有名パターンカテゴリを追加する場合
+### 新しい変奏・ジャンルパターンを追加
 
-1. `patterns/famous/`に新しいファイルを作成（例: `hiphop.ts`）
-2. パターン生成関数を定義
-3. `patterns/index.ts`でエクスポート
-4. `composer.ts`で必要に応じてインポート・使用
-
-### スタイル遷移マトリックスを調整する場合
-
-1. `styles/index.ts`の`STYLE_TRANSITION_MATRIX`を編集
-2. 新しいスタイルを追加した場合、全スタイルからの遷移重みを定義
-3. 相性値の目安: 3.0=非常に良い、2.0=良い、1.0=普通、0.5以下=避ける
-
-### 新しい変奏技法を追加する場合
-
-1. `patterns/melodies/variations.ts`に新しい関数を定義
-2. `applyRandomVariation()`の選択肢に追加
-3. 必要に応じて`patterns/index.ts`でエクスポート
+`patterns/melodies/variations.ts`または`patterns/famous/`に関数を追加し、必要に応じて`patterns/index.ts`でエクスポートします。
 
 ## インポートパターン
 
