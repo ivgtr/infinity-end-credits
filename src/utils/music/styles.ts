@@ -77,6 +77,37 @@ export const BASS_PATTERNS: BassPattern[] = [
     durations: [1, 1, 1, 1],
     rhythm: [0, 1, 2, 3],
   },
+  // Ambient専用ベースパターン
+  {
+    name: "Sustained Pulse",
+    pattern: [0], // ルート音のみ、長い持続
+    durations: [8],
+    rhythm: [0],
+  },
+  {
+    name: "Floating Root",
+    pattern: [0, 0], // ルート音のゆったりした繰り返し
+    durations: [6, 6],
+    rhythm: [0, 6],
+  },
+  {
+    name: "Deep Harmonic",
+    pattern: [0, 7], // ルートと5度、非常にゆっくり
+    durations: [8, 8],
+    rhythm: [0, 8],
+  },
+  {
+    name: "Sparse Pulse",
+    pattern: [0, 0, 7], // まばらなパルス
+    durations: [5, 5, 5],
+    rhythm: [0, 5, 10],
+  },
+  {
+    name: "Ethereal Drift",
+    pattern: [0, 4, 7], // 浮遊感のあるドリフト
+    durations: [6, 6, 6],
+    rhythm: [0, 6, 12],
+  },
 ];
 
 /**
@@ -203,6 +234,37 @@ export const ARPEGGIO_PATTERNS: ArpeggioPattern[] = [
     noteDuration: 0.22,
     speed: 1.6,
   },
+  // Ambient専用アルペジオパターン
+  {
+    name: "Gentle Cascade",
+    pattern: [0, 1, 2, 1, 0], // 優しいカスケード
+    noteDuration: 0.8,
+    speed: 0.6,
+  },
+  {
+    name: "Sparse Stars",
+    pattern: [0, 2, 0, 1], // まばらな星のよう
+    noteDuration: 1.0,
+    speed: 0.5,
+  },
+  {
+    name: "Meditation Wave",
+    pattern: [0, 1, 0, 2, 0, 1], // 瞑想的な波
+    noteDuration: 0.9,
+    speed: 0.7,
+  },
+  {
+    name: "Shimmer",
+    pattern: [1, 2, 1, 2], // きらめき
+    noteDuration: 0.7,
+    speed: 0.8,
+  },
+  {
+    name: "Cosmic Drift",
+    pattern: [0, 2, 1], // 宇宙的なドリフト
+    noteDuration: 1.2,
+    speed: 0.5,
+  },
 ];
 
 /**
@@ -320,6 +382,42 @@ export const DRUM_PATTERNS: DrumPattern[] = [
     snare: [2, 5],
     hihat: [0, 1, 2, 3, 4, 5],
     duration: 6,
+  },
+  // Ambient専用ドラムパターン
+  {
+    name: "Breath",
+    kick: [0],
+    snare: [],
+    hihat: [0, 4, 8],
+    duration: 12,
+  },
+  {
+    name: "Distant Echo",
+    kick: [0, 6],
+    snare: [3],
+    hihat: [0, 2, 4, 6],
+    duration: 8,
+  },
+  {
+    name: "Glacial Movement",
+    kick: [0],
+    snare: [],
+    hihat: [0, 3, 6, 9, 12],
+    duration: 16,
+  },
+  {
+    name: "Sparse Texture",
+    kick: [0, 5],
+    snare: [3],
+    hihat: [1, 4, 7, 10],
+    duration: 10,
+  },
+  {
+    name: "Meditation Pulse",
+    kick: [0, 8],
+    snare: [],
+    hihat: [0, 2, 4, 6, 8, 10, 12, 14],
+    duration: 16,
   },
 ];
 
@@ -593,9 +691,9 @@ export const GRAND_STYLE: MusicStyle = {
       repeat: 1,
     },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Octave Jump", "Classic Arpeggio Bass", "Rhythmic Groove"].includes(p.name)),
-  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Up-Down", "Slow Wave", "Broken Chord"].includes(p.name)),
-  drumPatterns: DRUM_PATTERNS.filter(p => ["Epic Slow", "Minimal Beat"].includes(p.name)),
+  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Octave Jump", "Classic Arpeggio Bass", "Rhythmic Groove", "Walking Bass", "Deep Pulse"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Up-Down", "Slow Wave", "Broken Chord", "Triplet", "Melodic Pattern", "Sweep Up", "Octave Up"].includes(p.name)),
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Epic Slow", "Minimal Beat", "Pop Ballad", "Half-Time", "Waltz 3/4", "Basic 4/4"].includes(p.name)),
   durationRange: [35, 55],
   scales: ["major", "minor", "harmonicMinor"],
   famousPatterns: ["createMozartRocket", "createFateMotif", "createBaroqueSequence"],
@@ -1051,9 +1149,9 @@ export const BRIGHT_STYLE: MusicStyle = {
       repeat: 2,
     },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Walking Bass", "Bouncy Pop", "Driving Eighth", "Rhythmic Groove"].includes(p.name)),
-  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => !["Slow Wave"].includes(p.name)), // ゆったり以外全て
-  drumPatterns: DRUM_PATTERNS.filter(p => ["Energetic", "Basic 4/4"].includes(p.name)),
+  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Walking Bass", "Bouncy Pop", "Driving Eighth", "Rhythmic Groove", "Syncopated Funk", "Octave Jump"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => !["Slow Wave", "Gentle Cascade", "Sparse Stars", "Meditation Wave", "Cosmic Drift"].includes(p.name)), // ゆったり系以外全て
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Energetic", "Basic 4/4", "House Beat", "Breakbeat", "Double-Time", "Shuffle Beat", "Syncopated Funk"].includes(p.name)),
   durationRange: [30, 45],
   scales: ["major", "lydian", "pentatonic"],
   famousPatterns: ["createOctaveJump", "createPentatonicRock", "createSyncopated8Beat"],
@@ -1317,9 +1415,9 @@ export const DARK_STYLE: MusicStyle = {
       repeat: 1,
     },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Minimal", "Root-Fifth", "Rock Steady", "Deep Pulse"].includes(p.name)),
-  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Down", "Random", "Slow Wave", "Broken Chord"].includes(p.name)),
-  drumPatterns: DRUM_PATTERNS.filter(p => ["Heavy Rock", "Basic 4/4"].includes(p.name)),
+  bassPatterns: BASS_PATTERNS.filter(p => ["Minimal", "Root-Fifth", "Rock Steady", "Deep Pulse", "Octave Jump", "Rhythmic Groove", "Driving Eighth"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Down", "Random", "Slow Wave", "Broken Chord", "Reverse Cascade", "Octave Down", "Stutter", "Complex Weave"].includes(p.name)),
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Heavy Rock", "Basic 4/4", "Energetic", "Half-Time", "Breakbeat", "Double-Time"].includes(p.name)),
   durationRange: [40, 60],
   scales: ["minor", "phrygian", "locrian", "harmonicMinor"],
 };
@@ -1533,9 +1631,42 @@ export const AMBIENT_STYLE: MusicStyle = {
       repeat: 1,
     },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => p.name === "Minimal"),
-  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Slow Wave", "Triplet"].includes(p.name)),
-  drumPatterns: DRUM_PATTERNS.filter(p => ["Minimal Beat", "Epic Slow"].includes(p.name)), // 非常に控えめなリズム
+  bassPatterns: BASS_PATTERNS.filter(p => [
+    "Minimal",
+    "Sustained Pulse",
+    "Floating Root",
+    "Deep Harmonic",
+    "Sparse Pulse",
+    "Ethereal Drift",
+    "Root-Fifth",
+    "Deep Pulse"
+  ].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => [
+    "Up",
+    "Slow Wave",
+    "Triplet",
+    "Gentle Cascade",
+    "Sparse Stars",
+    "Meditation Wave",
+    "Shimmer",
+    "Cosmic Drift",
+    "Down",
+    "Broken Chord",
+    "Bounce",
+    "Random"
+  ].includes(p.name)),
+  drumPatterns: DRUM_PATTERNS.filter(p => [
+    "Minimal Beat",
+    "Epic Slow",
+    "Breath",
+    "Distant Echo",
+    "Glacial Movement",
+    "Sparse Texture",
+    "Meditation Pulse",
+    "Half-Time",
+    "Pop Ballad",
+    "Waltz 3/4"
+  ].includes(p.name)),
   durationRange: [55, 90],
   scales: ["major", "minor", "dorian", "wholeTone"],
   famousPatterns: ["createEnoAmbientPad", "createShimmerReverb", "createTexturalDrone", "createGranularCloud", "createModularSequence"],
@@ -1794,9 +1925,9 @@ export const JAZZY_STYLE: MusicStyle = {
       repeat: 1,
     },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Walking Bass", "Root-Fifth", "Jazzy Walk", "Syncopated Funk"].includes(p.name)),
-  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Random", "Up-Down", "Syncopated", "Broken Chord"].includes(p.name)),
-  drumPatterns: DRUM_PATTERNS.filter(p => ["Basic 4/4", "Energetic"].includes(p.name)),
+  bassPatterns: BASS_PATTERNS.filter(p => ["Walking Bass", "Root-Fifth", "Jazzy Walk", "Syncopated Funk", "Rhythmic Groove", "Bouncy Pop"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Random", "Up-Down", "Syncopated", "Broken Chord", "Triplet", "Alternating", "Melodic Pattern", "Complex Weave"].includes(p.name)),
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Basic 4/4", "Energetic", "Shuffle Beat", "Syncopated Funk", "Breakbeat", "Pop Ballad"].includes(p.name)),
   durationRange: [35, 50],
   scales: ["dorian", "mixolydian", "blues", "melodicMinor"],
   famousPatterns: ["createBlueNoteDescend", "createBebopChromatic", "createIIVITurnaround"],
@@ -2048,9 +2179,9 @@ export const RETRO_STYLE: MusicStyle = {
       repeat: 1,
     },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Octave Jump", "Bouncy Pop", "Rock Steady"].includes(p.name)),
-  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up-Down", "Up", "Fast Cascade", "Bounce"].includes(p.name)),
-  drumPatterns: DRUM_PATTERNS.filter(p => ["Basic 4/4", "Energetic"].includes(p.name)),
+  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Octave Jump", "Bouncy Pop", "Rock Steady", "Driving Eighth", "Syncopated Funk", "Rhythmic Groove"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up-Down", "Up", "Fast Cascade", "Bounce", "Syncopated", "Alternating", "Sweep Up", "Rhythmic Pulse"].includes(p.name)),
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Basic 4/4", "Energetic", "House Beat", "Syncopated Funk", "Pop Ballad", "Shuffle Beat"].includes(p.name)),
   durationRange: [32, 48],
   scales: ["major", "minor", "pentatonic", "mixolydian"],
   famousPatterns: ["createSyncopated8Beat", "createOctaveJump"],
@@ -2304,9 +2435,9 @@ export const ELECTRONIC_STYLE: MusicStyle = {
       repeat: 2,
     },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Walking Bass", "Octave Jump", "Deep Pulse", "Driving Eighth", "Syncopated Funk"].includes(p.name)),
-  arpeggioPatterns: ARPEGGIO_PATTERNS, // すべてのアルペジオパターンを使用（アルペジオ重視）
-  drumPatterns: DRUM_PATTERNS.filter(p => ["Energetic", "Heavy Rock"].includes(p.name)),
+  bassPatterns: BASS_PATTERNS.filter(p => ["Walking Bass", "Octave Jump", "Deep Pulse", "Driving Eighth", "Syncopated Funk", "Rhythmic Groove", "Rock Steady"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => !["Gentle Cascade", "Sparse Stars", "Meditation Wave", "Cosmic Drift"].includes(p.name)), // Ambient専用を除く全て
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Energetic", "Heavy Rock", "House Beat", "Double-Time", "Breakbeat", "Syncopated Funk", "Basic 4/4"].includes(p.name)),
   durationRange: [28, 42],
   scales: ["minor", "phrygian", "wholeTone", "diminished"],
   famousPatterns: ["createArpeggiatorSeq", "createDropBuild", "createSidechainRhythm"],
@@ -2543,9 +2674,9 @@ export const ORCHESTRAL_STYLE: MusicStyle = {
       repeat: 1,
     },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Walking Bass", "Classic Arpeggio Bass"].includes(p.name)),
-  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Broken Chord", "Slow Wave", "Triplet"].includes(p.name)),
-  drumPatterns: DRUM_PATTERNS.filter(p => ["Waltz 3/4", "Minimal Beat", "Epic Slow"].includes(p.name)),
+  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Walking Bass", "Classic Arpeggio Bass", "Octave Jump", "Minimal", "Rhythmic Groove"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Broken Chord", "Slow Wave", "Triplet", "Up-Down", "Melodic Pattern", "Sweep Up", "Octave Up"].includes(p.name)),
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Waltz 3/4", "Minimal Beat", "Epic Slow", "Pop Ballad", "Half-Time", "Basic 4/4"].includes(p.name)),
   durationRange: [40, 65],
   scales: ["major", "minor", "harmonicMinor", "melodicMinor"],
   famousPatterns: ["createMozartRocket", "createAlbertiBass", "createBaroqueSequence", "createFateMotif"],
@@ -2772,9 +2903,9 @@ export const ETHNIC_STYLE: MusicStyle = {
       repeat: 1,
     },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Minimal", "Rhythmic Groove"].includes(p.name)),
-  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Down", "Slow Wave", "Triplet"].includes(p.name)),
-  drumPatterns: DRUM_PATTERNS.filter(p => ["Complex 7/8", "Progressive 5/4", "Minimal Beat", "Folk 6/8"].includes(p.name)),
+  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Minimal", "Rhythmic Groove", "Walking Bass", "Octave Jump", "Bouncy Pop"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Up", "Down", "Slow Wave", "Triplet", "Random", "Broken Chord", "Melodic Pattern", "Alternating"].includes(p.name)),
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Complex 7/8", "Progressive 5/4", "Minimal Beat", "Folk 6/8", "Waltz 3/4", "Basic 4/4", "Shuffle Beat"].includes(p.name)),
   durationRange: [35, 55],
   scales: ["hirajoshi", "inSen", "phrygianDominant", "hungarianMinor", "pentatonic"],
   famousPatterns: ["createInsenDescend", "createCelticRoll", "createHijazMaqam", "createRagaOrnament"],
@@ -2996,9 +3127,9 @@ export const LOFI_STYLE: MusicStyle = {
       repeat: 1,
     },
   ],
-  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Minimal", "Deep Pulse"].includes(p.name)),
-  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Slow Wave", "Up", "Triplet", "Melodic Pattern"].includes(p.name)),
-  drumPatterns: DRUM_PATTERNS.filter(p => ["Half-Time", "Minimal Beat", "Pop Ballad"].includes(p.name)),
+  bassPatterns: BASS_PATTERNS.filter(p => ["Root-Fifth", "Minimal", "Deep Pulse", "Walking Bass", "Bouncy Pop", "Rhythmic Groove"].includes(p.name)),
+  arpeggioPatterns: ARPEGGIO_PATTERNS.filter(p => ["Slow Wave", "Up", "Triplet", "Melodic Pattern", "Broken Chord", "Down", "Bounce", "Random"].includes(p.name)),
+  drumPatterns: DRUM_PATTERNS.filter(p => ["Half-Time", "Minimal Beat", "Pop Ballad", "Shuffle Beat", "Basic 4/4", "Breakbeat"].includes(p.name)),
   durationRange: [45, 70],
   scales: ["pentatonic", "minorPentatonic", "dorian", "minor"],
   famousPatterns: ["createPentatonicRock", "createOctaveJump"],
