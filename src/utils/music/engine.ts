@@ -290,29 +290,30 @@ export class MusicEngine {
     velocity: number,
     soundParams: SoundParameters
   ): void {
-    if (!this.audioContext || !this.masterGain) {
+    if (!this.audioContext || !this.masterGain || !this.fadeGain) {
       return;
     }
 
     const freq = midiToFrequency(midiNote);
+    const audioContext = this.audioContext;
 
     // ストリングスアンサンブルを模倣するため、わずかにデチューンした3つのオシレーターを使用
     const detuneValues = [-8, 0, 8]; // セント単位のデチューン
     const oscillators: OscillatorNode[] = [];
 
     // ゲインノード（エンベロープ用）
-    const gainNode = this.audioContext.createGain();
+    const gainNode = audioContext.createGain();
     gainNode.gain.value = 0;
 
     detuneValues.forEach((detune) => {
       // オシレーター: サウトゥース波（弦楽器の倍音成分を模倣）
-      const osc = this.audioContext.createOscillator();
+      const osc = audioContext.createOscillator();
       osc.type = "sawtooth";
       osc.frequency.value = freq;
       osc.detune.value = detune;
 
       // ローパスフィルター（高音をカットしてより柔らかく）
-      const filter = this.audioContext.createBiquadFilter();
+      const filter = audioContext.createBiquadFilter();
       filter.type = "lowpass";
       filter.frequency.value = 2000 + (velocity * 1000); // ベロシティで明るさを変化
       filter.Q.value = 1;
@@ -325,7 +326,7 @@ export class MusicEngine {
     });
 
     // ゲインノードをマスターに接続
-    gainNode.connect(this.fadeGain!);
+    gainNode.connect(this.fadeGain);
 
     // エンベロープ: 弦楽器らしいゆったりとしたアタックとリリース
     const attackTime = 0.15; // ボウが弦に当たって音が立ち上がる時間
