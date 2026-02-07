@@ -1,5 +1,5 @@
 import type { Credit, Credits } from "@/types/credits";
-import { use, useEffect, useState } from "react";
+import { useState } from "react";
 import { generateRoleStaff } from "@/utils/role";
 import type { Staffs } from "@/types/staff";
 import { generateId, generateTitle } from "@/utils/generate";
