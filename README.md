@@ -7,7 +7,8 @@ https://infinity-end-credits.vercel.app/
 
 ### 必要要件
 
-- Node.js 18.17以上
+- Node.js 24推奨（20.19以降の20系、22.13以降の22系にも対応）
+- npm 10以上
 
 ### インストール
 
@@ -17,7 +18,7 @@ git clone https://github.com/ivgtr/infinity-end-credits.git
 cd infinity-end-credits
 
 # 依存関係をインストール
-npm install
+npm ci
 ```
 
 ## 開発

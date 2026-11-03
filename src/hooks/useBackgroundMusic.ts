@@ -47,29 +47,9 @@ export function useBackgroundMusic() {
   }, [isInitialized]);
 
   /**
-   * 再生を開始
-   */
-  const play = useCallback(async () => {
-    if (!isInitialized) {
-      await initialize();
-    }
-
-    if (!engineRef.current || isPlaying) {
-      return;
-    }
-
-    engineRef.current.start();
-    setIsPlaying(true);
-
-    // スケジューラーを開始
-    nextScheduleTimeRef.current = engineRef.current.getCurrentTime();
-    scheduleNextSection();
-  }, [isInitialized, isPlaying, initialize]);
-
-  /**
    * 次のセクションをスケジュール
    */
-  const scheduleNextSection = useCallback(() => {
+  const scheduleNextSection = useCallback(function scheduleSection() {
     if (!engineRef.current || !composerRef.current) {
       return;
     }
@@ -180,11 +160,31 @@ export function useBackgroundMusic() {
     // 定期的にスケジューリングを続ける
     if (engine.getIsPlaying()) {
       schedulerIdRef.current = window.setTimeout(
-        () => scheduleNextSection(),
+        scheduleSection,
         100
       );
     }
   }, []);
+
+  /**
+   * 再生を開始
+   */
+  const play = useCallback(async () => {
+    if (!isInitialized) {
+      await initialize();
+    }
+
+    if (!engineRef.current || isPlaying) {
+      return;
+    }
+
+    engineRef.current.start();
+    setIsPlaying(true);
+
+    // スケジューラーを開始
+    nextScheduleTimeRef.current = engineRef.current.getCurrentTime();
+    scheduleNextSection();
+  }, [isInitialized, isPlaying, initialize, scheduleNextSection]);
 
   /**
    * 再生を停止
